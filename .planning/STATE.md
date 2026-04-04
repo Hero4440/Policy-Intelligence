@@ -12,27 +12,27 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 
 Phase: 1 of 6 (Policy Data Foundation)
 Plan: 2 of 2
-Status: In progress
-Last activity: 2026-04-04 — Completed plan 01-01
+Status: Completed
+Last activity: 2026-04-04 — Completed plan 01-02
 
-Progress: [█████░░░░░] 50%
+Progress: [██████████] 100%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 1
-- Average duration: 4.1 minutes
-- Total execution time: 0.1 hours
+- Total plans completed: 2
+- Average duration: 4.6 minutes
+- Total execution time: 0.2 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 01-policy-data-foundation | 1 | 4.1 min | 4.1 min |
+| 01-policy-data-foundation | 2 | 9.3 min | 4.6 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (4.1 min)
-- Trend: Just started
+- Last 5 plans: 01-01 (4.1 min), 01-02 (5.3 min)
+- Trend: Consistent velocity
 
 *Updated after each plan completion*
 
@@ -49,6 +49,9 @@ Recent decisions affecting current work:
 - Schema structure (01-01) — Nested evidence text and source attribution at each requirement level enables precise policy traceability
 - Drug aliasing (01-01) — Reverse lookup map for O(1) normalization performance
 - Text cleaning (01-01) — Light-touch artifact removal preserving policy substance
+- PDF availability (01-02) — Use real PDFs where available + standard patterns for unavailable documents with clear source attribution
+- Demo scenario mapping (01-02) — Let complexity emerge naturally from real policy requirements rather than engineering scenarios
+- Coverage status (01-02) — Heavily restricted JAK inhibitor serves as denial scenario; real biologics rarely excluded
 
 ### Pending Todos
 
@@ -57,12 +60,14 @@ None yet.
 ### Blockers/Concerns
 
 **Phase 1 (Data Foundation):**
-- Policy data extraction quality is critical — oversimplified extraction breaks downstream tools
-- Therapeutic area must be finalized before extraction begins (RA biologics recommended)
-- Policy PDF availability must be validated (UHC, Aetna, Cigna public documents)
+RESOLVED — Phase 1 complete. All concerns addressed:
+- Policy data extraction quality: UHC PDF provides real policy language; other policies based on standard patterns
+- Therapeutic area: RA biologics finalized and implemented
+- Policy PDF availability: Handled via hybrid approach (real PDF + standard patterns)
 
 ## Session Continuity
 
 Last session: 2026-04-04
-Stopped at: Completed 01-01-PLAN.md (Project Scaffolding and Schema Foundation)
-Resume file: .planning/phases/01-policy-data-foundation/01-01-SUMMARY.md
+Stopped at: Completed 01-02-PLAN.md (Policy Data Extraction and Structuring) — Phase 1 complete
+Resume file: .planning/phases/01-policy-data-foundation/01-02-SUMMARY.md
+Next: Phase 2 - MCP Tool Development
