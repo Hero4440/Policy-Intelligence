@@ -11,29 +11,29 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 ## Current Position
 
 Phase: 2 of 6 (MCP Server Core)
-Plan: 1 of 2
+Plan: 2 of 2
 Status: Completed
-Last activity: 2026-04-04 — Completed plan 02-01
+Last activity: 2026-04-04 — Completed plan 02-02
 
-Progress: [█████░░░░░] 50%
+Progress: [██████████] 100%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 3
-- Average duration: 4.5 minutes
-- Total execution time: 0.2 hours
+- Total plans completed: 4
+- Average duration: 3.8 minutes
+- Total execution time: 0.3 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01-policy-data-foundation | 2 | 9.3 min | 4.6 min |
-| 02-mcp-server-core | 1 | 4.0 min | 4.0 min |
+| 02-mcp-server-core | 2 | 6.5 min | 3.3 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (4.1 min), 01-02 (5.3 min), 02-01 (4.0 min)
-- Trend: Excellent velocity
+- Last 5 plans: 01-01 (4.1 min), 01-02 (5.3 min), 02-01 (4.0 min), 02-02 (2.5 min)
+- Trend: Excellent velocity - improving over time
 
 *Updated after each plan completion*
 
@@ -56,6 +56,7 @@ Recent decisions affecting current work:
 - Stateless MCP transport (02-01) — Per-request server instances eliminate session management complexity; simpler concurrency model
 - Structured JSON tool responses (02-01) — Nested evidence fields enable programmatic consumption while preserving policy traceability
 - Error handling with discovery (02-01) — Return available payers/drugs in errors to reduce round trips
+- [Phase 02]: Stub response pattern for patient readiness tool - criteria checklist with requires_patient_data status provides clear Phase 3 contract
 
 ### Pending Todos
 
@@ -70,11 +71,11 @@ RESOLVED — Phase 1 complete. All concerns addressed:
 - Policy PDF availability: Handled via hybrid approach (real PDF + standard patterns)
 
 **Phase 2 (MCP Server Core):**
-None — Phase 2 Plan 1 complete. MCP server foundation working as designed.
+RESOLVED — Phase 2 complete. All 3 core MCP tools implemented and tested.
 
 ## Session Continuity
 
 Last session: 2026-04-04
-Stopped at: Completed 02-01-PLAN.md (MCP Server Foundation with Coverage and PA Tools)
-Resume file: .planning/phases/02-mcp-server-core/02-01-SUMMARY.md
-Next: Plan 02-02 - Patient Readiness Tool
+Stopped at: Completed 02-02-PLAN.md (Patient Readiness Tool - Phase 2 Complete)
+Resume file: .planning/phases/02-mcp-server-core/02-02-SUMMARY.md
+Next: Phase 3 - FHIR Patient Context Integration
