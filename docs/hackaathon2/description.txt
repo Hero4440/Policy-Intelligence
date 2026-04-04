@@ -1,0 +1,9 @@
+Anton RX's Track
+Medical Benefit Drug Policy Tracker
+Health plans govern coverage of medical benefit drugs through individual medical policies that vary by
+payer and change frequently. There is no centralized, standardized source for tracking which drugs are
+covered under which policies, what clinical criteria apply, or how those policies differ across plans. Build
+an AI-powered system that can ingest, parse, and normalize medical policy documents from multiple
+health plans to create a searchable, comparable view of medical benefit drug coverage, enabling users to
+quickly answer questions like Which plans cover Drug X?, What prior auth criteria does Plan Y require for
+Drug Z?, or What changed across payer policies this quarter?

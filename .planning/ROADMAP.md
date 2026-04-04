@@ -31,10 +31,11 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. Policy data uses real policy language from actual payer documents (not fabricated text)
   4. Policy data covers one therapeutic area (rheumatoid arthritis biologics) with sufficient depth for demo scenarios
   5. Policy JSON schema is well-defined and supports drug name aliasing (brand/generic)
-**Plans**: TBD
+**Plans:** 2 plans
 
 Plans:
-- [ ] TBD
+- [ ] 01-01-PLAN.md — Schema, drug aliases, and extraction utilities
+- [ ] 01-02-PLAN.md — Policy data extraction and structuring (5 policies, 3 payers)
 
 ### Phase 2: MCP Server Core
 **Goal**: MCP server exposes functional coverage and criteria lookup tools
