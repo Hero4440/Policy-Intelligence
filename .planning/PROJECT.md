@@ -2,7 +2,7 @@
 
 ## What This Is
 
-PolicyPilot is a patient-aware Prior Authorization Readiness Agent that helps prior auth specialists determine drug coverage, inspect payer criteria, and identify what's missing before submission. It combines a chat-based UI ("Prompt Opinion"), an MCP policy server backed by curated real payer policy data, and synthetic FHIR patient context to deliver grounded, evidence-cited answers.
+PolicyPilot is an MCP server that integrates into the Prompt Opinion healthcare agent platform to provide prior authorization readiness capabilities. It exposes 3 tools — drug coverage lookup, PA criteria inspection, and patient readiness gap analysis — backed by a curated store of real payer policy data. Prompt Opinion provides the chat UI, agent orchestration, and FHIR patient context via SHARP extension specs. The MCP server is the hackathon deliverable; Prompt Opinion is the runtime platform.
 
 ## Core Value
 
@@ -18,8 +18,8 @@ A prior auth specialist can ask a natural language question about a patient's dr
 
 - [ ] MCP server exposes 3 tools: get_drug_coverage, get_prior_auth_criteria, check_patient_readiness
 - [ ] Policy rules store contains real extracted data from 3-5 public payer PDFs for one therapeutic area
-- [ ] Agent combines FHIR patient context with policy lookup to produce grounded answers
-- [ ] Chat UI accepts natural language questions and displays evidence-cited responses
+- [ ] MCP server accepts FHIR context via SHARP token from Prompt Opinion
+- [ ] MCP server registered and functional within Prompt Opinion workspace
 - [ ] Synthetic patient data available via Synthea + hand-crafted demo patients
 - [ ] Readiness logic identifies matched vs missing requirements with cautious clinical wording
 - [ ] System is deployed and accessible via URL for demo/judging
@@ -36,11 +36,16 @@ A prior auth specialist can ask a natural language question about a patient's dr
 - Production security stack — demo-grade auth acceptable
 - Multiple therapeutic areas — one domain only
 - Real patient data — synthetic only
-- Video/media in chat — text responses only
+- Custom chat UI — Prompt Opinion provides the UI
+- Own LLM integration — Prompt Opinion handles agent orchestration
 
 ## Context
 
-**Origin:** Innovation hackathon combining two prior hackathon concepts — (1) Prompt Opinion + MCP + FHIR context and (2) medical benefit drug policy parsing/lookup.
+**Platform:** Prompt Opinion (app.promptopinion.ai) — external healthcare agent platform providing chat UI, agent orchestration, FHIR patient context (SHARP specs), MCP integration surface, and marketplace publishing. We build an MCP server that plugs into it.
+
+**Hackathon:** "Agents Assemble" — build MCP servers or A2A agents that integrate with Prompt Opinion. Option 1 (our path): Build an MCP server with healthcare tools. Must demo within Prompt Opinion platform. Submit 3-minute video.
+
+**Origin:** Combines two prior hackathon concepts — (1) Prompt Opinion + MCP + FHIR context and (2) medical benefit drug policy parsing/lookup (Anton RX track).
 
 **Payer data sources (public):**
 - UnitedHealthcare: medical benefit drug policies including Rituximab policy (Jan 2026), Medical Benefit Drug Clinical Program Drug List
@@ -59,7 +64,7 @@ A prior auth specialist can ask a natural language question about a patient's dr
 
 - **Timeline**: 2-day hackathon — ruthless prioritization required
 - **Team**: Solo developer — no parallel human workstreams
-- **Tech stack**: Python backend (MCP server), flexible frontend
+- **Tech stack**: Python MCP server (mcp[cli]), no custom frontend (Prompt Opinion is the UI)
 - **Data store**: JSON files for MVP (schema designed for future DB migration)
 - **Deployment**: Must be accessible via URL for judges
 - **Data quality**: Policy data must reflect real policy language and structure — not fabricated
@@ -71,11 +76,11 @@ A prior auth specialist can ask a natural language question about a patient's dr
 |----------|-----------|---------|
 | JSON over SQLite for policy store | Maximum build speed for 3-5 policies; schema maps to DB later | — Pending |
 | Python for MCP server | Team preference; good ecosystem for healthcare/FHIR libraries | — Pending |
-| Own UI rather than existing platform | Full control over demo experience; "Prompt Opinion" is our interface | — Pending |
+| Integrate with Prompt Opinion platform | Required by hackathon; provides UI, agent, FHIR context for free | — Pending |
 | Synthea + hand-crafted patients | Synthea for realism, hand-crafted for guaranteed demo scenarios | — Pending |
 | Single therapeutic area | Depth over breadth; 3-5 policies done well beats 20 done poorly | — Pending |
 | Cautious clinical wording | Healthcare context demands hedged language; reduces liability risk | — Pending |
 | Product-future architecture | Clean boundaries now save rewrite later; minimal extra effort | — Pending |
 
 ---
-*Last updated: 2026-04-03 after initialization*
+*Last updated: 2026-04-04 after Prompt Opinion platform clarification*
