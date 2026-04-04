@@ -11,28 +11,28 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 ## Current Position
 
 Phase: 1 of 6 (Policy Data Foundation)
-Plan: Ready to plan
-Status: Not started
-Last activity: 2026-04-04 — Roadmap created
+Plan: 2 of 2
+Status: In progress
+Last activity: 2026-04-04 — Completed plan 01-01
 
-Progress: [░░░░░░░░░░] 0%
+Progress: [█████░░░░░] 50%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 0
-- Average duration: N/A
-- Total execution time: 0.0 hours
+- Total plans completed: 1
+- Average duration: 4.1 minutes
+- Total execution time: 0.1 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| - | - | - | - |
+| 01-policy-data-foundation | 1 | 4.1 min | 4.1 min |
 
 **Recent Trend:**
-- Last 5 plans: None yet
-- Trend: N/A
+- Last 5 plans: 01-01 (4.1 min)
+- Trend: Just started
 
 *Updated after each plan completion*
 
@@ -46,6 +46,9 @@ Recent decisions affecting current work:
 - JSON over SQLite for policy store — Maximum build speed for 3-5 policies; schema maps to DB later
 - Single therapeutic area — Depth over breadth; 3-5 policies done well beats 20 done poorly
 - Product-future architecture — Clean boundaries now save rewrite later; minimal extra effort
+- Schema structure (01-01) — Nested evidence text and source attribution at each requirement level enables precise policy traceability
+- Drug aliasing (01-01) — Reverse lookup map for O(1) normalization performance
+- Text cleaning (01-01) — Light-touch artifact removal preserving policy substance
 
 ### Pending Todos
 
@@ -61,5 +64,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-04-04
-Stopped at: Phase 1 context gathered
-Resume file: .planning/phases/01-policy-data-foundation/01-CONTEXT.md
+Stopped at: Completed 01-01-PLAN.md (Project Scaffolding and Schema Foundation)
+Resume file: .planning/phases/01-policy-data-foundation/01-01-SUMMARY.md
