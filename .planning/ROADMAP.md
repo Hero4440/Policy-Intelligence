@@ -49,10 +49,11 @@ Plans:
   5. All tool descriptions are clear and detailed enough for Prompt Opinion's agent to decide when and how to call them
   6. Both coverage and criteria tools handle brand/generic drug name aliases correctly
   7. Tools return evidence text (quoted policy language) supporting determinations
-**Plans**: TBD
+**Plans:** 2 plans
 
 Plans:
-- [ ] TBD
+- [ ] 02-01-PLAN.md — MCP server scaffold, policy loader, coverage and criteria tools
+- [ ] 02-02-PLAN.md — Patient readiness stub tool and end-to-end verification
 
 ### Phase 3: Patient Context Integration
 **Goal**: MCP server can accept FHIR patient context and perform readiness analysis
@@ -121,8 +122,8 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Policy Data Foundation | 0/TBD | Not started | - |
-| 2. MCP Server Core | 0/TBD | Not started | - |
+| 1. Policy Data Foundation | 2/2 | Complete | 2026-04-04 |
+| 2. MCP Server Core | 0/2 | Not started | - |
 | 3. Patient Context Integration | 0/TBD | Not started | - |
 | 4. Patient Data Setup | 0/TBD | Not started | - |
 | 5. Deployment & Integration | 0/TBD | Not started | - |
