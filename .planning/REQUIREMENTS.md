@@ -114,41 +114,41 @@ Deferred to post-hackathon.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| MCP-01 | — | Pending |
-| MCP-02 | — | Pending |
-| MCP-03 | — | Pending |
-| MCP-04 | — | Pending |
-| MCP-05 | — | Pending |
-| MCP-06 | — | Pending |
-| COV-01 | — | Pending |
-| COV-02 | — | Pending |
-| COV-03 | — | Pending |
-| COV-04 | — | Pending |
-| RDY-01 | — | Pending |
-| RDY-02 | — | Pending |
-| RDY-03 | — | Pending |
-| RDY-04 | — | Pending |
-| POL-01 | — | Pending |
-| POL-02 | — | Pending |
-| POL-03 | — | Pending |
-| POL-04 | — | Pending |
-| PAT-01 | — | Pending |
-| PAT-02 | — | Pending |
-| PAT-03 | — | Pending |
-| DEP-01 | — | Pending |
-| DEP-02 | — | Pending |
-| DEP-03 | — | Pending |
-| DEP-04 | — | Pending |
-| DEP-05 | — | Pending |
-| DEM-01 | — | Pending |
-| DEM-02 | — | Pending |
-| DEM-03 | — | Pending |
+| POL-01 | Phase 1 | Pending |
+| POL-02 | Phase 1 | Pending |
+| POL-03 | Phase 1 | Pending |
+| POL-04 | Phase 1 | Pending |
+| MCP-01 | Phase 2 | Pending |
+| MCP-02 | Phase 2 | Pending |
+| MCP-03 | Phase 2 | Pending |
+| MCP-04 | Phase 2 | Pending |
+| MCP-06 | Phase 2 | Pending |
+| COV-01 | Phase 2 | Pending |
+| COV-02 | Phase 2 | Pending |
+| COV-03 | Phase 2 | Pending |
+| COV-04 | Phase 2 | Pending |
+| MCP-05 | Phase 3 | Pending |
+| RDY-01 | Phase 3 | Pending |
+| RDY-02 | Phase 3 | Pending |
+| RDY-03 | Phase 3 | Pending |
+| RDY-04 | Phase 3 | Pending |
+| PAT-01 | Phase 4 | Pending |
+| PAT-02 | Phase 4 | Pending |
+| PAT-03 | Phase 4 | Pending |
+| DEP-01 | Phase 5 | Pending |
+| DEP-02 | Phase 5 | Pending |
+| DEP-03 | Phase 5 | Pending |
+| DEP-04 | Phase 5 | Pending |
+| DEP-05 | Phase 5 | Pending |
+| DEM-01 | Phase 6 | Pending |
+| DEM-02 | Phase 6 | Pending |
+| DEM-03 | Phase 6 | Pending |
 
 **Coverage:**
 - v1 requirements: 29 total
-- Mapped to phases: 0
-- Unmapped: 29 (roadmap will map these)
+- Mapped to phases: 29 (100%)
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-04-04*
-*Last updated: 2026-04-04 after Prompt Opinion platform clarification*
+*Last updated: 2026-04-04 — Traceability updated after roadmap creation*
