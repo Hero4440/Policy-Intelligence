@@ -6,22 +6,22 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 
 **Core value:** A prior auth specialist can ask a natural language question about a patient's drug coverage and get back a grounded answer citing real policy language — coverage status, required criteria, and what's missing — in seconds instead of hours of manual PDF review.
 
-**Current focus:** Phase 2 - MCP Server Core
+**Current focus:** Phase 3 - Patient Context Integration
 
 ## Current Position
 
-Phase: 2 of 6 (MCP Server Core)
-Plan: 2 of 2
+Phase: 3 of 6 (Patient Context Integration)
+Plan: 1 of 2
 Status: Completed
-Last activity: 2026-04-04 — Completed plan 02-02
+Last activity: 2026-04-04 — Completed plan 03-01
 
-Progress: [██████████] 100%
+Progress: [█████░░░░░] 50%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 4
-- Average duration: 3.8 minutes
+- Total plans completed: 5
+- Average duration: 3.9 minutes
 - Total execution time: 0.3 hours
 
 **By Phase:**
@@ -30,10 +30,11 @@ Progress: [██████████] 100%
 |-------|-------|-------|----------|
 | 01-policy-data-foundation | 2 | 9.3 min | 4.6 min |
 | 02-mcp-server-core | 2 | 6.5 min | 3.3 min |
+| 03-patient-context-integration | 1 | 4.0 min | 4.0 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (4.1 min), 01-02 (5.3 min), 02-01 (4.0 min), 02-02 (2.5 min)
-- Trend: Excellent velocity - improving over time
+- Last 5 plans: 01-02 (5.3 min), 02-01 (4.0 min), 02-02 (2.5 min), 03-01 (4.0 min)
+- Trend: Excellent velocity - maintaining consistent pace
 
 *Updated after each plan completion*
 
@@ -57,6 +58,10 @@ Recent decisions affecting current work:
 - Structured JSON tool responses (02-01) — Nested evidence fields enable programmatic consumption while preserving policy traceability
 - Error handling with discovery (02-01) — Return available payers/drugs in errors to reduce round trips
 - [Phase 02]: Stub response pattern for patient readiness tool - criteria checklist with requires_patient_data status provides clear Phase 3 contract
+- Lightweight custom FHIR types (03-01) — Use @types/fhir for basic types instead of full @solarahealth/fhir-r4 library; hackathon speed over comprehensive validation
+- ICD-10 wildcard matching (03-01) — Support M05.* prefix patterns for diagnosis code families; policies specify ranges not exact codes
+- Cautious clinical language (03-01) — Use 'appears_to_match' vs 'meets' to acknowledge automated analysis limitations; legally defensible outputs
+- Multi-drug parsing for step therapy (03-01) — Parse 'methotrexate OR leflunomide OR sulfasalazine' as alternatives; check if ANY prior trial exists
 
 ### Pending Todos
 
@@ -73,9 +78,12 @@ RESOLVED — Phase 1 complete. All concerns addressed:
 **Phase 2 (MCP Server Core):**
 RESOLVED — Phase 2 complete. All 3 core MCP tools implemented and tested.
 
+**Phase 3 (Patient Context Integration):**
+In progress — Plan 03-01 complete (FHIR integration layer). Plan 03-02 next (tool integration).
+
 ## Session Continuity
 
 Last session: 2026-04-04
-Stopped at: Completed 02-02-PLAN.md (Patient Readiness Tool - Phase 2 Complete)
-Resume file: .planning/phases/02-mcp-server-core/02-02-SUMMARY.md
-Next: Phase 3 - FHIR Patient Context Integration
+Stopped at: Completed 03-01-PLAN.md (FHIR Integration & Criteria Matching)
+Resume file: .planning/phases/03-patient-context-integration/03-01-SUMMARY.md
+Next: Plan 03-02 - Patient Readiness Tool Integration
