@@ -65,10 +65,11 @@ Plans:
   3. Tool compares patient clinical context against policy criteria and returns structured results: matched requirements, missing requirements, documentation needed
   4. All readiness outputs use cautious clinical language ("may be missing", "appears to match", "documentation may be needed")
   5. FHIR parser extracts relevant patient data (diagnoses, medications, labs, payer info) from FHIR bundles correctly
-**Plans**: TBD
+**Plans:** 2 plans
 
 Plans:
-- [ ] TBD
+- [ ] 03-01-PLAN.md — FHIR client, resource extractors, criteria matcher, and cautious clinical language helpers
+- [ ] 03-02-PLAN.md — Wire FHIR integration into check_patient_readiness tool and end-to-end verification
 
 ### Phase 4: Patient Data Setup
 **Goal**: Demo patients loaded in Prompt Opinion with controlled coverage scenarios
