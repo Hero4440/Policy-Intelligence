@@ -1,0 +1,90 @@
+{
+  "id": "cigna-infliximab-ra",
+  "payer": "Cigna",
+  "plan": "Commercial",
+  "drug": {
+    "brandName": "Remicade",
+    "genericName": "infliximab",
+    "aliases": ["Inflectra", "Renflexis", "Avsola", "Ixifi"]
+  },
+  "indication": "Rheumatoid Arthritis",
+  "coverageStatus": "covered-with-pa",
+  "paRequired": true,
+  "diagnosisRequirements": [
+    {
+      "icd10Codes": ["M05.*", "M06.*"],
+      "description": "Moderately to severely active rheumatoid arthritis despite conventional therapy",
+      "evidenceText": "Documentation of moderately to severely active rheumatoid arthritis with evidence of active inflammation (elevated ESR/CRP and/or swollen/tender joint count) despite treatment with conventional disease-modifying therapy.",
+      "source": {
+        "document": "Cigna Coverage Policy 0330 - Tumor Necrosis Factor (TNF) Inhibitors",
+        "page": 8,
+        "section": "Rheumatoid Arthritis Indications"
+      }
+    }
+  ],
+  "stepTherapy": [
+    {
+      "drugName": "methotrexate",
+      "dosage": "adequate dose",
+      "duration": "at least 3 months",
+      "failureCriteria": "inadequate clinical response or documented intolerance",
+      "evidenceText": "Individual has experienced an inadequate clinical response to at least 3 months of methotrexate at an adequate dose, or has a contraindication or intolerance to methotrexate. Documentation of specific methotrexate dose, duration, and clinical response required.",
+      "source": {
+        "document": "Cigna Coverage Policy 0330 - Tumor Necrosis Factor (TNF) Inhibitors",
+        "page": 9,
+        "section": "Prior Authorization Criteria - RA"
+      }
+    }
+  ],
+  "otherRequirements": [
+    {
+      "category": "prescriber qualification",
+      "requirement": "Prescribed by a rheumatologist or specialist experienced in managing rheumatoid arthritis",
+      "evidenceText": "Request is from a rheumatologist or other physician specialist with documented experience in the diagnosis and management of rheumatoid arthritis.",
+      "source": {
+        "document": "Cigna Coverage Policy 0330 - Tumor Necrosis Factor (TNF) Inhibitors",
+        "page": 9,
+        "section": "Prescriber Requirements"
+      },
+      "ambiguous": false
+    },
+    {
+      "category": "administration setting",
+      "requirement": "Infliximab must be administered via IV infusion in an appropriate clinical setting",
+      "evidenceText": "Infliximab is administered by intravenous infusion in a healthcare setting capable of managing potential infusion reactions. Infusion must be supervised by healthcare personnel trained in administration of biologic agents.",
+      "source": {
+        "document": "Cigna Coverage Policy 0330 - Tumor Necrosis Factor (TNF) Inhibitors",
+        "page": 10,
+        "section": "Administration Requirements"
+      },
+      "ambiguous": false
+    },
+    {
+      "category": "infection screening",
+      "requirement": "Screening for tuberculosis and hepatitis B required prior to treatment",
+      "evidenceText": "Individual has been screened for latent tuberculosis infection (via tuberculin skin test or interferon-gamma release assay) and hepatitis B virus prior to initiating therapy. Active infections must be treated before starting infliximab.",
+      "source": {
+        "document": "Cigna Coverage Policy 0330 - Tumor Necrosis Factor (TNF) Inhibitors",
+        "page": 11,
+        "section": "Safety Screening"
+      },
+      "ambiguous": false
+    },
+    {
+      "category": "biosimilar preference",
+      "requirement": "Biosimilar products may be preferred over reference biologic",
+      "evidenceText": "For individuals new to infliximab therapy, a biosimilar product (Inflectra, Renflexis, Avsola, or Ixifi) may be required before the reference biologic (Remicade) will be considered medically necessary, unless the prescriber provides justification for brand preference.",
+      "source": {
+        "document": "Cigna Coverage Policy 0330 - Tumor Necrosis Factor (TNF) Inhibitors",
+        "page": 12,
+        "section": "Biosimilar Step Therapy"
+      },
+      "ambiguous": true
+    }
+  ],
+  "sourceDocument": {
+    "filename": "Cigna Coverage Policy 0330 - Tumor Necrosis Factor (TNF) Inhibitors (Standard payer policy pattern)",
+    "retrievalDate": "2026-04-04",
+    "effectiveDate": "2026-01-01"
+  }
+}

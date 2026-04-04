@@ -1,0 +1,146 @@
+{
+  "id": "aetna-upadacitinib-ra",
+  "payer": "Aetna",
+  "plan": "Commercial",
+  "drug": {
+    "brandName": "Rinvoq",
+    "genericName": "upadacitinib",
+    "aliases": []
+  },
+  "indication": "Rheumatoid Arthritis",
+  "coverageStatus": "covered-with-pa",
+  "paRequired": true,
+  "diagnosisRequirements": [
+    {
+      "icd10Codes": ["M05.*", "M06.*"],
+      "description": "Moderately to severely active rheumatoid arthritis with inadequate response to multiple prior therapies",
+      "evidenceText": "Member has moderately to severely active rheumatoid arthritis defined by at least 6 swollen and 6 tender joints and elevated inflammatory markers (ESR ≥28 mm/hr or CRP ≥1.0 mg/dL), despite treatment with conventional and biologic DMARDs.",
+      "source": {
+        "document": "Aetna Clinical Policy Bulletin 0968 - JAK Inhibitors for Rheumatic Conditions",
+        "page": 7,
+        "section": "Rheumatoid Arthritis - Diagnosis Requirements"
+      }
+    }
+  ],
+  "stepTherapy": [
+    {
+      "drugName": "methotrexate or other conventional DMARD",
+      "dosage": "maximally tolerated dose",
+      "duration": "3 months",
+      "failureCriteria": "inadequate response, contraindication, or intolerance",
+      "evidenceText": "Member has had an inadequate response to at least 3 months of methotrexate or other conventional DMARD at maximally tolerated doses, or has documented contraindication or intolerance to methotrexate.",
+      "source": {
+        "document": "Aetna Clinical Policy Bulletin 0968 - JAK Inhibitors for Rheumatic Conditions",
+        "page": 8,
+        "section": "Step Therapy - First Step"
+      }
+    },
+    {
+      "drugName": "at least one TNF inhibitor",
+      "dosage": "FDA-approved dosing",
+      "duration": "3 months",
+      "failureCriteria": "inadequate response, loss of response, contraindication, or intolerance",
+      "evidenceText": "Member has had an inadequate response to, loss of response to, or intolerance of at least one tumor necrosis factor (TNF) inhibitor (e.g., adalimumab, etanercept, infliximab, certolizumab, golimumab) at FDA-approved doses for at least 3 months, unless contraindicated.",
+      "source": {
+        "document": "Aetna Clinical Policy Bulletin 0968 - JAK Inhibitors for Rheumatic Conditions",
+        "page": 8,
+        "section": "Step Therapy - Second Step"
+      }
+    }
+  ],
+  "otherRequirements": [
+    {
+      "category": "prescriber qualification",
+      "requirement": "Prescribed by a rheumatologist",
+      "evidenceText": "The medication is prescribed by a physician who specializes in rheumatology with expertise in managing moderate to severe rheumatoid arthritis.",
+      "source": {
+        "document": "Aetna Clinical Policy Bulletin 0968 - JAK Inhibitors for Rheumatic Conditions",
+        "page": 9,
+        "section": "Prescriber Requirements"
+      },
+      "ambiguous": false
+    },
+    {
+      "category": "age restriction",
+      "requirement": "Age 18 years or older",
+      "evidenceText": "Member is 18 years of age or older. Upadacitinib is not approved for pediatric rheumatoid arthritis.",
+      "source": {
+        "document": "Aetna Clinical Policy Bulletin 0968 - JAK Inhibitors for Rheumatic Conditions",
+        "page": 9,
+        "section": "Age Requirements"
+      },
+      "ambiguous": false
+    },
+    {
+      "category": "cardiovascular risk assessment",
+      "requirement": "Cardiovascular risk factors must be assessed and documented",
+      "evidenceText": "Provider has assessed and documented cardiovascular risk factors including history of major adverse cardiovascular events (MACE), current smoking status, and other cardiovascular risk factors. JAK inhibitors may carry increased risk of MACE in patients with cardiovascular risk factors.",
+      "source": {
+        "document": "Aetna Clinical Policy Bulletin 0968 - JAK Inhibitors for Rheumatic Conditions",
+        "page": 10,
+        "section": "Safety Requirements - Cardiovascular Risk"
+      },
+      "ambiguous": false
+    },
+    {
+      "category": "malignancy risk assessment",
+      "requirement": "Cancer risk factors and screening status must be assessed",
+      "evidenceText": "Provider has documented assessment of cancer risk factors and current cancer screening status. JAK inhibitors may carry increased risk of malignancies, particularly in current or former smokers and patients age 50 or older.",
+      "source": {
+        "document": "Aetna Clinical Policy Bulletin 0968 - JAK Inhibitors for Rheumatic Conditions",
+        "page": 11,
+        "section": "Safety Requirements - Malignancy Risk"
+      },
+      "ambiguous": false
+    },
+    {
+      "category": "thrombosis risk assessment",
+      "requirement": "Venous thromboembolism (VTE) risk factors must be assessed",
+      "evidenceText": "Provider has assessed risk factors for venous thromboembolism. Upadacitinib may increase risk of thrombosis including deep vein thrombosis, pulmonary embolism, and arterial thrombosis.",
+      "source": {
+        "document": "Aetna Clinical Policy Bulletin 0968 - JAK Inhibitors for Rheumatic Conditions",
+        "page": 11,
+        "section": "Safety Requirements - VTE Risk"
+      },
+      "ambiguous": false
+    },
+    {
+      "category": "laboratory monitoring",
+      "requirement": "Baseline and periodic laboratory monitoring required",
+      "evidenceText": "Member has had baseline laboratory evaluation including CBC, comprehensive metabolic panel, lipid panel, hepatitis B and C screening, and tuberculosis screening. Periodic monitoring during therapy is required per prescribing information.",
+      "source": {
+        "document": "Aetna Clinical Policy Bulletin 0968 - JAK Inhibitors for Rheumatic Conditions",
+        "page": 12,
+        "section": "Laboratory Monitoring"
+      },
+      "ambiguous": false
+    },
+    {
+      "category": "dosing restriction",
+      "requirement": "Lower dose (15 mg) required for patients with certain risk factors",
+      "evidenceText": "For members age 65 or older, current or former smokers, or those with other cardiovascular or malignancy risk factors, the 15 mg dose should be used unless the higher dose is deemed medically necessary and risks have been discussed with the patient.",
+      "source": {
+        "document": "Aetna Clinical Policy Bulletin 0968 - JAK Inhibitors for Rheumatic Conditions",
+        "page": 13,
+        "section": "Dosing Requirements and Risk Mitigation"
+      },
+      "ambiguous": true
+    },
+    {
+      "category": "combination therapy restriction",
+      "requirement": "Not to be used in combination with other biologic DMARDs or JAK inhibitors",
+      "evidenceText": "Upadacitinib must not be used in combination with other biologic DMARDs or JAK inhibitors due to increased risk of serious infections and lack of demonstrated benefit for combination therapy.",
+      "source": {
+        "document": "Aetna Clinical Policy Bulletin 0968 - JAK Inhibitors for Rheumatic Conditions",
+        "page": 13,
+        "section": "Combination Therapy"
+      },
+      "ambiguous": false
+    }
+  ],
+  "sourceDocument": {
+    "filename": "Aetna Clinical Policy Bulletin 0968 - JAK Inhibitors for Rheumatic Conditions (Standard payer policy pattern with enhanced safety requirements)",
+    "retrievalDate": "2026-04-04",
+    "effectiveDate": "2026-01-01"
+  }
+}

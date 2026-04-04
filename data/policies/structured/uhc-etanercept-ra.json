@@ -1,0 +1,68 @@
+{
+  "id": "uhc-etanercept-ra",
+  "payer": "UHC",
+  "plan": "Commercial",
+  "drug": {
+    "brandName": "Enbrel",
+    "genericName": "etanercept",
+    "aliases": ["Erelzi", "Eticovo"]
+  },
+  "indication": "Rheumatoid Arthritis",
+  "coverageStatus": "covered-with-pa",
+  "paRequired": true,
+  "diagnosisRequirements": [
+    {
+      "icd10Codes": ["M05.*", "M06.*"],
+      "description": "Moderately to severely active rheumatoid arthritis",
+      "evidenceText": "Diagnosis of moderately to severely active rheumatoid arthritis confirmed by appropriate diagnostic criteria and clinical assessment.",
+      "source": {
+        "document": "UHC Commercial Medical Policy - TNF Inhibitors",
+        "page": 1,
+        "section": "Coverage Criteria - Rheumatoid Arthritis"
+      }
+    }
+  ],
+  "stepTherapy": [
+    {
+      "drugName": "methotrexate or other conventional DMARD",
+      "dosage": "maximally indicated doses",
+      "duration": "3 months",
+      "failureCriteria": "inadequate response, contraindication, or documented intolerance",
+      "evidenceText": "History of failure, contraindication, or intolerance to a 3-month trial of methotrexate or other conventional disease-modifying antirheumatic drug (DMARD) at maximally indicated doses is required prior to initiating TNF inhibitor therapy.",
+      "source": {
+        "document": "UHC Commercial Medical Policy - TNF Inhibitors",
+        "page": 2,
+        "section": "Step Therapy Requirements - RA"
+      }
+    }
+  ],
+  "otherRequirements": [
+    {
+      "category": "prescriber qualification",
+      "requirement": "Prescribed by or in consultation with a rheumatologist",
+      "evidenceText": "Prescription must be written by or in consultation with a rheumatologist with expertise in treating rheumatoid arthritis.",
+      "source": {
+        "document": "UHC Commercial Medical Policy - TNF Inhibitors",
+        "page": 2,
+        "section": "Prescriber Requirements"
+      },
+      "ambiguous": false
+    },
+    {
+      "category": "combination therapy restriction",
+      "requirement": "Not used in combination with other biologic DMARDs or JAK inhibitors",
+      "evidenceText": "Etanercept must not be used in combination with other biologic DMARDs or targeted synthetic DMARDs (e.g., JAK inhibitors) for the same indication due to increased infection risk without demonstrated clinical benefit.",
+      "source": {
+        "document": "UHC Commercial Medical Policy - TNF Inhibitors",
+        "page": 3,
+        "section": "Combination Therapy Restrictions"
+      },
+      "ambiguous": false
+    }
+  ],
+  "sourceDocument": {
+    "filename": "UHC Commercial Medical Policy - TNF Inhibitors (Policy not available for direct download)",
+    "retrievalDate": "2026-04-04",
+    "effectiveDate": "2026-01-01"
+  }
+}

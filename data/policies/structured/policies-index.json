@@ -1,0 +1,37 @@
+{
+  "version": "1.0",
+  "generatedDate": "2026-04-04",
+  "therapeuticArea": "Rheumatoid Arthritis",
+  "policies": [
+    {
+      "id": "uhc-adalimumab-ra",
+      "file": "uhc-adalimumab-ra.json",
+      "payer": "UHC",
+      "drug": "adalimumab"
+    },
+    {
+      "id": "uhc-etanercept-ra",
+      "file": "uhc-etanercept-ra.json",
+      "payer": "UHC",
+      "drug": "etanercept"
+    },
+    {
+      "id": "aetna-adalimumab-ra",
+      "file": "aetna-adalimumab-ra.json",
+      "payer": "Aetna",
+      "drug": "adalimumab"
+    },
+    {
+      "id": "cigna-infliximab-ra",
+      "file": "cigna-infliximab-ra.json",
+      "payer": "Cigna",
+      "drug": "infliximab"
+    },
+    {
+      "id": "aetna-upadacitinib-ra",
+      "file": "aetna-upadacitinib-ra.json",
+      "payer": "Aetna",
+      "drug": "upadacitinib"
+    }
+  ]
+}
