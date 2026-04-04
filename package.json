@@ -10,7 +10,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "extract": "tsx src/extraction/pdf-extractor.ts",
-    "validate": "tsx src/structuring/validators.ts"
+    "validate": "tsx src/structuring/validators.ts",
+    "start": "tsx src/mcp/index.ts",
+    "dev": "tsx watch src/mcp/index.ts"
   },
   "keywords": [],
   "author": "",
