@@ -6,23 +6,23 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 
 **Core value:** A prior auth specialist can ask a natural language question about a patient's drug coverage and get back a grounded answer citing real policy language — coverage status, required criteria, and what's missing — in seconds instead of hours of manual PDF review.
 
-**Current focus:** Phase 3 - Patient Context Integration
+**Current focus:** Phase 4 - Patient Data Setup
 
 ## Current Position
 
-Phase: 3 of 6 (Patient Context Integration)
-Plan: 2 of 2
+Phase: 4 of 6 (Patient Data Setup)
+Plan: 1 of 1
 Status: Completed
-Last activity: 2026-04-04 — Completed plan 03-02
+Last activity: 2026-04-04 — Completed plan 04-01
 
-Progress: [██████░░░░] 60%
+Progress: [███████░░░] 70%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 6
-- Average duration: 3.9 minutes
-- Total execution time: 0.4 hours
+- Total plans completed: 7
+- Average duration: 9.9 minutes
+- Total execution time: 1.2 hours
 
 **By Phase:**
 
@@ -31,10 +31,11 @@ Progress: [██████░░░░] 60%
 | 01-policy-data-foundation | 2 | 9.3 min | 4.6 min |
 | 02-mcp-server-core | 2 | 6.5 min | 3.3 min |
 | 03-patient-context-integration | 2 | 8.0 min | 4.0 min |
+| 04-patient-data-setup | 1 | 46.0 min | 46.0 min |
 
 **Recent Trend:**
-- Last 5 plans: 02-01 (4.0 min), 02-02 (2.5 min), 03-01 (4.0 min), 03-02 (4.0 min)
-- Trend: Excellent velocity - maintaining consistent pace
+- Last 5 plans: 02-02 (2.5 min), 03-01 (4.0 min), 03-02 (4.0 min), 04-01 (46.0 min)
+- Trend: Phase 4 plan took longer due to hand-crafting FHIR bundles and checkpoint verification
 
 *Updated after each plan completion*
 
@@ -63,6 +64,10 @@ Recent decisions affecting current work:
 - Cautious clinical language (03-01) — Use 'appears_to_match' vs 'meets' to acknowledge automated analysis limitations; legally defensible outputs
 - Multi-drug parsing for step therapy (03-01) — Parse 'methotrexate OR leflunomide OR sulfasalazine' as alternatives; check if ANY prior trial exists
 - [Phase 03]: Three operational modes for check_patient_readiness - automated FHIR analysis, manual checklist, and graceful error fallback
+- Hand-crafted FHIR bundles (04-01) — Only 3 patients needed, full control over scenarios critical for demo, faster than Synthea generation + editing
+- FHIR Bundle collection type (04-01) — Local files not server submissions, collection type appropriate for static demo data
+- Exact payer name matching (04-01) — FHIR extractor reads payor[0].display, must match policy store strings exactly for check_patient_readiness tool
+- 2-month methotrexate gap for Patient 2 (04-01) — Creates obvious gap for demo (authoredOn 2026-02-01 to demo time 2026-04-04 = ~2 months, clearly short of 3-month requirement)
 
 ### Pending Todos
 
@@ -82,9 +87,12 @@ RESOLVED — Phase 2 complete. All 3 core MCP tools implemented and tested.
 **Phase 3 (Patient Context Integration):**
 COMPLETED — Both plans complete. FHIR integration layer (03-01) and patient readiness tool integration (03-02) delivered.
 
+**Phase 4 (Patient Data Setup):**
+COMPLETED — Plan complete. Three demo patient FHIR bundles created with controlled scenarios (full match, partial match with gap, poor match). All bundles validated against extractors. Prompt Opinion loading steps documented for Phase 5.
+
 ## Session Continuity
 
 Last session: 2026-04-04
-Stopped at: Completed 03-02-PLAN.md (Patient Readiness Tool Integration)
-Resume file: .planning/phases/03-patient-context-integration/03-02-SUMMARY.md
-Next: Phase 04 - Claude Integration (deep prompt development and context assembly)
+Stopped at: Completed 04-01-PLAN.md (Demo Patient FHIR Bundles)
+Resume file: .planning/phases/04-patient-data-setup/04-01-SUMMARY.md
+Next: Phase 5 - Deployment and Integration (MCP server registration, patient loading, E2E testing)
