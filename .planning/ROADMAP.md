@@ -80,10 +80,10 @@ Plans:
   2. Demo patients represent controlled scenarios: full criteria match, partial match with gaps, poor match with major gaps
   3. Each demo patient has relevant FHIR data: RA diagnosis codes, medication history, lab results, payer information
   4. Patients are accessible via Prompt Opinion's patient selector in the chat interface
-**Plans**: TBD
+**Plans:** 1 plan
 
 Plans:
-- [ ] TBD
+- [ ] 04-01-PLAN.md — Create 3 FHIR patient bundles (full match, partial match, poor match) and validate against extractors
 
 ### Phase 5: Deployment & Integration
 **Goal**: MCP server deployed and functional within Prompt Opinion workspace
