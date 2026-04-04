@@ -1,0 +1,221 @@
+{
+  "resourceType": "Bundle",
+  "type": "collection",
+  "entry": [
+    {
+      "fullUrl": "urn:uuid:patient-03",
+      "resource": {
+        "resourceType": "Patient",
+        "id": "patient-03-poor-match",
+        "identifier": [
+          {
+            "system": "http://hospital.example.org/mrn",
+            "value": "MRN-003-DEMO"
+          }
+        ],
+        "name": [
+          {
+            "use": "official",
+            "family": "Washington",
+            "given": ["Linda", "M."]
+          }
+        ],
+        "gender": "female",
+        "birthDate": "1968-11-30",
+        "address": [
+          {
+            "use": "home",
+            "line": ["789 Elm St"],
+            "city": "Houston",
+            "state": "TX",
+            "postalCode": "77001"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:condition-ra-03",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "condition-ra-03",
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active"
+            }
+          ]
+        },
+        "verificationStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-ver-status",
+              "code": "confirmed"
+            }
+          ]
+        },
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/condition-category",
+                "code": "encounter-diagnosis"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://hl7.org/fhir/sid/icd-10-cm",
+              "code": "M06.9",
+              "display": "Rheumatoid arthritis, unspecified"
+            }
+          ],
+          "text": "Rheumatoid arthritis"
+        },
+        "subject": {
+          "reference": "urn:uuid:patient-03"
+        },
+        "onsetDateTime": "2025-06-15",
+        "recordedDate": "2025-06-20"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:obs-esr-03",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "obs-esr-03",
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "laboratory"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "30341-2",
+              "display": "Erythrocyte sedimentation rate"
+            }
+          ],
+          "text": "ESR"
+        },
+        "subject": {
+          "reference": "urn:uuid:patient-03"
+        },
+        "effectiveDateTime": "2024-06-20",
+        "valueQuantity": {
+          "value": 28,
+          "unit": "mm/hr",
+          "system": "http://unitsofmeasure.org",
+          "code": "mm/h"
+        },
+        "interpretation": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation",
+                "code": "H",
+                "display": "High"
+              }
+            ]
+          }
+        ],
+        "referenceRange": [
+          {
+            "low": {
+              "value": 0,
+              "unit": "mm/hr"
+            },
+            "high": {
+              "value": 20,
+              "unit": "mm/hr"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:coverage-03",
+      "resource": {
+        "resourceType": "Coverage",
+        "id": "coverage-03",
+        "status": "active",
+        "type": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+              "code": "HIP",
+              "display": "health insurance plan policy"
+            }
+          ]
+        },
+        "subscriber": {
+          "reference": "urn:uuid:patient-03"
+        },
+        "beneficiary": {
+          "reference": "urn:uuid:patient-03"
+        },
+        "payor": [
+          {
+            "display": "Aetna"
+          }
+        ],
+        "class": [
+          {
+            "type": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/coverage-class",
+                  "code": "plan"
+                }
+              ]
+            },
+            "value": "Commercial",
+            "name": "Aetna Commercial Plan"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:practitioner-03",
+      "resource": {
+        "resourceType": "Practitioner",
+        "id": "practitioner-03",
+        "name": [
+          {
+            "family": "Martinez",
+            "given": ["Robert"],
+            "prefix": ["Dr."]
+          }
+        ],
+        "qualification": [
+          {
+            "code": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/v2-0360",
+                  "code": "MD",
+                  "display": "Doctor of Medicine"
+                }
+              ],
+              "text": "MD"
+            }
+          },
+          {
+            "code": {
+              "text": "Family Medicine"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
