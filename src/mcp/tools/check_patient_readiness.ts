@@ -190,7 +190,6 @@ export function registerCheckPatientReadiness(server: McpServer): void {
           plan: policy.plan,
           indication: policy.indication,
           readiness_status: 'requires_patient_data',
-          message: "Patient context integration pending. Below are the prior authorization criteria that would be checked against the patient's clinical data.",
           criteria_checklist: criteriaChecklist,
           total_criteria: criteriaChecklist.length,
           note: "Provide fhir_token and patient_id in patient_context for automated readiness analysis",
