@@ -3,6 +3,7 @@ import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/
 import { createMcpExpressApp } from '@modelcontextprotocol/sdk/server/express.js';
 import { registerGetDrugCoverage } from './tools/get_drug_coverage.js';
 import { registerGetPriorAuthCriteria } from './tools/get_prior_auth_criteria.js';
+import { registerCheckPatientReadiness } from './tools/check_patient_readiness.js';
 import { getAllPolicies } from './policy_store/loader.js';
 
 // Create Express app with MCP defaults
@@ -13,6 +14,7 @@ app.get('/health', (req, res) => {
   const policies = getAllPolicies();
   res.json({
     status: 'ok',
+    tools: 3,
     policies: policies.length,
     payers: [...new Set(policies.map(p => p.payer))],
     drugs: [...new Set(policies.map(p => p.drug.genericName))]
@@ -37,6 +39,7 @@ app.post('/mcp', async (req, res) => {
   // Register tools
   registerGetDrugCoverage(server);
   registerGetPriorAuthCriteria(server);
+  registerCheckPatientReadiness(server);
 
   // Create stateless transport
   const transport = new StreamableHTTPServerTransport({
