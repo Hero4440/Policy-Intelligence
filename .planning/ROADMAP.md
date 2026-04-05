@@ -2,7 +2,7 @@
 
 ## Overview
 
-PolicyPilot delivers prior authorization readiness intelligence through a 6-phase build: extract real payer policy data into structured JSON, implement 3 MCP tools (drug coverage, PA criteria, patient readiness), integrate FHIR patient context via SHARP specs, set up demo patients in Prompt Opinion, deploy the MCP server and register it in Prompt Opinion, and create a polished demo video showing the complete workflow. Each phase delivers a verifiable capability, building from data foundation through integration to demo-ready state. The critical path starts with policy data extraction — data quality underpins everything downstream.
+PolicyPilot delivers prior authorization readiness intelligence through a 6-phase build plus one inserted frontend phase: extract real payer policy data into structured JSON, implement 3 MCP tools (drug coverage, PA criteria, patient readiness), integrate FHIR patient context via SHARP specs, set up demo patients in Prompt Opinion, deploy the MCP server and register it in Prompt Opinion, add an Anton Rx demo frontend that presents the normalized policy data in a Prompt Opinion-inspired workspace, and create a polished demo video showing the complete workflow. Each phase delivers a verifiable capability, building from data foundation through integration to demo-ready state. The critical path starts with policy data extraction — data quality underpins everything downstream.
 
 ## Phases
 
@@ -17,6 +17,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [ ] **Phase 3: Patient Context Integration** - Add FHIR context handling and readiness analysis
 - [ ] **Phase 4: Patient Data Setup** - Create synthetic demo patients in Prompt Opinion
 - [ ] **Phase 5: Deployment & Integration** - Deploy MCP server and integrate with Prompt Opinion platform
+- [ ] **Phase 5.1: Anton Rx Demo Frontend (INSERTED)** - Build a Prompt Opinion-inspired frontend for searchable, comparable drug policy coverage
 - [ ] **Phase 6: Demo Preparation** - Create demo video and validate complete workflow
 
 ## Phase Details
@@ -96,10 +97,28 @@ Plans:
   4. PolicyPilot agent configured in Prompt Opinion with all 3 MCP tools attached
   5. Solution published to Prompt Opinion Marketplace for judge discovery
   6. End-to-end test: user can select patient, ask coverage question, and receive grounded answer with policy citations
-**Plans**: TBD
+**Plans:** 2 plans
 
 Plans:
-- [ ] TBD
+- [ ] 05-01-PLAN.md — Harden the MCP server for remote access, deployment, and smoke verification
+- [ ] 05-02-PLAN.md — Register in Prompt Opinion, validate SHARP context, publish, and run end-to-end demo checks
+
+### Phase 5.1: Anton Rx Demo Frontend (INSERTED)
+**Goal**: A polished frontend demo presents normalized medical-benefit drug policies in a Prompt Opinion-inspired workspace for the Anton Rx track
+**Depends on**: Phase 1 and Phase 2 (uses normalized policy data and MCP-compatible concepts); can proceed in parallel with late Prompt Opinion UI work
+**Requirements**: UI-01, UI-02, UI-03, UI-04, UI-05
+**Success Criteria** (what must be TRUE):
+  1. A browser-based frontend exists in this repo and can be run locally
+  2. The frontend answers "Which plans cover Drug X?" from the normalized policy dataset
+  3. The frontend answers "What prior auth criteria does Plan Y require for Drug Z?" with structured evidence-backed criteria
+  4. The frontend supports side-by-side comparison across payers/plans for a selected drug
+  5. The layout closely evokes a Prompt Opinion workspace without copying branding one-for-one
+  6. The frontend includes a clearly labeled policy-change view or change placeholder so the Anton Rx track story is represented honestly
+**Plans:** 2 plans
+
+Plans:
+- [ ] 05.1-01-PLAN.md — Scaffold the frontend app, data adapter, and Prompt Opinion-inspired workspace shell
+- [ ] 05.1-02-PLAN.md — Build Anton Rx search, compare, criteria, and policy-change demo workflows
 
 ### Phase 6: Demo Preparation
 **Goal**: Polished demo video showing complete PolicyPilot workflow
@@ -119,7 +138,7 @@ Plans:
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
+Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 5.1 → 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -127,5 +146,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 2. MCP Server Core | 0/2 | Not started | - |
 | 3. Patient Context Integration | 0/TBD | Not started | - |
 | 4. Patient Data Setup | 0/TBD | Not started | - |
-| 5. Deployment & Integration | 0/TBD | Not started | - |
+| 5. Deployment & Integration | 0/2 | Not started | - |
+| 5.1 Anton Rx Demo Frontend | 0/2 | Planned | - |
 | 6. Demo Preparation | 0/TBD | Not started | - |

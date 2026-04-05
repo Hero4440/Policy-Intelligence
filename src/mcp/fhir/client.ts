@@ -62,13 +62,35 @@ export async function fetchPatientBundle(
 export function extractFhirToken(
   patientContext: Record<string, any>
 ): FhirToken | null {
-  // Try multiple possible token field names
-  const token =
-    patientContext.fhir_token ||
-    patientContext.access_token ||
-    patientContext.token;
+  const contexts = [
+    patientContext,
+    patientContext.sharp_context,
+    patientContext.sharpContext,
+    patientContext.context,
+    patientContext.fhir,
+    patientContext.fhir_context,
+  ].filter((value): value is Record<string, any> => Boolean(value) && typeof value === 'object');
 
-  const patientId = patientContext.patient_id || patientContext.patientId;
+  const token = pickFirstString(contexts, [
+    'fhir_token',
+    'access_token',
+    'token',
+    'bearer_token',
+    'bearerToken'
+  ]);
+
+  const patientId =
+    pickFirstString(contexts, ['patient_id', 'patientId']) ||
+    pickPatientId(contexts);
+
+  const fhirServerUrl = pickFirstString(contexts, [
+    'fhir_server_url',
+    'fhirServerUrl',
+    'server_url',
+    'serverUrl',
+    'base_url',
+    'baseUrl'
+  ]);
 
   if (!token || !patientId) {
     return null;
@@ -77,6 +99,37 @@ export function extractFhirToken(
   return {
     fhir_token: token,
     patient_id: patientId,
-    fhir_server_url: patientContext.fhir_server_url || DEFAULT_FHIR_SERVER,
+    fhir_server_url: fhirServerUrl || DEFAULT_FHIR_SERVER,
   };
+}
+
+function pickFirstString(
+  candidates: Array<Record<string, any>>,
+  keys: string[]
+): string | undefined {
+  for (const candidate of candidates) {
+    for (const key of keys) {
+      const value = candidate[key];
+      if (typeof value === 'string' && value.trim()) {
+        return value.trim();
+      }
+    }
+  }
+
+  return undefined;
+}
+
+function pickPatientId(candidates: Array<Record<string, any>>): string | undefined {
+  for (const candidate of candidates) {
+    const patient = candidate.patient;
+    if (typeof patient === 'string' && patient.trim()) {
+      return patient.trim();
+    }
+
+    if (patient && typeof patient === 'object' && typeof patient.id === 'string' && patient.id.trim()) {
+      return patient.id.trim();
+    }
+  }
+
+  return undefined;
 }

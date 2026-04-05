@@ -14,8 +14,13 @@ export function registerCheckPatientReadiness(server: McpServer): void {
       description: "Analyze a patient's clinical context against a health plan's prior authorization criteria for a specific drug. Returns which PA requirements the patient appears to meet, which are missing or unverifiable, and what documentation may still be needed. When patient_context includes fhir_token and patient_id, retrieves patient FHIR data and performs automated readiness analysis. Without FHIR context, returns the criteria checklist for manual review.",
       inputSchema: patientReadinessInput.shape
     },
-    async ({ plan, drug, patient_context }) => {
+    async ({ plan, drug, patient_context }, extra) => {
       try {
+        const effectivePatientContext = mergePatientContextFromHeaders(
+          patient_context,
+          extra?.requestInfo?.headers
+        );
+
         // Normalize drug name
         const normalizedDrug = normalizeDrugName(drug);
 
@@ -45,7 +50,7 @@ export function registerCheckPatientReadiness(server: McpServer): void {
         }
 
         // Try to extract FHIR token from patient context
-        const fhirToken = extractFhirToken(patient_context);
+        const fhirToken = extractFhirToken(effectivePatientContext);
 
         // MODE A: With FHIR token - perform automated analysis
         if (fhirToken) {
@@ -193,6 +198,13 @@ export function registerCheckPatientReadiness(server: McpServer): void {
           criteria_checklist: criteriaChecklist,
           total_criteria: criteriaChecklist.length,
           note: "Provide fhir_token and patient_id in patient_context for automated readiness analysis",
+          context_hint: {
+            accepted_sources: [
+              'patient_context.fhir_token + patient_context.patient_id',
+              'patient_context.access_token + patient_context.patient_id',
+              'SHARP headers: X-FHIR-Access-Token, X-Patient-ID, X-FHIR-Server-URL'
+            ]
+          },
           source: {
             document: policy.sourceDocument.filename,
             url: policy.sourceDocument.url,
@@ -283,4 +295,53 @@ function buildCriteriaChecklist(policy: any): any[] {
   }
 
   return criteriaChecklist;
+}
+
+function mergePatientContextFromHeaders(
+  patientContext: Record<string, any>,
+  headers?: Record<string, string | string[] | undefined>
+): Record<string, any> {
+  if (!headers) {
+    return patientContext;
+  }
+
+  const merged = { ...patientContext };
+  const sharpContext = {
+    ...(typeof patientContext.sharp_context === 'object' && patientContext.sharp_context !== null
+      ? patientContext.sharp_context
+      : {})
+  };
+
+  const token = firstHeaderValue(headers['x-fhir-access-token']);
+  const patientId = firstHeaderValue(headers['x-patient-id']);
+  const serverUrl = firstHeaderValue(headers['x-fhir-server-url']);
+
+  if (token && !merged.fhir_token && !merged.access_token && !merged.token) {
+    merged.access_token = token;
+    sharpContext.access_token ??= token;
+  }
+
+  if (patientId && !merged.patient_id && !merged.patientId) {
+    merged.patient_id = patientId;
+    sharpContext.patient_id ??= patientId;
+  }
+
+  if (serverUrl && !merged.fhir_server_url && !merged.server_url) {
+    merged.fhir_server_url = serverUrl;
+    sharpContext.fhir_server_url ??= serverUrl;
+  }
+
+  if (Object.keys(sharpContext).length > 0) {
+    merged.sharp_context = sharpContext;
+  }
+
+  return merged;
+}
+
+function firstHeaderValue(value: string | string[] | undefined): string | undefined {
+  if (Array.isArray(value)) {
+    return value[0];
+  }
+
+  return value;
 }

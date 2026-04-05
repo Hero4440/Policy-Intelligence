@@ -14,6 +14,8 @@ PolicyPilot is an **MCP server** that integrates into the **Prompt Opinion** hea
 
 **We build:** MCP server + policy data store + demo patient setup in Prompt Opinion.
 
+**Inserted hackathon track exception:** For the Anton Rx track, we also build a browser-based demo frontend that presents the normalized policy data in a Prompt Opinion-inspired workspace shell. This frontend is a track-specific demo surface, not a replacement for the Prompt Opinion integration path.
+
 ## v1 Requirements
 
 Requirements for hackathon release. Each maps to roadmap phases.
@@ -68,6 +70,14 @@ Requirements for hackathon release. Each maps to roadmap phases.
 - [ ] **DEM-02**: Demo covers: open patient → ask coverage question → ask criteria question → ask readiness question
 - [ ] **DEM-03**: Demo shows MCP tool calls visible in Prompt Opinion's tool trace view
 
+### Anton Rx Demo Frontend
+
+- [ ] **UI-01**: A local browser frontend presents searchable medical-benefit drug policy coverage using the normalized policy dataset
+- [ ] **UI-02**: Users can answer "Which plans cover Drug X?" through filters or search results
+- [ ] **UI-03**: Users can answer "What prior auth criteria does Plan Y require for Drug Z?" in a structured detail view with source evidence
+- [ ] **UI-04**: Users can compare at least two payer policies side-by-side for a selected drug
+- [ ] **UI-05**: The frontend includes an honest policy-change view or clearly labeled placeholder that supports the Anton Rx quarterly-change narrative
+
 ## v2 Requirements
 
 Deferred to post-hackathon.
@@ -98,7 +108,7 @@ Deferred to post-hackathon.
 
 | Feature | Reason |
 |---------|--------|
-| Custom chat UI (Streamlit/React) | Prompt Opinion provides the UI; building our own duplicates effort |
+| Custom chat UI (Streamlit/React) | Prompt Opinion provides the UI; building our own duplicates effort except for the Anton Rx track-specific demo frontend |
 | Live user PDF upload | Curated dataset; parsing errors catastrophic in demo |
 | Admin dashboard | Team edits JSON directly; no demo value |
 | Multi-agent system | Single MCP server with 3 tools sufficient |
@@ -140,13 +150,18 @@ Deferred to post-hackathon.
 | DEP-03 | Phase 5 | Pending |
 | DEP-04 | Phase 5 | Pending |
 | DEP-05 | Phase 5 | Pending |
+| UI-01 | Phase 5.1 | Pending |
+| UI-02 | Phase 5.1 | Pending |
+| UI-03 | Phase 5.1 | Pending |
+| UI-04 | Phase 5.1 | Pending |
+| UI-05 | Phase 5.1 | Pending |
 | DEM-01 | Phase 6 | Pending |
 | DEM-02 | Phase 6 | Pending |
 | DEM-03 | Phase 6 | Pending |
 
 **Coverage:**
-- v1 requirements: 29 total
-- Mapped to phases: 29 (100%)
+- v1 requirements: 34 total
+- Mapped to phases: 34 (100%)
 - Unmapped: 0
 
 ---

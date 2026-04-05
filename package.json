@@ -12,22 +12,35 @@
     "extract": "tsx src/extraction/pdf-extractor.ts",
     "validate": "tsx src/structuring/validators.ts",
     "start": "tsx src/mcp/index.ts",
-    "dev": "tsx watch src/mcp/index.ts"
+    "dev": "tsx watch src/mcp/index.ts",
+    "dev:stack": "bash scripts/dev-stack.sh",
+    "server:dev": "tsx watch src/server/index.ts",
+    "smoke:mcp": "tsx tests/mcp/smoke-remote-server.ts",
+    "frontend:dev": "vite",
+    "frontend:build": "vite build",
+    "ingest:examples": "tsx scripts/ingest-example-policies.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.29.0",
+    "@vitejs/plugin-react": "^6.0.1",
+    "cors": "^2.8.5",
     "express": "^5.2.1",
     "fhir-kit-client": "^1.9.2",
     "pdf-parse": "^2.4.5",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "vite": "^8.0.3",
     "zod": "^4.3.6"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
     "@types/fhir": "^0.0.41",
     "@types/node": "^25.5.2",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
     "tsx": "^4.21.0",
     "typescript": "^6.0.2"
   }

@@ -6,22 +6,22 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 
 **Core value:** A prior auth specialist can ask a natural language question about a patient's drug coverage and get back a grounded answer citing real policy language — coverage status, required criteria, and what's missing — in seconds instead of hours of manual PDF review.
 
-**Current focus:** Phase 4 - Patient Data Setup
+**Current focus:** Phase 5 - Deployment & Integration
 
 ## Current Position
 
-Phase: 4 of 6 (Patient Data Setup)
-Plan: 1 of 1
-Status: Completed
-Last activity: 2026-04-04 — Completed plan 04-01
+Phase: 5 of 6 (Deployment & Integration)
+Plan: 1 of 2
+Status: In progress
+Last activity: 2026-04-04 — Completed plan 05-01
 
-Progress: [███████░░░] 70%
+Progress: [████████░░] 80%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 7
-- Average duration: 9.9 minutes
+- Total plans completed: 8
+- Average duration: 8.7 minutes
 - Total execution time: 1.2 hours
 
 **By Phase:**
@@ -32,10 +32,11 @@ Progress: [███████░░░] 70%
 | 02-mcp-server-core | 2 | 6.5 min | 3.3 min |
 | 03-patient-context-integration | 2 | 8.0 min | 4.0 min |
 | 04-patient-data-setup | 1 | 46.0 min | 46.0 min |
+| 05-deployment-integration | 1 | 0.0 min | 0.0 min |
 
 **Recent Trend:**
-- Last 5 plans: 02-02 (2.5 min), 03-01 (4.0 min), 03-02 (4.0 min), 04-01 (46.0 min)
-- Trend: Phase 4 plan took longer due to hand-crafting FHIR bundles and checkpoint verification
+- Last 5 plans: 03-01 (4.0 min), 03-02 (4.0 min), 04-01 (46.0 min), 05-01 (0.0 min active session)
+- Trend: Phase 5 started with deployment hardening; main remaining work is Prompt Opinion UI integration and Marketplace publication
 
 *Updated after each plan completion*
 
@@ -68,6 +69,8 @@ Recent decisions affecting current work:
 - FHIR Bundle collection type (04-01) — Local files not server submissions, collection type appropriate for static demo data
 - Exact payer name matching (04-01) — FHIR extractor reads payor[0].display, must match policy store strings exactly for check_patient_readiness tool
 - 2-month methotrexate gap for Patient 2 (04-01) — Creates obvious gap for demo (authoredOn 2026-02-01 to demo time 2026-04-04 = ~2 months, clearly short of 3-month requirement)
+- Explicit public host allowlisting for MCP server (05-01) — MCP SDK localhost host validation rejects ngrok domains by default; PUBLIC_BASE_URL preserves local safety while enabling public verification
+- SSE-aware MCP smoke checks (05-01) — tools/list response arrives as event-stream framing, so deployment verification must parse `data:` payloads rather than assume raw JSON
 
 ### Pending Todos
 
@@ -90,9 +93,12 @@ COMPLETED — Both plans complete. FHIR integration layer (03-01) and patient re
 **Phase 4 (Patient Data Setup):**
 COMPLETED — Plan complete. Three demo patient FHIR bundles created with controlled scenarios (full match, partial match with gap, poor match). All bundles validated against extractors. Prompt Opinion loading steps documented for Phase 5.
 
+**Phase 5 (Deployment & Integration):**
+IN PROGRESS — Plan 05-01 complete. MCP server hardened for browser-based remote access with CORS, explicit public host allowlisting, and verified local + ngrok smoke tests. Remaining work is Prompt Opinion workspace connection, SHARP validation, agent configuration, and Marketplace publication.
+
 ## Session Continuity
 
 Last session: 2026-04-04
-Stopped at: Completed 04-01-PLAN.md (Demo Patient FHIR Bundles)
-Resume file: .planning/phases/04-patient-data-setup/04-01-SUMMARY.md
-Next: Phase 5 - Deployment and Integration (MCP server registration, patient loading, E2E testing)
+Stopped at: Completed 05-01-PLAN.md (Deployment hardening, ngrok verification, runbook)
+Resume file: .planning/phases/05-deployment-integration/05-01-SUMMARY.md
+Next: Continue 05-02 - Prompt Opinion registration, SHARP payload validation, agent setup, and Marketplace publication

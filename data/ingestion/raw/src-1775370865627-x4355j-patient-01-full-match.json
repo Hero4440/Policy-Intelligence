@@ -1,0 +1,380 @@
+{
+  "resourceType": "Bundle",
+  "type": "collection",
+  "entry": [
+    {
+      "fullUrl": "urn:uuid:patient-01",
+      "resource": {
+        "resourceType": "Patient",
+        "id": "patient-01-full-match",
+        "identifier": [
+          {
+            "system": "http://hospital.example.org/mrn",
+            "value": "MRN-001-DEMO"
+          }
+        ],
+        "name": [
+          {
+            "use": "official",
+            "family": "Anderson",
+            "given": ["Sarah", "J."]
+          }
+        ],
+        "gender": "female",
+        "birthDate": "1975-06-15",
+        "address": [
+          {
+            "use": "home",
+            "line": ["123 Main St"],
+            "city": "Boston",
+            "state": "MA",
+            "postalCode": "02101"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:condition-ra-01",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "condition-ra-01",
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active"
+            }
+          ]
+        },
+        "verificationStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-ver-status",
+              "code": "confirmed"
+            }
+          ]
+        },
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/condition-category",
+                "code": "encounter-diagnosis"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://hl7.org/fhir/sid/icd-10-cm",
+              "code": "M05.79",
+              "display": "Rheumatoid arthritis with rheumatoid factor of multiple sites without organ or systems involvement"
+            }
+          ],
+          "text": "Seropositive rheumatoid arthritis"
+        },
+        "subject": {
+          "reference": "urn:uuid:patient-01"
+        },
+        "onsetDateTime": "2023-01-15",
+        "recordedDate": "2023-01-20"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:medrequest-mtx-01",
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "medrequest-mtx-01",
+        "status": "active",
+        "intent": "order",
+        "medicationCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+              "code": "6851",
+              "display": "Methotrexate"
+            }
+          ],
+          "text": "Methotrexate 15mg weekly"
+        },
+        "subject": {
+          "reference": "urn:uuid:patient-01"
+        },
+        "authoredOn": "2023-02-01",
+        "requester": {
+          "reference": "urn:uuid:practitioner-01",
+          "display": "Dr. Emily Rodriguez, Rheumatology"
+        },
+        "dosageInstruction": [
+          {
+            "text": "15mg orally once weekly",
+            "timing": {
+              "repeat": {
+                "frequency": 1,
+                "period": 1,
+                "periodUnit": "wk"
+              }
+            },
+            "route": {
+              "coding": [
+                {
+                  "system": "http://snomed.info/sct",
+                  "code": "26643006",
+                  "display": "Oral route"
+                }
+              ]
+            },
+            "doseAndRate": [
+              {
+                "doseQuantity": {
+                  "value": 15,
+                  "unit": "mg",
+                  "system": "http://unitsofmeasure.org",
+                  "code": "mg"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:obs-esr-01",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "obs-esr-01",
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "laboratory"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "30341-2",
+              "display": "Erythrocyte sedimentation rate"
+            }
+          ],
+          "text": "ESR"
+        },
+        "subject": {
+          "reference": "urn:uuid:patient-01"
+        },
+        "effectiveDateTime": "2025-11-15",
+        "valueQuantity": {
+          "value": 40,
+          "unit": "mm/hr",
+          "system": "http://unitsofmeasure.org",
+          "code": "mm/h"
+        },
+        "interpretation": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation",
+                "code": "H",
+                "display": "High"
+              }
+            ]
+          }
+        ],
+        "referenceRange": [
+          {
+            "low": {
+              "value": 0,
+              "unit": "mm/hr"
+            },
+            "high": {
+              "value": 20,
+              "unit": "mm/hr"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:obs-crp-01",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "obs-crp-01",
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "laboratory"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "1988-5",
+              "display": "C reactive protein [Mass/volume] in Serum or Plasma"
+            }
+          ],
+          "text": "CRP"
+        },
+        "subject": {
+          "reference": "urn:uuid:patient-01"
+        },
+        "effectiveDateTime": "2025-11-15",
+        "valueQuantity": {
+          "value": 2.5,
+          "unit": "mg/L",
+          "system": "http://unitsofmeasure.org",
+          "code": "mg/L"
+        },
+        "interpretation": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation",
+                "code": "H",
+                "display": "High"
+              }
+            ]
+          }
+        ],
+        "referenceRange": [
+          {
+            "high": {
+              "value": 1.0,
+              "unit": "mg/L"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:obs-rf-01",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "obs-rf-01",
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "laboratory"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "11572-5",
+              "display": "Rheumatoid factor [Units/volume] in Serum or Plasma"
+            }
+          ],
+          "text": "Rheumatoid Factor"
+        },
+        "subject": {
+          "reference": "urn:uuid:patient-01"
+        },
+        "effectiveDateTime": "2025-10-20",
+        "valueString": "Positive",
+        "interpretation": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation",
+                "code": "A",
+                "display": "Abnormal"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:coverage-01",
+      "resource": {
+        "resourceType": "Coverage",
+        "id": "coverage-01",
+        "status": "active",
+        "type": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+              "code": "HIP",
+              "display": "health insurance plan policy"
+            }
+          ]
+        },
+        "subscriber": {
+          "reference": "urn:uuid:patient-01"
+        },
+        "beneficiary": {
+          "reference": "urn:uuid:patient-01"
+        },
+        "payor": [
+          {
+            "display": "UHC"
+          }
+        ],
+        "class": [
+          {
+            "type": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/coverage-class",
+                  "code": "plan"
+                }
+              ]
+            },
+            "value": "Commercial",
+            "name": "UHC Commercial Plan"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:practitioner-01",
+      "resource": {
+        "resourceType": "Practitioner",
+        "id": "practitioner-01",
+        "name": [
+          {
+            "family": "Rodriguez",
+            "given": ["Emily"],
+            "prefix": ["Dr."]
+          }
+        ],
+        "qualification": [
+          {
+            "code": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/v2-0360",
+                  "code": "MD",
+                  "display": "Doctor of Medicine"
+                }
+              ],
+              "text": "MD"
+            }
+          },
+          {
+            "code": {
+              "text": "Rheumatology"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
