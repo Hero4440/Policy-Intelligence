@@ -3,3 +3,8 @@ dist/
 *.log
 .env
 .DS_Store
+/data/
+.DS_Store
+docs/hackaathon/
+docs/hackaathon2/
+data/ingestion/db.json
