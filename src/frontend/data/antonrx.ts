@@ -116,6 +116,11 @@ export interface AntonRxCatalogSummary {
   issuers: string[];
 }
 
+export interface IngestionUploadResult {
+  accepted: Array<{ source: IngestedSourceRecord; snapshotCount: number }>;
+  summary: IngestionSummary;
+}
+
 type UploadFilePayload = {
   name: string;
   mimeType: string;
@@ -177,7 +182,7 @@ export async function uploadIngestionFiles(files: File[]) {
     throw new Error(`Upload failed with ${response.status}`);
   }
 
-  return response.json() as Promise<{ accepted: Array<{ source: IngestedSourceRecord; snapshotCount: number }>; summary: IngestionSummary }>;
+  return response.json() as Promise<IngestionUploadResult>;
 }
 
 async function toUploadPayload(file: File): Promise<UploadFilePayload> {

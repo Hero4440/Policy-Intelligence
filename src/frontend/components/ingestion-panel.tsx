@@ -3,14 +3,15 @@ import {
   uploadIngestionFiles,
   type AntonRxCatalogSummary,
   type IngestedSourceRecord,
-  type IngestionSummary
+  type IngestionSummary,
+  type IngestionUploadResult
 } from '../data/antonrx.js';
 
 type IngestionPanelProps = {
   ingestedSources: IngestedSourceRecord[];
   ingestionSummary: IngestionSummary | null;
   catalogSummary: AntonRxCatalogSummary | null;
-  onIngestionComplete: () => void;
+  onIngestionComplete: (result: IngestionUploadResult) => Promise<void> | void;
 };
 
 export function IngestionPanel({
@@ -22,6 +23,7 @@ export function IngestionPanel({
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
+  const [uploadNotice, setUploadNotice] = useState<string | null>(null);
 
   async function handleFiles(nextFiles: FileList | null) {
     const files = nextFiles ? Array.from(nextFiles) : [];
@@ -31,9 +33,16 @@ export function IngestionPanel({
 
     setIsUploading(true);
     setUploadError(null);
+    setUploadNotice(null);
     try {
-      await uploadIngestionFiles(files);
-      onIngestionComplete();
+      const result = await uploadIngestionFiles(files);
+      await onIngestionComplete(result);
+      const normalizedCount = result.accepted.reduce((count, item) => count + item.snapshotCount, 0);
+      setUploadNotice(
+        normalizedCount > 0
+          ? `Uploaded ${files.length} file${files.length === 1 ? '' : 's'} and created ${normalizedCount} searchable snapshot${normalizedCount === 1 ? '' : 's'}.`
+          : `Uploaded ${files.length} file${files.length === 1 ? '' : 's'}. The new sources were stored, but no searchable snapshots were created yet.`
+      );
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
       }
@@ -57,14 +66,6 @@ export function IngestionPanel({
       </div>
 
       <div className="ingestion-stats-grid">
-        <article className="ingestion-stat-card">
-          <span className="detail-label">Seed plans</span>
-          <strong>{catalogSummary?.planCount ?? '—'}</strong>
-        </article>
-        <article className="ingestion-stat-card">
-          <span className="detail-label">Seed formulary rows</span>
-          <strong>{catalogSummary?.formularyRowCount ?? '—'}</strong>
-        </article>
         <article className="ingestion-stat-card">
           <span className="detail-label">Structured policies</span>
           <strong>{catalogSummary?.structuredPolicyCount ?? '—'}</strong>
@@ -114,6 +115,7 @@ export function IngestionPanel({
       </div>
 
       {uploadError && <div className="chat-error">{uploadError}</div>}
+      {uploadNotice && <div className="chat-upload-zone">{uploadNotice}</div>}
 
       <div className="ingestion-source-list">
         {ingestedSources.length === 0 && (

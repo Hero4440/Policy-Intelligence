@@ -1,5 +1,5 @@
 import type { AntonRxCatalogSummary, IngestedSourceRecord, IngestionSummary } from '../data/antonrx.js';
-import { InfoChip } from './info-chip.js';
+import { InfoChip, InfoLabel } from './info-chip.js';
 
 type DataOverviewViewProps = {
   ingestedSources: IngestedSourceRecord[];
@@ -49,31 +49,44 @@ export function DataOverviewView({
 
       <div className="detail-summary-card">
         <div>
-          <span className="detail-label">Seeded Plans</span>
+          <InfoLabel label="Seeded Plans" description="Plans loaded from the packaged Anton Rx dataset that give the app baseline plan coverage breadth." />
           <strong>{catalogSummary?.planCount ?? '—'}</strong>
         </div>
         <div>
-          <span className="detail-label">Uploaded Sources</span>
+          <InfoLabel label="Uploaded Sources" description="Raw files uploaded into the system, such as PDFs, CSVs, JSON policy files, or FHIR bundles." />
           <strong>{ingestionSummary?.sourceCount ?? 0}</strong>
         </div>
         <div>
-          <span className="detail-label">Uploaded Snapshots</span>
+          <InfoLabel label="Uploaded Snapshots" description="Searchable normalized records created from uploaded files. These are the records used by compare and detail views." />
           <strong>{catalogSummary?.ingestedSnapshotCount ?? ingestionSummary?.snapshotCount ?? 0}</strong>
         </div>
       </div>
 
       <div className="detail-section">
-        <h3>Source status</h3>
+        <h3>
+          <InfoLabel label="Source status" description="How uploaded files were processed. Normalized means usable records were created. Partial means the file was understood only in part. Stored means it was saved without full normalization. Rejected means it could not be processed." />
+        </h3>
         <div className="data-bars">
-          {[
+          {([
             ['normalized', statusCounts.normalized],
             ['partial', statusCounts.partial],
             ['stored', statusCounts.stored],
             ['rejected', statusCounts.rejected]
-          ].map(([label, value]) => (
+          ] as Array<[string, number]>).map(([label, value]) => (
             <article key={label} className="data-bar-card">
               <div className="data-bar-header">
-                <span>{label}</span>
+                <InfoLabel
+                  label={label}
+                  description={
+                    label === 'normalized'
+                      ? 'The upload was successfully turned into searchable structured records.'
+                      : label === 'partial'
+                        ? 'The system extracted some useful information, but not enough to fully normalize the file.'
+                        : label === 'stored'
+                          ? 'The file was accepted and saved, but only as a raw source artifact.'
+                          : 'The file was invalid or did not match a supported structure.'
+                  }
+                />
                 <strong>{value}</strong>
               </div>
               <div className="data-bar-track">
@@ -88,7 +101,9 @@ export function DataOverviewView({
       </div>
 
       <div className="detail-section">
-        <h3>Most frequently detected uploaded drugs</h3>
+        <h3>
+          <InfoLabel label="Most frequently detected uploaded drugs" description="Drug names the system detected most often across uploaded source files. This gives a quick view of what your uploaded corpus is mostly about." />
+        </h3>
         {topDetectedDrugs.length === 0 ? (
           <div className="empty-state">Upload policy files to see detected drug families.</div>
         ) : (
@@ -102,22 +117,24 @@ export function DataOverviewView({
       </div>
 
       <div className="detail-section">
-        <h3>Seeded corpus snapshot</h3>
+        <h3>
+          <InfoLabel label="Seeded corpus snapshot" description="Summary of the packaged baseline dataset already loaded into the app before considering new uploads." />
+        </h3>
         <div className="data-kind-grid">
           <article className="detail-card">
-            <p className="detail-card-title">Formulary rows</p>
+            <p className="detail-card-title"><InfoLabel label="Formulary rows" description="Coverage rows loaded from formulary-style data sources in the packaged dataset." /></p>
             <p>{catalogSummary?.formularyRowCount ?? '—'}</p>
           </article>
           <article className="detail-card">
-            <p className="detail-card-title">Medical benefit rows</p>
+            <p className="detail-card-title"><InfoLabel label="Medical benefit rows" description="Rows explicitly flagged as medical benefit coverage in the packaged dataset." /></p>
             <p>{catalogSummary?.medicalBenefitRowCount ?? '—'}</p>
           </article>
           <article className="detail-card">
-            <p className="detail-card-title">Structured policies</p>
+            <p className="detail-card-title"><InfoLabel label="Structured policies" description="Deep policy records that already exist in structured form and can support richer detail and criteria views." /></p>
             <p>{catalogSummary?.structuredPolicyCount ?? '—'}</p>
           </article>
           <article className="detail-card">
-            <p className="detail-card-title">Issuers</p>
+            <p className="detail-card-title"><InfoLabel label="Issuers" description="Distinct payer or issuer names currently represented in the packaged dataset." /></p>
             <p>{catalogSummary?.issuers.length ?? '—'}</p>
           </article>
         </div>

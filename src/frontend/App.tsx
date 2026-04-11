@@ -24,6 +24,7 @@ import {
   type AntonRxCoverageMatch,
   type IngestedSourceRecord,
   type IngestionSummary,
+  type IngestionUploadResult,
   type AntonRxPlanDrugDetail
 } from './data/antonrx.js';
 
@@ -46,22 +47,21 @@ export default function App() {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
+  async function refreshDataViews() {
+    const [summaryPayload, sourcePayload, issuerPayload] = await Promise.all([
+      fetchAntonRxSummary().catch(() => ({ summary: null as AntonRxCatalogSummary | null })),
+      fetchIngestionSources().catch(() => ({ sources: [] as IngestedSourceRecord[], summary: null as IngestionSummary | null })),
+      fetchAntonRxIssuers().catch(() => ({ issuers: [] as string[] }))
+    ]);
+
+    setCatalogSummary(summaryPayload.summary);
+    setIngestedSources(sourcePayload.sources);
+    setIngestionSummary(sourcePayload.summary);
+    setIssuers(issuerPayload.issuers);
+  }
+
   useEffect(() => {
-    void fetchAntonRxIssuers()
-      .then((payload) => setIssuers(payload.issuers))
-      .catch(() => setIssuers([]));
-    void fetchAntonRxSummary()
-      .then((payload) => setCatalogSummary(payload.summary))
-      .catch(() => setCatalogSummary(null));
-    void fetchIngestionSources()
-      .then((payload) => {
-        setIngestedSources(payload.sources);
-        setIngestionSummary(payload.summary);
-      })
-      .catch(() => {
-        setIngestedSources([]);
-        setIngestionSummary(null);
-      });
+    void refreshDataViews();
   }, [refreshToken]);
 
   useEffect(() => {
@@ -114,6 +114,17 @@ export default function App() {
       .then((payload) => setDetail(payload.detail))
       .catch(() => setDetail(null));
   }, [selectedPlanId, drugQuery]);
+
+  async function handleIngestionComplete(result: IngestionUploadResult) {
+    setIngestionSummary(result.summary);
+    setIngestedSources((current) => {
+      const next = [...result.accepted.map((item) => item.source), ...current];
+      const deduped = new Map(next.map((source) => [source.id, source]));
+      return [...deduped.values()];
+    });
+    await refreshDataViews();
+    setRefreshToken((current) => current + 1);
+  }
 
   const selectedMatch = useMemo(
     () => matches.find((match) => match.planId === selectedPlanId) ?? matches[0] ?? null,
@@ -310,7 +321,7 @@ export default function App() {
             ingestedSources={ingestedSources}
             ingestionSummary={ingestionSummary}
             catalogSummary={catalogSummary}
-            onIngestionComplete={() => setRefreshToken((current) => current + 1)}
+            onIngestionComplete={handleIngestionComplete}
           />
         ) : activePage === 'compare' ? (
           <CompareBuilderView

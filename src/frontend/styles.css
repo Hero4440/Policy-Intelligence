@@ -169,6 +169,42 @@ select {
   transform: translateY(0);
 }
 
+.info-label {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: inherit;
+  font: inherit;
+}
+
+.info-label-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: rgba(104, 182, 223, 0.2);
+  color: #f1fbff;
+  font-weight: 700;
+  font-size: 0.68rem;
+  cursor: help;
+}
+
+.info-label-badge:focus-visible {
+  outline: 2px solid rgba(170, 224, 248, 0.9);
+  outline-offset: 2px;
+}
+
+.info-label:hover .info-chip-tooltip,
+.info-label:focus-within .info-chip-tooltip {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 .status-dot {
   width: 9px;
   height: 9px;
