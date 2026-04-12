@@ -2,6 +2,7 @@
   "id": "uhc-etanercept-ra",
   "payer": "UHC",
   "plan": "Commercial",
+  "policyTitle": "UHC Etanercept Prior Authorization Policy",
   "drug": {
     "brandName": "Enbrel",
     "genericName": "etanercept",

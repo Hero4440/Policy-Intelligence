@@ -2,6 +2,7 @@
   "id": "aetna-adalimumab-ra",
   "payer": "Aetna",
   "plan": "Commercial",
+  "policyTitle": "Aetna Adalimumab Prior Authorization Policy",
   "drug": {
     "brandName": "Humira",
     "genericName": "adalimumab",

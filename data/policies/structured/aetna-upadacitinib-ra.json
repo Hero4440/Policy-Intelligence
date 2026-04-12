@@ -2,6 +2,7 @@
   "id": "aetna-upadacitinib-ra",
   "payer": "Aetna",
   "plan": "Commercial",
+  "policyTitle": "Aetna Upadacitinib Prior Authorization Policy",
   "drug": {
     "brandName": "Rinvoq",
     "genericName": "upadacitinib",

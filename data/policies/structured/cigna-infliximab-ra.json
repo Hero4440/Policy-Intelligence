@@ -2,6 +2,7 @@
   "id": "cigna-infliximab-ra",
   "payer": "Cigna",
   "plan": "Commercial",
+  "policyTitle": "Cigna Infliximab Prior Authorization Policy",
   "drug": {
     "brandName": "Remicade",
     "genericName": "infliximab",

@@ -2,6 +2,7 @@
   "id": "uhc-adalimumab-ra",
   "payer": "UHC",
   "plan": "Commercial",
+  "policyTitle": "UHC Adalimumab Prior Authorization Policy",
   "drug": {
     "brandName": "Humira",
     "genericName": "adalimumab",
