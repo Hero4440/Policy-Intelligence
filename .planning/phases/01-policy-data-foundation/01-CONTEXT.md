@@ -1,56 +1,63 @@
 # Phase 1: Policy Data Foundation - Context
 
-**Gathered:** 2026-04-04
+**Gathered:** 2026-04-11
 **Status:** Ready for planning
 
 <domain>
 ## Phase Boundary
 
-Extract and structure real payer policy data from public PDFs into queryable JSON. Covers 3 payers (UHC, Aetna, Cigna) and top RA biologics. Downstream MCP tools, patient integration, and deployment are separate phases.
+Normalize BCBS NC (bevacizumab/oncology) and Cigna (rituximab/non-oncology) policies into structured, evidence-backed data using the existing Zod schema — extended for oncology fields. Add bevacizumab and rituximab drug families to the alias system. Migrate existing 5 RA policies to the extended schema for consistency. PDFs are available in `docs/hackaathon/Medical Drug Coverage Policy Examples/`.
+
+This phase builds on significant existing infrastructure: PDF extraction pipeline, Zod policy schema, drug alias system (4 drugs), 6 structured RA policies, and an MCP server with 3 tools. The work is adding 2 new policy documents and 2 new drug families to the existing foundation.
 
 </domain>
 
 <decisions>
 ## Implementation Decisions
 
-### Policy & drug selection
-- Target top 3-4 RA biologics: Humira (adalimumab), Enbrel (etanercept), Remicade (infliximab), and potentially one JAK inhibitor like Rinvoq
-- Three payers: UHC, Aetna, Cigna — all have public medical policy documents
-- Use whatever the actual policies say — don't engineer variation between payers for demo purposes; let real differences emerge
-- Support both brand and generic name lookups (e.g., "Humira" and "adalimumab" both return results)
+### Data extraction approach
+- Claude's discretion on extraction method (manual curation vs automated parsing) given hackathon scope of 2 documents
+- Claude's discretion on whether structured data files are checked into repo or generated at runtime
+- Source PDFs are already available in the repo (`docs/hackaathon/Medical Drug Coverage Policy Examples/`)
+- PDFs are mostly tables + text format (structured tables with drug lists, criteria columns, surrounding text)
+- Extend the existing Zod schema to accommodate oncology-specific fields (preferred/non-preferred splits, multiple indications)
 
-### Extraction granularity
-- Full detail on step therapy: capture each required prior therapy, duration, and failure criteria (e.g., "Must fail methotrexate 15mg+ for 3 months")
-- Hybrid approach for complex conditional logic: structure main criteria (diagnosis codes, step therapy requirements, lab requirements) as discrete fields, keep nuanced conditional language as evidence text for LLM interpretation
-- Flag ambiguous policy language with an ambiguity marker — downstream tools can surface this to users rather than guessing
-- Quantity limits and dosing restrictions: capture in evidence text only, not as structured fields — LLM interprets at query time
+### Evidence mapping strategy
+- Per-field evidence granularity: every normalized field (preferred status, step therapy, restrictions) gets its own evidence snippet with 1-3 sentences
+- Claude's discretion on evidence format (direct quotes vs paraphrased summaries) — pick what best serves downstream tools
+- Include page/section references (e.g., "Page 3, Section 2.1") for traceability back to original PDF
+- Use existing `ambiguous: true` flag pattern per field when evidence is unclear, with a note explaining what's ambiguous
 
-### Demo scenario coverage
-- The key demo moment is gap identification — a patient who's ALMOST ready but missing one thing (e.g., "You need a documented methotrexate failure")
-- Include at least one denial scenario (drug/payer combo where coverage is excluded) alongside covered-with-requirements scenarios
-- Target 3 distinct scenarios: one clear approval path, one with gaps (the wow moment), one denial
-- Let scenario mapping emerge from real policy data rather than pre-planning which drug+payer maps to which scenario
+### Drug alias resolution
+- Add bevacizumab family: Avastin, bevacizumab-awwb/Mvasi, bevacizumab-bvzr/Zirabev
+- Add rituximab family: Rituxan, rituximab-abbs/Truxima, rituximab-pvvr/Ruxience
+- Keep flat TypeScript map structure in existing `data/lookup/drug-aliases.ts`
+- Include therapeutic class info (VEGF inhibitor for bevacizumab, anti-CD20 for rituximab) — consistent with existing `class` field
+- Claude's discretion on fuzzy/prefix matching and not-found behavior
 
-### Evidence text handling
-- Lightly edited policy quotes: clean up PDF formatting artifacts but preserve substance and traceability
-- Full source attribution: document name, page number, and section header for every evidence quote
-- Key sentences only (1-2 most relevant sentences per criterion), not full paragraphs
-- Evidence always shown inline with determinations — every coverage result includes supporting policy quote
+### Schema design choices
+- Products array with tier field: each product gets `tier: 'preferred' | 'non-preferred'` within the policy record for BCBS NC preferred/non-preferred splits
+- Claude's discretion on multiple indications representation (array vs indication-specific sections) based on actual policy content
+- Migrate all existing 5 RA policies to match extended schema — one consistent format across all records
+- Load-time validation only: validate Zod schema when server starts, trust data after that
 
 ### Claude's Discretion
-- JSON schema design and field naming
-- PDF extraction technique and tooling
-- File organization within the policy store
-- Handling of policies that don't cleanly fit the schema
+- Extraction method (manual vs automated) for 2 PDFs
+- Data storage approach (committed files vs generated)
+- Evidence format (direct quotes vs paraphrased)
+- Fuzzy/prefix matching for drug aliases
+- Not-found behavior for unrecognized drug names
+- Indications representation design
 
 </decisions>
 
 <specifics>
 ## Specific Ideas
 
-- Gap identification is the signature demo moment — data should support a scenario where a patient is close but missing one specific criterion
-- Brand/generic aliasing is important because clinicians and specialists use both interchangeably
-- Evidence text should build trust immediately — always inline, never hidden behind a click
+- Existing codebase has full PDF extraction pipeline (`src/extraction/pdf-extractor.ts`, `text-cleaner.ts`) and ingestion system (`src/server/ingestion/`) that can be leveraged
+- Current structured policies at `data/policies/structured/` follow a pattern with evidenceText + source per criterion
+- Drug aliases at `data/lookup/drug-aliases.ts` use `normalizeDrugName()` and `getDrugInfo()` functions
+- Policy schema at `data/schemas/policy.schema.ts` is the Zod schema to extend
 
 </specifics>
 
@@ -64,4 +71,4 @@ None — discussion stayed within phase scope
 ---
 
 *Phase: 01-policy-data-foundation*
-*Context gathered: 2026-04-04*
+*Context gathered: 2026-04-11*
