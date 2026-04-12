@@ -29,10 +29,11 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. Every extracted field has mapped evidence snippets (1-3 sentences) from source policy text
   4. Drug alias lookup resolves bevacizumab family (Avastin, bevacizumab-awwb/Mvasi, bevacizumab-bvzr/Zirabev) and rituximab family (Rituxan, rituximab-abbs/Truxima, rituximab-pvvr/Ruxience) to canonical names
   5. Normalized data validates against Zod schema without errors
-**Plans**: TBD
+**Plans:** 2 plans
 
 Plans:
-- [ ] TBD
+- [ ] 01-01-PLAN.md — Extend schema with oncology fields + add drug alias families + migrate RA policies
+- [ ] 01-02-PLAN.md — Extract BCBS NC + Cigna policies into structured JSON with evidence + update index
 
 ### Phase 2: Core MCP Tools
 **Goal**: Deterministic MCP tools deliver policy intelligence with evidence grounding and structured responses
@@ -88,7 +89,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Policy Data Foundation | 0/TBD | Not started | - |
+| 1. Policy Data Foundation | 0/2 | Planned | - |
 | 2. Core MCP Tools | 0/TBD | Not started | - |
 | 3. Hybrid Q&A Engine | 0/TBD | Not started | - |
 | 4. Deployment + Integration | 0/TBD | Not started | - |
