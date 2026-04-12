@@ -1,107 +1,71 @@
-# Technology Stack
+# Stack Research
 
-**Project:** PolicyPilot
-**Researched:** 2026-04-04
+**Domain:** Medical-benefit drug policy intelligence MCP server
+**Researched:** 2026-04-11
+**Confidence:** MEDIUM
 
 ## Recommended Stack
 
-### MCP Server (Core Backend)
-| Technology | Version | Purpose | Why | Confidence |
-|------------|---------|---------|-----|------------|
-| Python | 3.12+ | Runtime | Required by project constraints; excellent healthcare library ecosystem | HIGH |
-| mcp[cli] (FastMCP) | 1.x stable | MCP server framework | Official Python SDK from Anthropic. Decorator-based tool registration (`@mcp.tool()`), automatic parameter validation, built-in debugging via MCP Inspector. FastMCP 3.0 (from Prefect) also available but official SDK is simpler for hackathon. | HIGH |
-| FastAPI | 0.115+ | HTTP API layer | Only if needed for non-MCP endpoints (health checks, admin). MCP server handles tool transport natively via stdio/SSE/Streamable HTTP. | MEDIUM |
-| uvicorn | 0.34+ | ASGI server | Serves FastAPI if used; MCP server has its own transport. | MEDIUM |
+### Core Technologies (Already Present — No Changes Needed)
 
-### FHIR Patient Context
-| Technology | Version | Purpose | Why | Confidence |
-|------------|---------|---------|-----|------------|
-| fhir.resources | 7.x+ | FHIR data models | Pydantic V2-powered, built-in validation, supports R4B as sub-package (`fhir.resources.R4B`). Type-safe FHIR resource parsing. | HIGH |
-| Synthea | latest | Synthetic patient generation | Industry standard for synthetic FHIR data. Outputs FHIR R4 Bundle transactions, one file per patient with Patient + Conditions + Observations + Procedures. | HIGH |
+| Technology | Version | Purpose | Status |
+|------------|---------|---------|--------|
+| TypeScript | 6.0.2 | Primary language | Existing |
+| Express | 5.2.1 | HTTP server + MCP middleware | Existing |
+| @modelcontextprotocol/sdk | 1.29.0 | MCP server + StreamableHTTP | Existing |
+| Zod | 4.3.6 | Schema validation | Existing |
+| pdf-parse | 2.4.5 | PDF text extraction | Existing |
+| fhir-kit-client | 1.9.2 | FHIR patient data | Existing |
 
-### Policy Rules Store
-| Technology | Version | Purpose | Why | Confidence |
-|------------|---------|---------|-----|------------|
-| JSON files | — | Policy data storage | Maximum build speed for 3-5 policies. Schema designed for future migration to SQLite/Postgres. No ORM overhead. | HIGH |
-| Pydantic | 2.x | Data validation | Validate policy records on load. Share models between store and MCP tools. Already a dependency via fhir.resources. | HIGH |
+### Additional Libraries Needed
 
-### Chat UI
-| Technology | Version | Purpose | Why | Confidence |
-|------------|---------|---------|-----|------------|
-| React | 18+ | UI framework | Widely supported, fast to scaffold with Vite | MEDIUM |
-| Vite | 5+ | Build tool | Fast dev server, simple config | MEDIUM |
-| Tailwind CSS | 3+ | Styling | Rapid UI development, no custom CSS needed | MEDIUM |
-| Vercel AI SDK | 4.x | Chat interface | Streaming chat UI components, handles message state, works with any LLM provider | MEDIUM |
+| Library | Version | Purpose | Why Recommended |
+|---------|---------|---------|-----------------|
+| (none required) | — | — | Existing stack sufficient for POC |
 
-**Alternative UI approach (faster):** Use Streamlit or Gradio for Python-only UI. Eliminates React build entirely. Tradeoff: less polished but ships in hours not days.
+**Rationale:** This is a hackathon POC with 2 documents and 2 drug families. The existing stack (TypeScript + Express + MCP SDK + Zod + Ollama) covers everything needed:
 
-| Technology | Version | Purpose | Why | Confidence |
-|------------|---------|---------|-----|------------|
-| Streamlit | 1.40+ | Python-native chat UI | `st.chat_input()` + `st.chat_message()` = working chat in <50 lines. Deploy to Streamlit Cloud free. | HIGH |
-| Gradio | 5.x | Alternative Python UI | `gr.ChatInterface()` for instant chat. Deploy to HuggingFace Spaces free. | HIGH |
-
-### LLM Integration
-| Technology | Version | Purpose | Why | Confidence |
-|------------|---------|---------|-----|------------|
-| anthropic | 0.40+ | Claude API client | Native tool_use support, direct MCP tool calling | HIGH |
-| claude-sonnet-4-5-20250929 | — | LLM model | Best cost/quality ratio for tool use; fast enough for demo | HIGH |
-
-### Deployment
-| Technology | Version | Purpose | Why | Confidence |
-|------------|---------|---------|-----|------------|
-| Railway / Render | — | Backend hosting | Free tier, deploy from Git, supports Python. Railway has one-click deploy. | MEDIUM |
-| Streamlit Cloud | — | UI hosting (if Streamlit) | Free for public repos, zero config | HIGH |
-| Vercel | — | UI hosting (if React) | Free tier, deploy from Git | HIGH |
-
-### PDF Extraction (Offline)
-| Technology | Version | Purpose | Why | Confidence |
-|------------|---------|---------|-----|------------|
-| PyMuPDF (fitz) | 1.24+ | PDF text extraction | Fast, accurate, handles complex layouts better than pdfplumber for policy docs | MEDIUM |
-| Claude API | — | Structured extraction | Send PDF text to Claude, extract structured fields. Most accurate for complex policy language. | HIGH |
-
-## Alternatives Considered
-
-| Category | Recommended | Alternative | Why Not |
-|----------|-------------|-------------|---------|
-| MCP SDK | mcp[cli] (official) | FastMCP 3.0 (Prefect) | Official SDK is simpler, fewer dependencies, better documented for basic tool servers |
-| FHIR | fhir.resources | fhirclient (SMART) | fhirclient targets SMART-on-FHIR server connections; fhir.resources is better for local bundle parsing |
-| Policy store | JSON | SQLite | JSON is faster to build; 3-5 policies don't need query optimization |
-| UI | Streamlit | React + Vite | React adds a full frontend build step; Streamlit ships a working chat in hours |
-| PDF extraction | Claude API | LangChain document loaders | LangChain adds heavy dependency for something Claude does natively |
-| Deployment | Railway | Docker + AWS | AWS is overkill for hackathon; Railway deploys in minutes |
+- **Deterministic Q&A:** Pure TypeScript object filtering/matching against normalized PolicyRecord data. No vector DB or embedding library needed for 2 documents.
+- **LLM fallback:** Ollama is already integrated (`src/server/chat.ts`). Use direct HTTP fetch to Ollama `/api/chat` for complex questions. No LangChain or AI SDK needed.
+- **Evidence extraction:** String matching and Zod-validated structured data. The policy data is small enough to hold entirely in memory.
+- **Cross-payer comparison:** TypeScript array operations across PolicyRecord objects. Lodash/ramda add no value here.
+- **Schema validation:** Zod already handles all validation needs for tool inputs and policy records.
 
 ## What NOT to Use
 
-- **LangChain** — Heavy framework, unnecessary abstraction for 3 MCP tools
-- **Vector databases (Pinecone, Chroma)** — Not needed; structured JSON lookup, not semantic search
-- **Django/Flask** — Overkill for MCP server; FastMCP handles everything
-- **Docker** — Adds deployment complexity; Railway/Render handle Python natively
-- **Terraform/IaC** — Hackathon, not production infrastructure
+| Avoid | Why | Use Instead |
+|-------|-----|-------------|
+| LangChain | Massive dependency, overkill for 2 documents, adds complexity | Direct Ollama HTTP calls |
+| Vector databases (Pinecone, Weaviate, Chroma) | 2 documents don't need semantic search; structured lookup is faster and more reliable | In-memory PolicyRecord filtering |
+| @xenova/transformers | Embedding computation unnecessary for small corpus | Direct field matching |
+| Vercel AI SDK | Extra abstraction layer over Ollama with no benefit for this POC | Direct fetch to Ollama API |
+| OpenAI API | Contradicts local-first approach; adds API key dependency | Ollama (already integrated) |
+| Full NLP libraries (compromise, natural) | Drug/payer names are known; no NLP needed for structured lookup | Exact match + drug alias normalization |
 
-## Installation
+## Alternatives Considered
 
-```bash
-# Core MCP server
-pip install "mcp[cli]" anthropic pydantic
+| Approach | When to Reconsider |
+|----------|-------------------|
+| Vector search + embeddings | If scaling to 50+ policy documents where keyword matching fails |
+| LangChain | If building multi-step retrieval-augmented generation pipelines |
+| AI SDK (Vercel) | If switching to streaming structured outputs with multiple LLM providers |
 
-# FHIR
-pip install fhir.resources
+## Stack Pattern for This POC
 
-# PDF extraction (offline use)
-pip install PyMuPDF
+**Deterministic-first, LLM-fallback:**
+1. Parse user query → identify drug/payer/intent
+2. Look up in normalized PolicyRecord store (fast, reliable, evidence-backed)
+3. If no deterministic match → format context + query → Ollama → validate response has evidence
+4. Every response: structured_result + evidence array + confidence level
 
-# UI (Option A: Streamlit — recommended for speed)
-pip install streamlit
-
-# UI (Option B: React — if you want polished frontend)
-npm create vite@latest ui -- --template react-ts
-cd ui && npm install
-```
+**No new dependencies needed.** The existing stack is sufficient for a 2-document, 2-drug-family POC.
 
 ## Sources
 
-- [MCP Python SDK (Official)](https://github.com/modelcontextprotocol/python-sdk)
-- [FastMCP Tutorial](https://www.firecrawl.dev/blog/fastmcp-tutorial-building-mcp-servers-python)
-- [fhir.resources on PyPI](https://pypi.org/project/fhir.resources/)
-- [Synthea Overview](https://mitre.github.io/fhir-for-research/modules/synthea-overview)
-- [MCP 2026 Guide](https://dev.to/universe7creator/the-complete-guide-to-model-context-protocol-mcp-building-ai-native-applications-in-2026-10c5)
+- Existing codebase analysis (`.planning/codebase/STACK.md`, `ARCHITECTURE.md`)
+- MCP SDK documentation (already integrated)
+- Ollama API documentation (already integrated at `src/server/chat.ts`)
+
+---
+*Stack research for: medical-benefit drug policy intelligence*
+*Researched: 2026-04-11*

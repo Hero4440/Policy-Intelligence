@@ -1,128 +1,181 @@
-# Domain Pitfalls
+# Pitfalls Research
 
-**Domain:** Prior Authorization Readiness Agent
-**Researched:** 2026-04-04
+**Domain:** Medical-benefit drug policy intelligence MCP server (hackathon POC)
+**Researched:** 2026-04-11
+**Confidence:** HIGH
 
 ## Critical Pitfalls
 
-Mistakes that cause rewrites or major issues.
+### Pitfall 1: Hallucinating Policy Facts
 
-### Pitfall 1: Policy Data Extraction Quality
-**What goes wrong:** Extracted policy fields are incomplete, mismatched, or miss conditional logic (e.g., "Drug X requires prior therapy failure of TWO conventional DMARDs" gets stored as just "prior therapy required").
-**Why it happens:** Payer PDFs use dense, legalistic language with nested conditions, exceptions, and cross-references. Semi-manual extraction under time pressure leads to oversimplification.
-**Consequences:** MCP tools return incorrect criteria. Demo shows wrong requirements. Judges with healthcare background will notice immediately.
-**Prevention:**
-- Extract ONE policy end-to-end first as a template before doing the rest
-- Include the full conditional text in `evidence_text` field — don't paraphrase
-- Store exact quotes from policy documents, not summaries
-- Have extraction output reviewed against source PDF before demo
-**Detection:** Tool returns that don't match what you see in the PDF. Readiness check that misses a known requirement.
-**Phase:** Phase 1 (Data Preparation) — this is the foundation. Bad data = bad everything.
+**What goes wrong:**
+LLM generates plausible-sounding but incorrect coverage rules. "Cigna requires step therapy for bevacizumab" when it actually doesn't.
 
-### Pitfall 2: LLM Hallucinating Coverage Decisions
-**What goes wrong:** Claude makes up coverage rules that aren't in your policy data, or states things definitively that should be hedged.
-**Why it happens:** Claude has training data about drug policies and may "fill in" gaps with plausible-sounding but fabricated policy details. Tool results get mixed with hallucinated context.
-**Consequences:** Agent states incorrect coverage information. In a healthcare context, this is a serious credibility issue. AMA has flagged that AI-driven PA decisions already produce 16x higher denial rates when poorly implemented.
-**Prevention:**
-- System prompt must explicitly say: "Only use information returned by tools. Never state coverage information from your own knowledge."
-- Tool responses include `evidence_text` — instruct Claude to quote it
-- Add "Source: [policy document name]" to every coverage statement
-- Use cautious language templates: "Based on the policy on file...", "The available policy data indicates..."
-**Detection:** Response mentions drugs, plans, or criteria not in your JSON store. Response lacks evidence citations.
-**Phase:** Phase 4 (Agent Integration) — must be addressed in system prompt design.
+**Why it happens:**
+LLMs interpolate from training data about insurance policies in general, not from the specific loaded documents.
 
-### Pitfall 3: MCP Tool Schema Mismatch
-**What goes wrong:** Tool input/output schemas don't match what Claude expects. Claude sends wrong parameter types, or tool responses are formatted in ways Claude can't parse well.
-**Why it happens:** MCP tool definitions need precise type annotations and clear descriptions. Vague tool descriptions lead Claude to misuse tools or hallucinate parameters.
-**Consequences:** Tool calls fail silently. Agent gives generic responses instead of grounded answers. Demo breaks mid-flow.
-**Prevention:**
-- Use Pydantic models for tool inputs and outputs
-- Write detailed tool docstrings — Claude reads these to decide how to use tools
-- Test each tool in MCP Inspector before connecting to agent
-- Include example values in parameter descriptions
-**Detection:** Claude calls tools with wrong parameters. Tool returns error responses. Agent falls back to generic answers.
-**Phase:** Phase 2 (MCP Server) — test tools in isolation before integration.
+**How to avoid:**
+- Deterministic lookup first — never invoke LLM for questions answerable from structured data
+- When using LLM fallback, inject only the relevant normalized policy data as context
+- Validate every LLM claim against the evidence index before returning
+- If LLM answer can't be grounded in evidence, return "insufficient evidence" instead
 
-## Moderate Pitfalls
+**Warning signs:**
+- LLM responses that sound confident but don't include specific policy text citations
+- Answers about policies/drugs not in the loaded dataset
+- Coverage rules that contradict the normalized structured data
 
-### Pitfall 4: FHIR Bundle Parsing Fragility
-**What goes wrong:** Code assumes specific FHIR resource structure that varies between Synthea-generated and hand-crafted patients. Missing fields cause crashes.
-**Why it happens:** Synthea bundles have consistent structure, but hand-crafted ones may differ. FHIR is flexible — same data can be represented differently.
-**Prevention:**
-- Use fhir.resources for validation (Pydantic catches missing fields)
-- Always use `.get()` or optional fields when extracting patient data
-- Create a `parse_patient_context()` function that handles both Synthea and hand-crafted formats
-- Test with both data sources early
-**Phase:** Phase 3 (Patient Context) — test with multiple patient formats.
+**Phase to address:** Evidence grounding (must be built into every tool from day one)
 
-### Pitfall 5: Scope Creep Under Time Pressure
-**What goes wrong:** Adding features during demo prep. "What if we also show..." turns into 4 hours of unplanned work.
-**Why it happens:** Solo developer + hackathon adrenaline. Each feature seems small but compounds.
-**Prevention:**
-- Lock the 3-tool scope: coverage, criteria, readiness. Nothing else.
-- If a cool idea comes up, write it in a "v2 ideas" file and move on
-- Demo script written BEFORE building. Only build what the script needs.
-- Set a hard cutoff: stop coding 4 hours before demo to test and polish
-**Phase:** All phases — discipline required throughout.
+---
 
-### Pitfall 6: Deployment Surprises
-**What goes wrong:** App works locally, fails when deployed. Environment variables missing, ports wrong, dependencies not installed.
-**Why it happens:** Deployment is the last step, done under time pressure with no buffer.
-**Prevention:**
-- Deploy a "hello world" version at the START (Day 1 morning)
-- Use Railway/Render/Streamlit Cloud with git-push deployment
-- Test deployment after each major component, not just at the end
-- Keep a `.env.example` file from the start
-**Detection:** App crashes on deployment platform. Logs show import errors or missing env vars.
-**Phase:** Phase 1 (setup) — deploy skeleton immediately. Phase 6 (final) — final deployment.
+### Pitfall 2: Inconsistent Drug Name Matching
 
-### Pitfall 7: Patient Readiness Logic Over-Engineering
-**What goes wrong:** Trying to build a sophisticated matching engine that handles every edge case in policy requirements.
-**Why it happens:** Healthcare requirements are genuinely complex. Easy to get pulled into handling conditional logic, partial matches, etc.
-**Prevention:**
-- Simple field-by-field comparison: requirement exists → check patient data → matched/missing
-- Use cautious wording for everything: "appears to match", "may be missing", "documentation may be needed"
-- Don't try to handle: date ranges, dosage matching, lab value thresholds beyond basic comparison
-- 3 output categories only: matched, missing, documentation_needed
-**Phase:** Phase 4 (Readiness Logic) — keep it simple.
+**What goes wrong:**
+"Bevacizumab" in BCBS NC policy doesn't match "bevacizumab-awwb" (Mvasi) or "Avastin" in comparison queries. Cross-payer comparison returns incomplete results.
 
-## Minor Pitfalls
+**Why it happens:**
+Drug families have brand names, generic names, biosimilar suffixes, and multiple aliases. Each payer uses different naming conventions.
 
-### Pitfall 8: Demo Patient Doesn't Tell a Story
-**What goes wrong:** Synthetic patient data is generic. Demo shows "everything matches" or "nothing matches" — no interesting narrative.
-**Prevention:**
-- Hand-craft 3 demo patients: (1) fully qualified — all criteria met, (2) partially qualified — 1-2 missing requirements, (3) wrong diagnosis — coverage doesn't apply
-- Patient #2 is the hero of the demo — shows the system's real value
+**How to avoid:**
+- Extend existing drug alias system (`data/lookup/drug-aliases.ts`) to cover all names in the 2 policies
+- Normalize at query time AND at data loading time
+- Test with exact queries from the hackathon demo: "bevacizumab", "Avastin", "rituximab", "Rituxan"
 
-### Pitfall 9: Inconsistent Drug/Plan Naming
-**What goes wrong:** Policy data uses "adalimumab" but user asks about "Humira". Tool can't match.
-**Prevention:**
-- Include both brand and generic names in policy data
-- Add a drug_aliases field to policy records
-- System prompt tells Claude to normalize drug names before tool calls
+**Warning signs:**
+- compare_drug_across_payers returns fewer policies than expected
+- get_policy_summary works for one naming convention but not another
+- "No data found" for drugs that are clearly in the loaded policies
 
-### Pitfall 10: No Error Handling in Demo Flow
-**What goes wrong:** Unexpected input during live demo causes unhandled error, breaking the flow.
-**Prevention:**
-- Add try/except around all tool handlers
-- Return graceful "I couldn't find policy data for that combination" messages
-- Practice the exact demo flow 3+ times before presenting
+**Phase to address:** Policy data normalization (before any tools are built)
 
-## Phase-Specific Warnings
+---
 
-| Phase Topic | Likely Pitfall | Mitigation |
-|-------------|---------------|------------|
-| Data preparation | Oversimplified extraction | Extract one policy completely first as template |
-| MCP server | Tool schema issues | Test with MCP Inspector before integration |
-| Patient context | Bundle parsing failures | Use fhir.resources validation, test both formats |
-| Agent integration | Hallucinated coverage info | Strict system prompt, evidence-only responses |
-| Readiness logic | Over-engineering matching | Simple field comparison + cautious wording |
-| Deployment | Last-minute failures | Deploy skeleton on Day 1 morning |
-| Demo | Boring patient scenarios | Hand-craft 3 patients with different stories |
+### Pitfall 3: Evidence Snippets That Don't Ground the Answer
+
+**What goes wrong:**
+Evidence field contains text that technically comes from the policy but doesn't actually support the specific claim being made. "Meets evidence requirement" technically but not meaningfully.
+
+**Why it happens:**
+Lazy evidence extraction — grabbing a paragraph that mentions the drug rather than the specific sentence about the coverage rule.
+
+**How to avoid:**
+- Map evidence snippets to specific extracted fields, not to the document as a whole
+- Each evidence snippet should directly support the claim it's attached to
+- Keep snippets focused: 1-3 sentences, not full paragraphs
+- During normalization, link each field to the exact source text
+
+**Warning signs:**
+- Evidence text is long and generic (full sections, not specific sentences)
+- Evidence text mentions the drug but not the specific coverage rule being reported
+- Same evidence snippet used for multiple different claims
+
+**Phase to address:** Policy data normalization + evidence extraction
+
+---
+
+### Pitfall 4: MCP Tool Discovery Fails in Prompt Opinion
+
+**What goes wrong:**
+ngrok tunnel is up, server responds to /health, but Prompt Opinion can't discover tools or tools return errors.
+
+**Why it happens:**
+- MCP transport mismatch (SSE vs StreamableHTTP)
+- Missing CORS headers for Prompt Opinion's domain
+- Tool schemas don't match what Prompt Opinion expects
+- Missing `ai.promptopinion/fhir-context` capability extension
+
+**How to avoid:**
+- Follow po-community-mcp reference exactly for transport setup
+- Test with Prompt Opinion EARLY — don't wait until all tools are built
+- Verify: CORS allows Prompt Opinion origin, /mcp endpoint accepts POST, tool schemas are valid Zod → JSON Schema
+- Keep the existing `ai.promptopinion/fhir-context` extension capability
+
+**Warning signs:**
+- /health works but /mcp returns 404 or CORS error
+- Tools appear but calling them returns transport errors
+- Tool inputs don't match schema (Zod validation failures)
+
+**Phase to address:** Deployment + integration testing (should be validated early, not last)
+
+---
+
+### Pitfall 5: Over-Engineering for 2 Documents
+
+**What goes wrong:**
+Building a sophisticated parsing pipeline, search engine, or abstraction layer for 2 policy documents when simple in-memory data structures suffice.
+
+**Why it happens:**
+Engineering instinct to "do it right" instead of "do it fast." Training data includes enterprise-scale solutions.
+
+**How to avoid:**
+- Hard-code document count awareness: 2 policies, 2 drug families
+- No database, no vector store, no search index
+- In-memory normalized JSON objects loaded at startup
+- Direct array filtering, not query engines
+
+**Warning signs:**
+- Spending time on "scalable" infrastructure instead of tool quality
+- Adding dependencies for problems that don't exist at this scale
+- Config files for things that could be constants
+
+**Phase to address:** All phases — maintain hackathon pragmatism throughout
+
+---
+
+## Technical Debt Patterns
+
+| Shortcut | Immediate Benefit | Long-term Cost | When Acceptable |
+|----------|-------------------|----------------|-----------------|
+| Hard-coded policy data | Fast, reliable, no parsing errors | Must re-normalize for each new document | POC with 2 documents — always acceptable |
+| In-memory only | No DB setup, instant queries | Can't persist state across restarts | POC demo — always acceptable |
+| Ollama-only LLM | No API keys, local, free | Slower than cloud APIs, model quality varies | Hackathon where external dependencies are risky |
+| Single-file normalized JSONs | Easy to inspect and debug | Won't scale to 100+ policies | POC — always acceptable |
+
+## Integration Gotchas
+
+| Integration | Common Mistake | Correct Approach |
+|-------------|----------------|------------------|
+| ngrok tunnel | Tunnel URL changes on restart; forgetting to update Prompt Opinion config | Use `ngrok http 3000` with stable subdomain if available; test connection before demo |
+| Prompt Opinion MCP | Testing tools locally but not via Prompt Opinion's MCP client | Test via Prompt Opinion early — their MCP client may parse responses differently |
+| Ollama | Assuming Ollama is running and model is loaded | Check Ollama health (`/api/tags`) before LLM fallback; graceful degradation if Ollama is down |
+| StreamableHTTP | Creating persistent sessions when Prompt Opinion expects stateless | Use stateless transport (sessionIdGenerator: undefined) per po-community-mcp reference |
+
+## Security Mistakes
+
+| Mistake | Risk | Prevention |
+|---------|------|------------|
+| Including real patient PHI in demo data | HIPAA violation even in hackathon context | Use only de-identified or synthetic data; verify no PHI in policy documents |
+| Logging full policy text to console | Potential IP exposure of payer policies | Log metadata only, not full policy content |
+| ngrok tunnel without auth | Anyone with URL can query policy data | Acceptable for hackathon demo; add basic auth for any post-hackathon deployment |
+
+## "Looks Done But Isn't" Checklist
+
+- [ ] **list_policies:** Returns metadata but forgot to include drug_family list per policy
+- [ ] **get_policy_summary:** Returns fields but evidence snippets are empty or generic
+- [ ] **compare_drug_across_payers:** Works for bevacizumab but fails for rituximab (or vice versa)
+- [ ] **ask_policy_question:** Returns LLM answer but without evidence (hallucination risk)
+- [ ] **Evidence grounding:** Evidence exists but doesn't actually support the specific claim
+- [ ] **Prompt Opinion connection:** Tools discoverable but responses don't render properly in PO UI
+- [ ] **Drug normalization:** Works for exact names but not for brand/biosimilar aliases
+
+## Pitfall-to-Phase Mapping
+
+| Pitfall | Prevention Phase | Verification |
+|---------|------------------|--------------|
+| Hallucinating policy facts | Evidence grounding (built into all tools) | Every response has non-empty evidence array |
+| Drug name mismatch | Policy normalization | Test all drug name variants return results |
+| Weak evidence snippets | Policy normalization + evidence extraction | Each evidence snippet directly supports its claim |
+| MCP discovery failure | Deployment + integration testing | Prompt Opinion discovers and calls all 4 tools |
+| Over-engineering | All phases | No new dependencies added; in-memory data only |
 
 ## Sources
 
-- [AMA: How AI is Leading to More PA Denials](https://www.ama-assn.org/practice-management/prior-authorization/how-ai-leading-more-prior-authorization-denials)
-- [Stanford: AI-Driven Insurance Decisions Raise Concerns](https://news.stanford.edu/stories/2026/01/ai-algorithms-health-insurance-care-risks-research)
-- [Health Affairs: AI in Utilization Review](https://www.healthaffairs.org/doi/10.1377/hlthaff.2025.00897)
-- [AKASA: 7 Prior Authorization Challenges](https://akasa.com/blog/prior-authorization-mistakes/)
+- Existing codebase patterns (`src/mcp/tools/`, `src/mcp/policy_store/`)
+- po-community-mcp reference project patterns
+- Medical policy domain expertise
+- Hackathon POC anti-pattern experience
+
+---
+*Pitfalls research for: medical-benefit drug policy intelligence*
+*Researched: 2026-04-11*

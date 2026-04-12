@@ -1,99 +1,108 @@
-# Feature Landscape
+# Feature Research
 
-**Domain:** Prior Authorization Readiness Tools
-**Researched:** 2026-04-04
+**Domain:** Medical-benefit drug policy intelligence MCP server (hackathon POC)
+**Researched:** 2026-04-11
+**Confidence:** HIGH
 
-## Table Stakes
+## Feature Landscape
 
-Features users expect. Missing = product feels incomplete.
+### Table Stakes (Judges/Users Expect These)
 
 | Feature | Why Expected | Complexity | Notes |
 |---------|--------------|------------|-------|
-| Drug coverage lookup | First question any PA specialist asks. Without this, tool has no foundation. | Medium | Must support brand + generic names (Humira/adalimumab) |
-| PA criteria display | Users need to know what documentation is required. This is the "job to be done." | Medium | Show diagnosis codes, lab values, failed therapy requirements, step therapy |
-| Drug search/identification | Users may not know exact drug names. Must handle how they actually work. | Low | Autocomplete, brand/generic matching, synonym handling |
-| Payer/plan selection | Coverage is plan-specific. Wrong plan = wrong answer. | Low | Simplified for MVP: payer specified in query or patient context |
-| Form generation/pre-population | Industry standard since ~2015. Manual form filling seen as antiquated. | High | **OUT OF SCOPE for MVP** — no submission workflow |
-| Status tracking | Users need to know where requests stand. Expected in any workflow tool. | Medium | **OUT OF SCOPE for MVP** — pre-submission focus only |
+| List available policies | Users need to know what data is loaded before querying | LOW | Return payer, title, drug families, effective date |
+| Structured policy summary | Users expect to see normalized fields for any loaded policy | MEDIUM | Must extract: preferred/non-preferred products, PA requirements, step therapy, indications |
+| Cross-payer drug comparison | Core value prop — side-by-side coverage differences | MEDIUM | Input drug family → return structured comparison across all loaded payers |
+| Evidence-grounded Q&A | Every answer must cite source text from policy documents | HIGH | Hybrid: deterministic first, LLM for complex. Never answer without evidence |
+| Source attribution | Users need to verify answers against original documents | LOW | Evidence snippets mapped to extracted fields |
+| Confidence scoring | Users need to know how reliable each answer is | LOW | HIGH/MEDIUM/LOW based on whether answer is from structured data or LLM |
+| Structured response format | MCP consumers expect parseable JSON, not just text | LOW | human_readable + structured_result + evidence[] + confidence |
+| Graceful "I don't know" | Medical domain requires honesty about gaps | LOW | If data is unclear or missing, say so explicitly |
 
-## Differentiators
-
-Features that set product apart. Not expected, but valued.
+### Differentiators (Hackathon Competitive Advantage)
 
 | Feature | Value Proposition | Complexity | Notes |
 |---------|-------------------|------------|-------|
-| Patient readiness gap analysis | Most tools show criteria but don't analyze patient fit. Proactively prevents denials. PolicyPilot's CORE differentiator. | High | check_patient_readiness tool. Few competitors do this well. |
-| Evidence citation & policy grounding | Transparent, auditable answers vs black-box AI. Builds trust in clinical context. | Medium | Tool responses include evidence_text with quoted policy language |
-| Natural language query interface | Dramatically faster workflow. Users think in questions, not database queries. | High | "Prompt Opinion" chat UI. Most PA tools are form-based. |
-| Multi-payer comparison | Useful for diverse patient populations. Side-by-side PA requirements. | Medium | OUT OF SCOPE for MVP. Easy to add post-hackathon. |
-| Predictive approval likelihood | Estimate probability of PA approval. Actionable insight for prioritization. | Very High | OUT OF SCOPE — no training data for hackathon |
-| Automated evidence gathering | Pull supporting docs from EHR, attach to PA. Saves 30-60 min per request. | Very High | OUT OF SCOPE — read-only FHIR context |
-| Denial prediction & pre-emptive strengthening | Identify likely denial reasons, suggest strengthening actions before submission. | High | PARTIAL — readiness tool identifies gaps |
-| Step therapy navigator | Guide users through required step therapy sequences with visual flowchart. | Medium | PARTIAL — criteria display includes step therapy |
-| Real-time policy updates | Alert when payer policies change. Prevents stale data denials. | High | OUT OF SCOPE — static dataset |
-| Therapeutic alternatives suggestion | If PA too complex, suggest alternative covered drugs for same indication. | High | OUT OF SCOPE — single drug query focus |
+| Preferred vs non-preferred product identification | Directly answers "which biosimilar does this plan prefer?" | MEDIUM | BCBS NC explicitly lists preferred/non-preferred for bevacizumab |
+| Step therapy / fail-first logic extraction | Surfaces complex coverage rules that analysts spend hours reading | MEDIUM | Cigna requires specific step sequences for rituximab |
+| Prior auth criteria detail | Goes beyond "PA required: yes" to extract specific criteria | MEDIUM | Diagnosis requirements, documentation needed, clinical criteria |
+| Cross-payer criteria differences | Highlights where plans disagree on coverage rules | MEDIUM | Depends on compare tool + normalization quality |
+| Natural language question handling | Users can ask in plain English, not structured queries | HIGH | LLM fallback for questions that don't match deterministic patterns |
 
-## Anti-Features
+### Anti-Features (Do NOT Build for POC)
 
-Features to explicitly NOT build.
-
-| Anti-Feature | Why Avoid | What to Do Instead |
-|--------------|-----------|-------------------|
-| Live PDF upload & parsing | Very high complexity, 1-2 days just for parser, parsing errors in live demo catastrophic | Preload 3-5 curated policies as JSON |
-| Admin dashboard | No value for demo, 4-8 hours for basic CRUD, judges won't see it | Edit JSON files directly |
-| Multi-agent orchestration | Single agent + 3 tools sufficient, 6-12 hours debugging agent handoffs | Single agent with multiple MCP tools |
-| Vector database | Overkill for 3-5 policies, structured lookup is faster and more reliable | JSON file lookup with exact key matching |
-| Policy change tracking | Static dataset for hackathon, no time dimension in demo | Single snapshot of policies (Jan 2026) |
-| Full payer comparison engine | Dilutes focus, judges prefer depth over breadth | Single-payer queries |
-| Production security stack | Synthetic data only, 1-2 days minimum, judges won't security-test | Minimal or no auth for hackathon |
-| Multiple therapeutic areas | 2-3 hours per additional area, depth wins hackathons | RA biologics only |
-| Real patient data | Weeks of legal/IT security, compliance risk | Synthea + hand-crafted demo patients |
+| Feature | Why Requested | Why Problematic | Alternative |
+|---------|---------------|-----------------|-------------|
+| Universal PDF parser | "Parse any payer document" | Every payer formats differently; universal parsing is a multi-month effort | Hand-normalize 2 specific documents |
+| Real-time policy updates | "Keep data current" | Requires crawler infrastructure, change detection, versioning | Static loaded data, refresh manually |
+| Patient-policy matching workflow | "Which plan covers my patient?" | Requires patient data, diagnosis matching, complex eligibility logic | Existing check_patient_readiness tool covers basics |
+| Full analytics dashboard | "Visualize coverage landscape" | Frontend work distracts from MCP tool quality | Prompt Opinion IS the UI |
+| Multi-indication coverage | "Cover all indications for a drug" | Exponential complexity with each indication added | Focus on primary indications in 2 docs |
+| Appeal/exception guidance | "What to do if denied" | Complex legal/regulatory domain beyond policy parsing | Out of scope for POC |
+| Formulary tier integration | "Include pharmacy benefit data" | Medical benefit ≠ pharmacy benefit; different data structures | Medical benefit only |
 
 ## Feature Dependencies
 
 ```
-Policy Data Quality → Coverage Lookup → Criteria Display → Readiness Analysis
-                                                              ↑
-FHIR Patient Context ─────────────────────────────────────────┘
+Normalized Policy Data (extraction + schema)
+    ├──requires──> list_policies (needs metadata from normalized data)
+    ├──requires──> get_policy_summary (needs all normalized fields)
+    ├──requires──> compare_drug_across_payers (needs normalized data from multiple policies)
+    └──requires──> ask_policy_question (needs structured data for deterministic lookup)
 
-MCP Server Stability → Chat Interface → Full Demo Flow
+Drug Alias Normalization
+    └──requires──> compare_drug_across_payers (must match "bevacizumab" across policies)
 
-Drug Reference Data → Drug Search → Coverage Lookup accuracy
+Evidence Grounding Engine
+    ├──requires──> get_policy_summary (evidence snippets per field)
+    ├──requires──> compare_drug_across_payers (evidence for each payer's position)
+    └──requires──> ask_policy_question (evidence for every answer)
+
+LLM Fallback (Ollama)
+    └──requires──> ask_policy_question (for questions that don't match deterministic patterns)
 ```
 
-## MVP Recommendation
+### Dependency Notes
 
-**Must Build (Core Demo Flow):**
-1. Drug coverage lookup via MCP tool — P0
-2. PA criteria display via MCP tool — P0
-3. Patient readiness gap analysis via MCP tool — P0 (core differentiator)
-4. Evidence-grounded responses with policy citations — P0
-5. Natural language chat interface — P0
+- **All tools require normalized policy data:** This is the foundation. Must be built first.
+- **Evidence grounding is cross-cutting:** Every tool needs it, so the evidence extraction pattern must be established early.
+- **LLM fallback only needed for ask_policy_question:** Other tools are fully deterministic.
 
-**Build if Time Permits:**
-6. Drug search autocomplete (1-2 hrs, high ROI)
-7. Visual evidence citations in UI (2 hrs, medium ROI)
+## MVP Definition
 
-**Defer Everything Else.**
+### Launch With (POC v1)
 
-**PolicyPilot's competitive angle:**
-- "Prior Auth Copilot that tells you what's missing BEFORE you submit"
-- "Grounded AI with citations — no hallucinations, just policy facts"
-- "From hours of PDF reading to seconds of conversation"
+- [x] Normalized policy data for BCBS NC + Cigna (foundation)
+- [ ] `list_policies` — show what's loaded
+- [ ] `get_policy_summary` — structured summary with evidence
+- [ ] `compare_drug_across_payers` — side-by-side for bevacizumab/rituximab
+- [ ] `ask_policy_question` — hybrid Q&A with evidence grounding
 
-## Competitive Landscape
+### Defer
 
-| Competitor | Table Stakes | Differentiators | Weakness vs PolicyPilot |
-|------------|-------------|-----------------|------------------------|
-| CoverMyMeds | All | E-submission, 3000+ forms, payer integrations | Not patient-aware; no readiness analysis |
-| Surescripts | All | Network effects (90% of prescribers), real-time eligibility | Workflow-focused, not intelligence-focused |
-| Change Healthcare | All | Revenue cycle integration, predictive analytics | Enterprise-only; complex implementation |
-| Waystar / Rhyme.ai | Partial | AI-driven form filling, approval prediction | Black-box AI; no evidence transparency |
+- Patient readiness integration with new tools (already exists as separate tool)
+- Additional policy documents beyond BCBS NC + Cigna
+- Change tracking / policy versioning
+- Advanced analytics or visualizations
+
+## Feature Prioritization Matrix
+
+| Feature | User Value | Implementation Cost | Priority |
+|---------|------------|---------------------|----------|
+| Normalized policy data | HIGH | MEDIUM | P0 (foundation) |
+| list_policies | MEDIUM | LOW | P1 |
+| get_policy_summary | HIGH | MEDIUM | P1 |
+| compare_drug_across_payers | HIGH | MEDIUM | P1 |
+| ask_policy_question | HIGH | HIGH | P1 |
+| Evidence grounding | HIGH | MEDIUM | P0 (cross-cutting) |
+| Confidence scoring | MEDIUM | LOW | P1 |
 
 ## Sources
 
-- [CoverMyMeds Features](https://www.covermymeds.health/articles/healthcare-technology/latent-health-intelligent-automation-fhir)
-- [Top ePA Platforms 2026](https://intuitionlabs.ai/articles/electronic-prior-authorization-platforms)
-- [Best PA Software 2026](https://softwarefinder.com/resources/top-ai-vendors-for-prior-authorization-in-healthcare)
-- [AI Boosts PA Determinations](https://www.covermymeds.health/who-we-serve/provider/health-systems/ai-boosts-prior-authorization-determinations-at-scale)
-- [CMS PA Final Rule 2026](https://www.cms.gov/newsroom/fact-sheets/cms-interoperability-and-prior-authorization-final-rule-cms-0057-f)
+- Existing codebase analysis (`.planning/codebase/ARCHITECTURE.md`)
+- Prompt Opinion MCP reference (`po-community-mcp`)
+- Domain expertise: medical-benefit drug policy management workflows
+
+---
+*Feature research for: medical-benefit drug policy intelligence*
+*Researched: 2026-04-11*
