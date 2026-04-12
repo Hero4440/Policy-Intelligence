@@ -30,16 +30,25 @@ const OtherRequirement = z.object({
   ambiguous: z.boolean().default(false) // Flag unclear policy language
 });
 
+const ProductWithTier = z.object({
+  name: z.string(),
+  tier: z.enum(['preferred', 'non-preferred']),
+  aliases: z.array(z.string()).default([])
+});
+
 export const PolicyRecordSchema = z.object({
   id: z.string(),              // Unique ID, e.g., "uhc-humira-ra"
-  payer: z.enum(['UHC', 'Aetna', 'Cigna']),
+  payer: z.enum(['UHC', 'Aetna', 'Cigna', 'BCBS-NC']),
   plan: z.string(),            // e.g., "Commercial", "Medicare Advantage"
+  policyTitle: z.string().optional(),  // NEW: full policy title from document
   drug: z.object({
     brandName: z.string(),
     genericName: z.string(),
-    aliases: z.array(z.string()).default([])
+    aliases: z.array(z.string()).default([]),
+    products: z.array(ProductWithTier).optional()  // NEW: oncology preferred/non-preferred
   }),
   indication: z.string(),     // "Rheumatoid Arthritis"
+  indications: z.array(z.string()).optional(),  // NEW: multiple indications for oncology
   coverageStatus: z.enum(['covered', 'covered-with-pa', 'excluded']),
   paRequired: z.boolean(),
   diagnosisRequirements: z.array(DiagnosisRequirement),
@@ -54,6 +63,7 @@ export const PolicyRecordSchema = z.object({
 });
 
 export type PolicyRecord = z.infer<typeof PolicyRecordSchema>;
+export type ProductWithTier = z.infer<typeof ProductWithTier>;
 export type StepTherapy = z.infer<typeof StepTherapyRequirement>;
 export type DiagnosisReq = z.infer<typeof DiagnosisRequirement>;
 export type OtherReq = z.infer<typeof OtherRequirement>;

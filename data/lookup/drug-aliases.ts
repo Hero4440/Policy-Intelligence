@@ -29,6 +29,18 @@ export const drugAliases: Record<string, DrugAlias> = {
     brandNames: ['Rinvoq'],
     biosimilars: [],
     class: 'JAK inhibitor'
+  },
+  'bevacizumab': {
+    genericName: 'bevacizumab',
+    brandNames: ['Avastin'],
+    biosimilars: ['Mvasi', 'Zirabev', 'Alymsys', 'Vegzelma', 'Avzivi'],
+    class: 'VEGF inhibitor'
+  },
+  'rituximab': {
+    genericName: 'rituximab',
+    brandNames: ['Rituxan'],
+    biosimilars: ['Truxima', 'Ruxience', 'Riabni'],
+    class: 'anti-CD20 monoclonal antibody'
   }
 };
 
@@ -49,6 +61,16 @@ for (const [genericName, drug] of Object.entries(drugAliases)) {
     reverseLookup.set(biosimilar.toLowerCase(), genericName);
   }
 }
+
+// FDA biosimilar suffix variants (policies may reference these)
+reverseLookup.set('bevacizumab-awwb', 'bevacizumab');
+reverseLookup.set('bevacizumab-bvzr', 'bevacizumab');
+reverseLookup.set('bevacizumab-maly', 'bevacizumab');
+reverseLookup.set('bevacizumab-adcd', 'bevacizumab');
+reverseLookup.set('bevacizumab-tnjn', 'bevacizumab');
+reverseLookup.set('rituximab-abbs', 'rituximab');
+reverseLookup.set('rituximab-pvvr', 'rituximab');
+reverseLookup.set('rituximab-arrx', 'rituximab');
 
 /**
  * Normalize a drug name to its canonical generic name.
