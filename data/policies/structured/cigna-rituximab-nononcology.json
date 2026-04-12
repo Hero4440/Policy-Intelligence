@@ -1,0 +1,218 @@
+{
+  "id": "cigna-rituximab-nononcology",
+  "payer": "Cigna",
+  "plan": "Commercial",
+  "policyTitle": "Drug Coverage Policy: Rituximab Intravenous Products for Non-Oncology Indications",
+  "drug": {
+    "brandName": "Rituxan",
+    "genericName": "rituximab",
+    "aliases": ["Truxima", "Ruxience", "Riabni"],
+    "products": [
+      { "name": "Truxima (rituximab-abbs)", "tier": "preferred", "aliases": ["rituximab-abbs"] },
+      { "name": "Riabni (rituximab-arrx)", "tier": "preferred", "aliases": ["rituximab-arrx"] },
+      { "name": "Ruxience (rituximab-pvvr)", "tier": "preferred", "aliases": ["rituximab-pvvr"] },
+      { "name": "Rituxan", "tier": "non-preferred", "aliases": [] }
+    ]
+  },
+  "indication": "Non-Oncology",
+  "indications": [
+    "Chronic lymphocytic leukemia (CLL)",
+    "Granulomatosis with polyangiitis (Wegener's granulomatosis)",
+    "Microscopic polyangiitis",
+    "Non-Hodgkin lymphoma (NHL)",
+    "Pemphigus vulgaris",
+    "Rheumatoid arthritis",
+    "Antineutrophil Cytoplasmic Antibody (ANCA)-Associated Vasculitis",
+    "Autoimmune Hemolytic Anemia (AIHA)",
+    "Immune Thrombocytopenia (ITP)",
+    "Immunotherapy-Related Toxicities Associated with Checkpoint Inhibitors",
+    "Interstitial Lung Disease Associated with Systemic Autoimmune Rheumatic Disease (SARD-ILD)",
+    "Membranous Nephropathy",
+    "Minimal Change Disease (MCD)",
+    "Multiple Sclerosis (MS)",
+    "Myasthenia Gravis (MG)",
+    "Neuromyelitis Optica Spectrum Disorders (NMOSD)",
+    "Pediatric Nephrotic Syndrome",
+    "Graft-Versus-Host Disease (GVHD)",
+    "Hematopoietic Cell Transplantation",
+    "Systemic Lupus Erythematosus (SLE)",
+    "Thrombotic Thrombocytopenic Purpura (TTP)",
+    "Solid Organ Transplantation"
+  ],
+  "coverageStatus": "covered-with-pa",
+  "paRequired": true,
+  "diagnosisRequirements": [
+    {
+      "icd10Codes": [],
+      "description": "Patient has an ANCA-associated vasculotide (granulomatosis with polyangiitis or microscopic polyangiitis)",
+      "evidenceText": "Patient has an ANCA-associated vasculotide; AND. Note: Examples of ANCA-associated vasculitis include granulomatosis with polyangiitis (Wegener's granulomatosis), or microscopic polyangiitis. The medication is being administered in combination with glucocorticoids.",
+      "source": {
+        "document": "Cigna Rituximab Intravenous Products for Non-Oncology Indications.pdf",
+        "page": 7,
+        "section": "Coverage Policy - FDA-Approved Indications - 1. Antineutrophil Cytoplasmic Antibody (ANCA)-Associated Vasculitis"
+      }
+    },
+    {
+      "icd10Codes": [],
+      "description": "Rheumatoid arthritis in adult patients with moderately to severely active disease in combination with methotrexate",
+      "evidenceText": "Rheumatoid arthritis, in adult patients with moderately to severely active disease, in combination with methotrexate for patients who have had an inadequate response to one or more tumor necrosis factor inhibitors. Patient has tried ONE conventional synthetic disease-modifying antirheumatic drug (DMARD) for at least 3 months; AND. Note: Examples of conventional synthetic DMARDs include methotrexate [oral or injectable], leflunomide, hydroxychloroquine, or sulfasalazine.",
+      "source": {
+        "document": "Cigna Rituximab Intravenous Products for Non-Oncology Indications.pdf",
+        "page": 8,
+        "section": "Coverage Policy - FDA-Approved Indications - 3. Rheumatoid Arthritis"
+      }
+    }
+  ],
+  "stepTherapy": [
+    {
+      "drugName": "Conventional synthetic disease-modifying antirheumatic drug (DMARD)",
+      "duration": "3 months",
+      "failureCriteria": "Inadequate response, contraindication, or clinically significant adverse effects",
+      "evidenceText": "Patient has tried ONE conventional synthetic disease-modifying antirheumatic drug (DMARD) for at least 3 months; AND. Note: Examples of conventional synthetic DMARDs include methotrexate [oral or injectable], leflunomide, hydroxychloroquine, or sulfasalazine. An exception to the requirement for a trial of one conventional synthetic DMARD can be made if the patient already has a 3-month trial of at least one biologic other than the requested drug.",
+      "source": {
+        "document": "Cigna Rituximab Intravenous Products for Non-Oncology Indications.pdf",
+        "page": 8,
+        "section": "Coverage Policy - FDA-Approved Indications - 3. Rheumatoid Arthritis - A. Initial Therapy - i"
+      }
+    },
+    {
+      "drugName": "Preferred rituximab biosimilars (Truxima, Riabni, Ruxience)",
+      "duration": "Until documented adverse reaction",
+      "failureCriteria": "Patient has tried ALL of the following: Truxima, Riabni, and Ruxience and cannot continue to use each formulary alternative due to a formulation difference in the inactive ingredient(s) which would result in a significant allergy or serious adverse reaction",
+      "evidenceText": "Patient meets BOTH of the following (A and B): A. Patient has tried ALL of the following: Truxima, Riabni, and Ruxience [documentation required] B. Patient cannot continue to use each formulary alternative due to a formulation difference in the inactive ingredient(s) [e.g., differences in stabilizing agent, buffering agent, and/or surfactant] which, according to the prescriber, would result in a significant allergy or serious adverse reaction [documentation required]",
+      "source": {
+        "document": "Cigna Rituximab Intravenous Products for Non-Oncology Indications.pdf",
+        "page": 17,
+        "section": "Coverage Policy - Employer Plans - Preferred Product Criteria - Rituxan"
+      }
+    }
+  ],
+  "otherRequirements": [
+    {
+      "category": "preferred product requirement",
+      "requirement": "For Rituxan (brand), patient must have tried ALL three preferred biosimilars (Truxima, Riabni, and Ruxience) and documented that they cannot continue each due to formulation differences causing significant allergy or serious adverse reaction",
+      "evidenceText": "Patient meets BOTH of the following (A and B): A. Patient has tried ALL of the following: Truxima, Riabni, and Ruxience [documentation required] B. Patient cannot continue to use each formulary alternative due to a formulation difference in the inactive ingredient(s) [e.g., differences in stabilizing agent, buffering agent, and/or surfactant] which, according to the prescriber, would result in a significant allergy or serious adverse reaction [documentation required]",
+      "source": {
+        "document": "Cigna Rituximab Intravenous Products for Non-Oncology Indications.pdf",
+        "page": 17,
+        "section": "Coverage Policy - Individual and Family Plans - Preferred Product Criteria"
+      },
+      "ambiguous": false
+    },
+    {
+      "category": "prescriber qualification",
+      "requirement": "Prescribed by or in consultation with a rheumatologist, nephrologist, pulmonologist, or immunologist for ANCA-associated vasculitis",
+      "evidenceText": "The medication is prescribed by or in consultation with a rheumatologist, nephrologist, pulmonologist, or immunologist; AND",
+      "source": {
+        "document": "Cigna Rituximab Intravenous Products for Non-Oncology Indications.pdf",
+        "page": 7,
+        "section": "Coverage Policy - FDA-Approved Indications - 1. ANCA-Associated Vasculitis - A. Induction Treatment - iii"
+      },
+      "ambiguous": false
+    },
+    {
+      "category": "prescriber qualification",
+      "requirement": "Prescribed by or in consultation with a dermatologist for Pemphigus Vulgaris",
+      "evidenceText": "The medication is prescribed by or in consultation with a dermatologist; AND",
+      "source": {
+        "document": "Cigna Rituximab Intravenous Products for Non-Oncology Indications.pdf",
+        "page": 7,
+        "section": "Coverage Policy - FDA-Approved Indications - 2. Pemphigus Vulgaris - A. Initial Treatment - ii"
+      },
+      "ambiguous": false
+    },
+    {
+      "category": "prescriber qualification",
+      "requirement": "Prescribed by or in consultation with a rheumatologist for Rheumatoid Arthritis",
+      "evidenceText": "The medication is prescribed by or in consultation with a rheumatologist; AND",
+      "source": {
+        "document": "Cigna Rituximab Intravenous Products for Non-Oncology Indications.pdf",
+        "page": 8,
+        "section": "Coverage Policy - FDA-Approved Indications - 3. Rheumatoid Arthritis - A. Initial Therapy - iii"
+      },
+      "ambiguous": false
+    },
+    {
+      "category": "combination therapy restriction",
+      "requirement": "The medication will not be used concurrently with another biologic or with a targeted synthetic DMARD for Rheumatoid Arthritis",
+      "evidenceText": "The medication will not be used concurrently with another biologic or with a targeted synthetic DMARD; AND. Note: Refer to Appendix A for examples of biologics and targeted synthetic DMARDs.",
+      "source": {
+        "document": "Cigna Rituximab Intravenous Products for Non-Oncology Indications.pdf",
+        "page": 9,
+        "section": "Coverage Policy - FDA-Approved Indications - 3. Rheumatoid Arthritis - A. Initial Therapy - ii"
+      },
+      "ambiguous": false
+    },
+    {
+      "category": "treatment interval requirement",
+      "requirement": "16 weeks or greater will elapse between treatment courses for Rheumatoid Arthritis",
+      "evidenceText": "16 weeks or greater will elapse between treatment courses; AND. Note: For example, there will be a minimum of 16 weeks since the first dose of the previous course and the first dose of the next course of a rituximab product.",
+      "source": {
+        "document": "Cigna Rituximab Intravenous Products for Non-Oncology Indications.pdf",
+        "page": 9,
+        "section": "Coverage Policy - FDA-Approved Indications - 3. Rheumatoid Arthritis - B. Patient has already received one course - i"
+      },
+      "ambiguous": false
+    },
+    {
+      "category": "clinical response requirement",
+      "requirement": "Patient experienced a beneficial clinical response when assessed by at least one objective measure OR patient experienced an improvement in at least one symptom for continuation therapy",
+      "evidenceText": "Patient meets at least ONE of the following (a or b): a. Patient experienced a beneficial clinical response when assessed by at least one objective measure; OR. Note: Examples of standardized and validated measures of disease activity include Clinical Disease Activity Index (CDAI), Disease Activity Score (DAS) 28 using erythrocyte sedimentation rate (ESR) or C-reactive protein (CRP), Patient Activity Scale (PAS)-II, Rapid Assessment of Patient Index Data 3 (RAPID-3), and/or Simplified Disease Activity Index (SDAI). b. Patient experienced an improvement in at least one symptom, such as decreased joint pain, morning stiffness, or fatigue; improved function or activities of daily living; decreased tissue swelling in joints or tendon sheaths; AND",
+      "source": {
+        "document": "Cigna Rituximab Intravenous Products for Non-Oncology Indications.pdf",
+        "page": 9,
+        "section": "Coverage Policy - FDA-Approved Indications - 3. Rheumatoid Arthritis - C. Patient has already received two or more courses - iii"
+      },
+      "ambiguous": false
+    },
+    {
+      "category": "hematologist consultation requirement",
+      "requirement": "Prescribed by or in consultation with a hematologist for Autoimmune Hemolytic Anemia",
+      "evidenceText": "The medication is prescribed by or in consultation with a hematologist; AND",
+      "source": {
+        "document": "Cigna Rituximab Intravenous Products for Non-Oncology Indications.pdf",
+        "page": 9,
+        "section": "Coverage Policy - Other Uses with Supportive Evidence - 4. Autoimmune Hemolytic Anemia - A"
+      },
+      "ambiguous": false
+    },
+    {
+      "category": "specialist consultation requirement",
+      "requirement": "Prescribed by or in consultation with an oncologist, hematologist, or transplant center physician for various indications including GVHD, transplantation, and hematologic conditions",
+      "evidenceText": "The medication is prescribed by or in consultation with an oncologist, hematologist, or a physician affiliated with a transplant center; AND",
+      "source": {
+        "document": "Cigna Rituximab Intravenous Products for Non-Oncology Indications.pdf",
+        "page": 10,
+        "section": "Coverage Policy - Other Uses with Supportive Evidence - 5. Graft-Versus-Host Disease - A. Initial Therapy - iii"
+      },
+      "ambiguous": false
+    },
+    {
+      "category": "neurologist consultation requirement",
+      "requirement": "Prescribed by or in consultation with a neurologist or physician who specializes in treatment of multiple sclerosis for MS, Myasthenia Gravis, and NMOSD",
+      "evidenceText": "The medication is prescribed by or in consultation with a neurologist or a physician who specializes in the treatment of multiple sclerosis; AND",
+      "source": {
+        "document": "Cigna Rituximab Intravenous Products for Non-Oncology Indications.pdf",
+        "page": 13,
+        "section": "Coverage Policy - Other Uses with Supportive Evidence - 12. Multiple Sclerosis - A. Initial Therapy - iii"
+      },
+      "ambiguous": false
+    },
+    {
+      "category": "approval duration",
+      "requirement": "Initial approval for 1 month for most indications; follow-up approvals for 1 year for ANCA-vasculitis, 1 month for pemphigus vulgaris relapses, 1 month for rheumatoid arthritis courses",
+      "evidenceText": "Approve for 1 month if the patient meets ALL of the following (i, ii, iii and iv) for ANCA-Associated Vasculitis Induction Treatment. Follow-Up Treatment of Patients Who Have Received Induction Treatment for ANCA-Associated Vasculitis: Approve for 1 year if the patient meets ALL of the following. Pemphigus Vulgaris Initial Treatment: Approve for 1 month. Rheumatoid Arthritis Initial Therapy: Approve for 1 month.",
+      "source": {
+        "document": "Cigna Rituximab Intravenous Products for Non-Oncology Indications.pdf",
+        "page": 7,
+        "section": "Coverage Policy - FDA-Approved Indications - Duration statements"
+      },
+      "ambiguous": false
+    }
+  ],
+  "sourceDocument": {
+    "filename": "Cigna Rituximab Intravenous Products for Non-Oncology Indications.pdf",
+    "retrievalDate": "2026-04-12",
+    "effectiveDate": "2026-02-01"
+  }
+}
