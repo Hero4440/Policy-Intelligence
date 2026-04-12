@@ -1,8 +1,8 @@
-# Roadmap: PolicyPilot
+# Roadmap: PolicyLens MCP
 
 ## Overview
 
-PolicyPilot delivers prior authorization readiness intelligence through a 6-phase build plus one inserted frontend phase: extract real payer policy data into structured JSON, implement 3 MCP tools (drug coverage, PA criteria, patient readiness), integrate FHIR patient context via SHARP specs, set up demo patients in Prompt Opinion, deploy the MCP server and register it in Prompt Opinion, add an Anton Rx demo frontend that presents the normalized policy data in a Prompt Opinion-inspired workspace, and create a polished demo video showing the complete workflow. Each phase delivers a verifiable capability, building from data foundation through integration to demo-ready state. The critical path starts with policy data extraction — data quality underpins everything downstream.
+PolicyLens MCP transforms medical-benefit drug policy PDFs into an intelligent MCP server that answers coverage questions with source-backed evidence. The journey starts with normalizing two policy documents (BCBS NC and Cigna) into structured data with evidence mappings, then builds four MCP tools on that foundation (list, summarize, compare, Q&A), and deploys via ngrok for Prompt Opinion integration. Each phase delivers a complete, verifiable capability that builds toward the core value: every policy question answered includes evidence from loaded policy documents.
 
 ## Phases
 
@@ -12,124 +12,70 @@ PolicyPilot delivers prior authorization readiness intelligence through a 6-phas
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Policy Data Foundation** - Extract and structure real payer policy data from public PDFs
-- [ ] **Phase 2: MCP Server Core** - Implement 3 MCP tools with coverage and criteria lookup
-- [ ] **Phase 3: Patient Context Integration** - Add FHIR context handling and readiness analysis
-- [ ] **Phase 4: Patient Data Setup** - Create synthetic demo patients in Prompt Opinion
-- [ ] **Phase 5: Deployment & Integration** - Deploy MCP server and integrate with Prompt Opinion platform
-- [ ] **Phase 5.1: Anton Rx Demo Frontend (INSERTED)** - Build a Prompt Opinion-inspired frontend for searchable, comparable drug policy coverage
-- [ ] **Phase 6: Demo Preparation** - Create demo video and validate complete workflow
+- [ ] **Phase 1: Policy Data Foundation** - Normalize BCBS NC and Cigna policies with evidence mappings and drug aliases
+- [ ] **Phase 2: Core MCP Tools** - Build deterministic tools (list, summary, compare) with evidence grounding
+- [ ] **Phase 3: Hybrid Q&A Engine** - Build natural language Q&A tool with LLM fallback and validation
+- [ ] **Phase 4: Deployment + Integration** - Deploy via ngrok and validate Prompt Opinion integration
 
 ## Phase Details
 
 ### Phase 1: Policy Data Foundation
-**Goal**: Real payer policy data extracted and available for tool queries
+**Goal**: BCBS NC and Cigna policies normalized into structured, evidence-backed data that enables all downstream tools
 **Depends on**: Nothing (first phase)
-**Requirements**: POL-01, POL-02, POL-03, POL-04
+**Requirements**: DATA-01, DATA-02, DATA-03, DATA-04, DATA-05, DATA-06
 **Success Criteria** (what must be TRUE):
-  1. Policy JSON store contains extracted data from 3-5 public payer PDFs (UHC, Aetna, Cigna)
-  2. Policy records include all required fields: payer, plan, drug, indication, coverage status, PA requirements, diagnosis criteria, prior therapy requirements, evidence text, source document
-  3. Policy data uses real policy language from actual payer documents (not fabricated text)
-  4. Policy data covers one therapeutic area (rheumatoid arthritis biologics) with sufficient depth for demo scenarios
-  5. Policy JSON schema is well-defined and supports drug name aliasing (brand/generic)
-**Plans:** 2 plans
+  1. BCBS NC Preferred Injectable Oncology Program loaded with normalized fields (payer, title, date, drug family, preferred/non-preferred products, prior auth, step therapy, indications, restrictions)
+  2. Cigna Rituximab IV Non-Oncology policy loaded with same normalized schema
+  3. Every extracted field has mapped evidence snippets (1-3 sentences) from source policy text
+  4. Drug alias lookup resolves bevacizumab family (Avastin, bevacizumab-awwb/Mvasi, bevacizumab-bvzr/Zirabev) and rituximab family (Rituxan, rituximab-abbs/Truxima, rituximab-pvvr/Ruxience) to canonical names
+  5. Normalized data validates against Zod schema without errors
+**Plans**: TBD
 
 Plans:
-- [ ] 01-01-PLAN.md — Schema, drug aliases, and extraction utilities
-- [ ] 01-02-PLAN.md — Policy data extraction and structuring (5 policies, 3 payers)
+- [ ] TBD
 
-### Phase 2: MCP Server Core
-**Goal**: MCP server exposes functional coverage and criteria lookup tools
+### Phase 2: Core MCP Tools
+**Goal**: Deterministic MCP tools deliver policy intelligence with evidence grounding and structured responses
 **Depends on**: Phase 1
-**Requirements**: MCP-01, MCP-02, MCP-03, MCP-04, MCP-06, COV-01, COV-02, COV-03, COV-04
+**Requirements**: TOOL-01, TOOL-02, TOOL-03, RESP-01, RESP-02, RESP-03, RESP-04, RESP-05, DIFF-01, DIFF-02, DIFF-03
 **Success Criteria** (what must be TRUE):
-  1. MCP server exposes `get_drug_coverage` tool that returns coverage status, source policy, and evidence text
-  2. MCP server exposes `get_prior_auth_criteria` tool that returns structured criteria (diagnosis, step therapy, quantity limits, restrictions) with evidence
-  3. MCP server exposes `check_patient_readiness` tool stub (accepts parameters but patient context integration comes in Phase 3)
-  4. MCP server uses Streamable HTTP transport compatible with Prompt Opinion
-  5. All tool descriptions are clear and detailed enough for Prompt Opinion's agent to decide when and how to call them
-  6. Both coverage and criteria tools handle brand/generic drug name aliases correctly
-  7. Tools return evidence text (quoted policy language) supporting determinations
-**Plans:** 2 plans
+  1. list_policies tool returns all loaded policies with metadata (payer, title, effective date, drug families)
+  2. get_policy_summary tool returns structured summary for one policy with all normalized fields plus evidence
+  3. compare_drug_across_payers tool accepts drug_family input and returns side-by-side comparison showing preferred/non-preferred splits and criteria differences
+  4. All three tools return responses with: human-readable answer + structured_result object + evidence array + confidence level (HIGH for deterministic lookups)
+  5. Bevacizumab comparison identifies BCBS NC preferred vs non-preferred product split
+  6. Rituximab summary extracts Cigna step therapy and prior auth requirements
+**Plans**: TBD
 
 Plans:
-- [ ] 02-01-PLAN.md — MCP server scaffold, policy loader, coverage and criteria tools
-- [ ] 02-02-PLAN.md — Patient readiness stub tool and end-to-end verification
+- [ ] TBD
 
-### Phase 3: Patient Context Integration
-**Goal**: MCP server can accept FHIR patient context and perform readiness analysis
+### Phase 3: Hybrid Q&A Engine
+**Goal**: Natural language policy questions answered with evidence grounding via hybrid deterministic + LLM routing
 **Depends on**: Phase 2
-**Requirements**: MCP-05, RDY-01, RDY-02, RDY-03, RDY-04
+**Requirements**: TOOL-04, RESP-06
 **Success Criteria** (what must be TRUE):
-  1. MCP server accepts FHIR context token via SHARP extension specs from Prompt Opinion
-  2. `check_patient_readiness` tool can retrieve patient FHIR data using SHARP token from Prompt Opinion's FHIR server
-  3. Tool compares patient clinical context against policy criteria and returns structured results: matched requirements, missing requirements, documentation needed
-  4. All readiness outputs use cautious clinical language ("may be missing", "appears to match", "documentation may be needed")
-  5. FHIR parser extracts relevant patient data (diagnoses, medications, labs, payer info) from FHIR bundles correctly
-**Plans:** 2 plans
+  1. ask_policy_question tool accepts natural language questions about loaded policies
+  2. Query router tries deterministic lookup first (from Phase 2 patterns), falls back to LLM only for complex questions
+  3. LLM responses validated against evidence index (every claim must map to policy text)
+  4. Tool returns "insufficient evidence" for questions that can't be grounded in loaded policy data
+  5. Question "What prior authorization criteria does Cigna require for rituximab?" returns grounded answer with evidence snippets
+**Plans**: TBD
 
 Plans:
-- [ ] 03-01-PLAN.md — FHIR client, resource extractors, criteria matcher, and cautious clinical language helpers
-- [ ] 03-02-PLAN.md — Wire FHIR integration into check_patient_readiness tool and end-to-end verification
+- [ ] TBD
 
-### Phase 4: Patient Data Setup
-**Goal**: Demo patients loaded in Prompt Opinion with controlled coverage scenarios
+### Phase 4: Deployment + Integration
+**Goal**: MCP server publicly accessible via ngrok and fully integrated with Prompt Opinion
 **Depends on**: Phase 3
-**Requirements**: PAT-01, PAT-02, PAT-03
+**Requirements**: DEPL-01, DEPL-02, DEPL-03, DEPL-04, DEPL-05, DEMO-01, DEMO-02, DEMO-03
 **Success Criteria** (what must be TRUE):
-  1. At least 3 synthetic demo patients loaded into Prompt Opinion workspace
-  2. Demo patients represent controlled scenarios: full criteria match, partial match with gaps, poor match with major gaps
-  3. Each demo patient has relevant FHIR data: RA diagnosis codes, medication history, lab results, payer information
-  4. Patients are accessible via Prompt Opinion's patient selector in the chat interface
-**Plans:** 1 plan
-
-Plans:
-- [ ] 04-01-PLAN.md — Create 3 FHIR patient bundles (full match, partial match, poor match) and validate against extractors
-
-### Phase 5: Deployment & Integration
-**Goal**: MCP server deployed and functional within Prompt Opinion workspace
-**Depends on**: Phase 4
-**Requirements**: DEP-01, DEP-02, DEP-03, DEP-04, DEP-05
-**Success Criteria** (what must be TRUE):
-  1. MCP server deployed and accessible via public URL (ngrok or cloud hosting)
-  2. MCP server registered in Prompt Opinion workspace hub as MCP connection
-  3. SHARP FHIR context enabled on the MCP connection in Prompt Opinion
-  4. PolicyPilot agent configured in Prompt Opinion with all 3 MCP tools attached
-  5. Solution published to Prompt Opinion Marketplace for judge discovery
-  6. End-to-end test: user can select patient, ask coverage question, and receive grounded answer with policy citations
-**Plans:** 2 plans
-
-Plans:
-- [ ] 05-01-PLAN.md — Harden the MCP server for remote access, deployment, and smoke verification
-- [ ] 05-02-PLAN.md — Register in Prompt Opinion, validate SHARP context, publish, and run end-to-end demo checks
-
-### Phase 5.1: Anton Rx Demo Frontend (INSERTED)
-**Goal**: A polished frontend demo presents normalized medical-benefit drug policies in a Prompt Opinion-inspired workspace for the Anton Rx track
-**Depends on**: Phase 1 and Phase 2 (uses normalized policy data and MCP-compatible concepts); can proceed in parallel with late Prompt Opinion UI work
-**Requirements**: UI-01, UI-02, UI-03, UI-04, UI-05
-**Success Criteria** (what must be TRUE):
-  1. A browser-based frontend exists in this repo and can be run locally
-  2. The frontend answers "Which plans cover Drug X?" from the normalized policy dataset
-  3. The frontend answers "What prior auth criteria does Plan Y require for Drug Z?" with structured evidence-backed criteria
-  4. The frontend supports side-by-side comparison across payers/plans for a selected drug
-  5. The layout closely evokes a Prompt Opinion workspace without copying branding one-for-one
-  6. The frontend includes a clearly labeled policy-change view or change placeholder so the Anton Rx track story is represented honestly
-**Plans:** 2 plans
-
-Plans:
-- [ ] 05.1-01-PLAN.md — Scaffold the frontend app, data adapter, and Prompt Opinion-inspired workspace shell
-- [ ] 05.1-02-PLAN.md — Build Anton Rx search, compare, criteria, and policy-change demo workflows
-
-### Phase 6: Demo Preparation
-**Goal**: Polished demo video showing complete PolicyPilot workflow
-**Depends on**: Phase 5
-**Requirements**: DEM-01, DEM-02, DEM-03
-**Success Criteria** (what must be TRUE):
-  1. Demo video recorded (under 3 minutes) showing PolicyPilot functioning within Prompt Opinion
-  2. Demo covers complete workflow: open patient, ask coverage question, ask criteria question, ask readiness question
-  3. Demo shows MCP tool calls visible in Prompt Opinion's tool trace view
-  4. Demo script validated with all 3 demo patients to ensure smooth execution
-  5. Edge cases handled gracefully (unknown drug, missing patient data, ambiguous queries)
+  1. MCP server running with ngrok tunnel providing public HTTPS URL
+  2. Prompt Opinion connects to server and discovers all 4 tools (list_policies, get_policy_summary, compare_drug_across_payers, ask_policy_question)
+  3. All 4 tools callable from Prompt Opinion with correct StreamableHTTP transport and CORS headers
+  4. Health endpoint accessible and returns accurate policy/payer/drug counts
+  5. Demo scenario works: bevacizumab cross-payer comparison shows BCBS NC preferred/non-preferred distinction
+  6. Demo scenario works: rituximab Q&A from Prompt Opinion returns evidence-backed answer about Cigna prior auth criteria
 **Plans**: TBD
 
 Plans:
@@ -138,14 +84,11 @@ Plans:
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 5.1 → 6
+Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Policy Data Foundation | 2/2 | Complete | 2026-04-04 |
-| 2. MCP Server Core | 0/2 | Not started | - |
-| 3. Patient Context Integration | 0/TBD | Not started | - |
-| 4. Patient Data Setup | 0/TBD | Not started | - |
-| 5. Deployment & Integration | 0/2 | Not started | - |
-| 5.1 Anton Rx Demo Frontend | 0/2 | Planned | - |
-| 6. Demo Preparation | 0/TBD | Not started | - |
+| 1. Policy Data Foundation | 0/TBD | Not started | - |
+| 2. Core MCP Tools | 0/TBD | Not started | - |
+| 3. Hybrid Q&A Engine | 0/TBD | Not started | - |
+| 4. Deployment + Integration | 0/TBD | Not started | - |
