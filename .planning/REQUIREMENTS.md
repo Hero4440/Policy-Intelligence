@@ -1,169 +1,131 @@
-# Requirements: PolicyPilot
+# Requirements: PolicyLens MCP
 
-**Defined:** 2026-04-04
-**Core Value:** A prior auth specialist can ask a natural language question about a patient's drug coverage and get a grounded, evidence-cited answer in seconds — powered by an MCP server integrated into the Prompt Opinion platform.
-
-## Platform Context
-
-PolicyPilot is an **MCP server** that integrates into the **Prompt Opinion** healthcare agent platform. Prompt Opinion provides:
-- Chat UI / workspace / launchpad (we do NOT build a UI)
-- Agent orchestration (LLM decides when to call our MCP tools)
-- FHIR patient context via SHARP extension specs (passed to our tools)
-- Patient data management (synthetic patients loaded in platform)
-- Marketplace publishing and discovery
-
-**We build:** MCP server + policy data store + demo patient setup in Prompt Opinion.
-
-**Inserted hackathon track exception:** For the Anton Rx track, we also build a browser-based demo frontend that presents the normalized policy data in a Prompt Opinion-inspired workspace shell. This frontend is a track-specific demo surface, not a replacement for the Prompt Opinion integration path.
+**Defined:** 2026-04-11
+**Core Value:** Every policy question answered must include source-backed evidence from loaded policy documents.
 
 ## v1 Requirements
 
-Requirements for hackathon release. Each maps to roadmap phases.
-
-### MCP Server
-
-- [ ] **MCP-01**: MCP server exposes `get_drug_coverage(plan, drug)` tool returning coverage status, source policy, and evidence text
-- [ ] **MCP-02**: MCP server exposes `get_prior_auth_criteria(plan, drug)` tool returning diagnosis requirement, prior therapy requirement, other restrictions, and evidence snippet
-- [ ] **MCP-03**: MCP server exposes `check_patient_readiness(plan, drug, patient_context)` tool returning matched requirements, missing requirements, and likely missing documentation
-- [ ] **MCP-04**: MCP server uses Streamable HTTP transport (compatible with Prompt Opinion)
-- [ ] **MCP-05**: MCP server accepts FHIR context token via SHARP extension specs to retrieve patient data from Prompt Opinion's FHIR server
-- [ ] **MCP-06**: Tool descriptions are clear and detailed so Prompt Opinion's agent can correctly decide when and how to call each tool
-
-### Coverage & Lookup
-
-- [ ] **COV-01**: `get_drug_coverage` returns coverage status (covered, not covered, covered with PA) with source policy reference
-- [ ] **COV-02**: `get_prior_auth_criteria` returns structured criteria: diagnosis requirements, step therapy requirements, quantity limits, and other restrictions
-- [ ] **COV-03**: Both tools return evidence text — quoted policy language supporting the determination
-- [ ] **COV-04**: Tools handle both brand and generic drug names (Humira = adalimumab) via alias matching
-
-### Patient Readiness
-
-- [ ] **RDY-01**: `check_patient_readiness` accepts patient clinical context (from FHIR via Prompt Opinion) and compares against policy criteria
-- [ ] **RDY-02**: Tool returns structured result: matched requirements, missing requirements, documentation needed
-- [ ] **RDY-03**: All readiness outputs use cautious clinical language ("may be missing", "appears to match", "documentation may be needed")
-- [ ] **RDY-04**: Tool can retrieve patient FHIR data using the SHARP token passed by Prompt Opinion
+Requirements for hackathon POC. Each maps to roadmap phases.
 
 ### Policy Data
 
-- [ ] **POL-01**: Policy rules store contains real extracted data from 3-5 public payer PDFs (UHC, Aetna, Cigna)
-- [ ] **POL-02**: Policy data covers one therapeutic area (rheumatoid arthritis biologics)
-- [ ] **POL-03**: Policy records include: payer, plan, drug, indication, coverage status, PA required, diagnosis requirement, prior therapy requirement, other requirements, evidence text, source document
-- [ ] **POL-04**: Policy data uses real policy language extracted from actual payer documents (not fabricated)
+- [ ] **DATA-01**: System loads and validates BCBS NC Preferred Injectable Oncology Program policy into normalized schema
+- [ ] **DATA-02**: System loads and validates Cigna Rituximab IV Non-Oncology policy into normalized schema
+- [ ] **DATA-03**: Each normalized policy includes: payer, policy title, effective date, drug family, preferred products, non-preferred products, prior auth required, step/fail-first logic, covered indications, notable restrictions
+- [ ] **DATA-04**: Each extracted field has mapped evidence snippets from the source policy text
+- [ ] **DATA-05**: Drug alias normalization resolves bevacizumab family names (Avastin, bevacizumab-awwb/Mvasi, bevacizumab-bvzr/Zirabev, etc.)
+- [ ] **DATA-06**: Drug alias normalization resolves rituximab family names (Rituxan, rituximab-abbs/Truxima, rituximab-pvvr/Ruxience, etc.)
 
-### Patient Data (in Prompt Opinion)
+### MCP Tools
 
-- [ ] **PAT-01**: Synthetic patients loaded into Prompt Opinion workspace (via import or manual creation)
-- [ ] **PAT-02**: At least 3 demo patients with controlled scenarios: full criteria match, partial match (gaps), poor match (major gaps)
-- [ ] **PAT-03**: Demo patients have relevant FHIR data: RA diagnosis codes, medication history, lab results, payer info
+- [ ] **TOOL-01**: `list_policies` tool returns all loaded policies with metadata (payer, title, effective date, drug families covered)
+- [ ] **TOOL-02**: `get_policy_summary` tool returns structured normalized summary for one policy including all DATA-03 fields with evidence
+- [ ] **TOOL-03**: `compare_drug_across_payers` tool accepts drug_family input and returns side-by-side comparison across loaded payers
+- [ ] **TOOL-04**: `ask_policy_question` tool accepts natural-language question and returns evidence-grounded answer using hybrid approach (deterministic first, LLM fallback)
 
-### Deployment & Integration
+### Response Quality
 
-- [ ] **DEP-01**: MCP server deployed and accessible via public URL (ngrok for dev, cloud hosting for demo)
-- [ ] **DEP-02**: MCP server registered in Prompt Opinion workspace hub as MCP connection
-- [ ] **DEP-03**: SHARP FHIR context enabled on the MCP connection in Prompt Opinion
-- [ ] **DEP-04**: PolicyPilot agent configured in Prompt Opinion with MCP tools attached
-- [ ] **DEP-05**: Solution published to Prompt Opinion Marketplace for judge discovery
+- [ ] **RESP-01**: Every tool response includes human-readable answer text
+- [ ] **RESP-02**: Every tool response includes structured_result object with typed fields
+- [ ] **RESP-03**: Every tool response includes evidence array with source text snippets
+- [ ] **RESP-04**: Every tool response includes confidence level (HIGH/MEDIUM/LOW)
+- [ ] **RESP-05**: System never answers without evidence — if information is unclear or missing, explicitly says so
+- [ ] **RESP-06**: System does not hallucinate missing facts — deterministic lookup preferred over LLM generation
 
-### Demo
+### Differentiators
 
-- [ ] **DEM-01**: Demo video (under 3 minutes) showing PolicyPilot functioning within Prompt Opinion
-- [ ] **DEM-02**: Demo covers: open patient → ask coverage question → ask criteria question → ask readiness question
-- [ ] **DEM-03**: Demo shows MCP tool calls visible in Prompt Opinion's tool trace view
+- [ ] **DIFF-01**: Comparison tool identifies preferred vs non-preferred biosimilar products per payer (e.g., BCBS NC bevacizumab preferred/non-preferred split)
+- [ ] **DIFF-02**: Summary and comparison tools extract step therapy / fail-first logic (e.g., Cigna rituximab step requirements)
+- [ ] **DIFF-03**: Comparison tool highlights specific criteria differences between payers for the same drug family
 
-### Anton Rx Demo Frontend
+### Deployment
 
-- [ ] **UI-01**: A local browser frontend presents searchable medical-benefit drug policy coverage using the normalized policy dataset
-- [ ] **UI-02**: Users can answer "Which plans cover Drug X?" through filters or search results
-- [ ] **UI-03**: Users can answer "What prior auth criteria does Plan Y require for Drug Z?" in a structured detail view with source evidence
-- [ ] **UI-04**: Users can compare at least two payer policies side-by-side for a selected drug
-- [ ] **UI-05**: The frontend includes an honest policy-change view or clearly labeled placeholder that supports the Anton Rx quarterly-change narrative
+- [ ] **DEPL-01**: MCP server deployable via ngrok as public URL
+- [ ] **DEPL-02**: Prompt Opinion can connect to the MCP server and discover all registered tools
+- [ ] **DEPL-03**: StreamableHTTP transport configured with stateless per-request server instances
+- [ ] **DEPL-04**: CORS configured to allow Prompt Opinion cross-origin requests
+- [ ] **DEPL-05**: Health endpoint returns server status with loaded policy/payer/drug counts
+
+### Demo Scenarios
+
+- [ ] **DEMO-01**: Bevacizumab cross-payer comparison works and shows BCBS NC preferred/non-preferred split
+- [ ] **DEMO-02**: Rituximab Q&A works — "What prior authorization criteria does Cigna require for rituximab?" returns grounded answer
+- [ ] **DEMO-03**: All 4 tools discoverable and callable from Prompt Opinion
 
 ## v2 Requirements
 
 Deferred to post-hackathon.
 
-### Submission Workflow
+### Additional Policies
 
-- **SUB-01**: Generate pre-populated PA request forms from readiness analysis
-- **SUB-02**: Electronic PA submission via payer APIs
+- **DATA-V2-01**: Florida Blue bevacizumab policy loaded and normalized
+- **DATA-V2-02**: Priority Health covered-alternative logic for Avastin
+- **DATA-V2-03**: Support for 10+ policy documents
 
-### Intelligence Layer
+### Advanced Features
 
-- **INT-01**: Predict PA approval likelihood
-- **INT-02**: Suggest therapeutic alternatives
-- **INT-03**: Auto-gather supporting EHR documents
+- **FEAT-V2-01**: Change tracking between policy versions
+- **FEAT-V2-02**: Full patient-policy matching workflow with FHIR data
+- **FEAT-V2-03**: Visual analytics / heat map of coverage across payers
+- **FEAT-V2-04**: Knowledge graph of drug-payer-indication relationships
 
-### Scale
+### Infrastructure
 
-- **SCL-01**: Multiple therapeutic areas
-- **SCL-02**: Multi-payer comparison
-- **SCL-03**: Real-time policy updates
-
-### A2A Agent
-
-- **A2A-01**: Expose PolicyPilot as A2A agent (not just MCP tools)
-- **A2A-02**: Enable agent-to-agent collaboration with other Prompt Opinion agents
+- **INFRA-V2-01**: Cloud deployment (beyond ngrok)
+- **INFRA-V2-02**: User authentication
+- **INFRA-V2-03**: Full web portal UI
 
 ## Out of Scope
 
 | Feature | Reason |
 |---------|--------|
-| Custom chat UI (Streamlit/React) | Prompt Opinion provides the UI; building our own duplicates effort except for the Anton Rx track-specific demo frontend |
-| Live user PDF upload | Curated dataset; parsing errors catastrophic in demo |
-| Admin dashboard | Team edits JSON directly; no demo value |
-| Multi-agent system | Single MCP server with 3 tools sufficient |
-| Vector database | 3-5 policies, structured JSON lookup sufficient |
-| Policy change tracking | Static dataset for hackathon |
-| Full payer comparison | Depth over breadth |
-| Production security | Demo-grade; Prompt Opinion handles auth |
-| Multiple therapeutic areas | One domain done well |
-| Real patient data | Synthetic only; compliance |
-| Own LLM integration | Prompt Opinion handles agent/LLM orchestration |
+| Universal PDF parser | Every payer formats differently; multi-month R&D effort beyond POC |
+| Pharmacy benefit / formulary lookup | POC is medical benefit only — different data structures |
+| Real-time policy update ingestion | Requires crawler infrastructure; static data sufficient for POC |
+| ePA submission workflow | Complex regulatory domain beyond policy intelligence |
+| Multi-indication coverage analysis | Exponential complexity; focus on primary indications in 2 docs |
+| Appeal/exception guidance | Legal/regulatory domain beyond policy parsing |
+| Full web portal | Prompt Opinion IS the product surface for this POC |
+| Mobile app | Web-first, Prompt Opinion integration only |
+| Production enterprise architecture | Hackathon pragmatism — in-memory, file-based, minimal infrastructure |
 
 ## Traceability
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| POL-01 | Phase 1 | Pending |
-| POL-02 | Phase 1 | Pending |
-| POL-03 | Phase 1 | Pending |
-| POL-04 | Phase 1 | Pending |
-| MCP-01 | Phase 2 | Pending |
-| MCP-02 | Phase 2 | Pending |
-| MCP-03 | Phase 2 | Pending |
-| MCP-04 | Phase 2 | Pending |
-| MCP-06 | Phase 2 | Pending |
-| COV-01 | Phase 2 | Pending |
-| COV-02 | Phase 2 | Pending |
-| COV-03 | Phase 2 | Pending |
-| COV-04 | Phase 2 | Pending |
-| MCP-05 | Phase 3 | Pending |
-| RDY-01 | Phase 3 | Pending |
-| RDY-02 | Phase 3 | Pending |
-| RDY-03 | Phase 3 | Pending |
-| RDY-04 | Phase 3 | Pending |
-| PAT-01 | Phase 4 | Pending |
-| PAT-02 | Phase 4 | Pending |
-| PAT-03 | Phase 4 | Pending |
-| DEP-01 | Phase 5 | Pending |
-| DEP-02 | Phase 5 | Pending |
-| DEP-03 | Phase 5 | Pending |
-| DEP-04 | Phase 5 | Pending |
-| DEP-05 | Phase 5 | Pending |
-| UI-01 | Phase 5.1 | Pending |
-| UI-02 | Phase 5.1 | Pending |
-| UI-03 | Phase 5.1 | Pending |
-| UI-04 | Phase 5.1 | Pending |
-| UI-05 | Phase 5.1 | Pending |
-| DEM-01 | Phase 6 | Pending |
-| DEM-02 | Phase 6 | Pending |
-| DEM-03 | Phase 6 | Pending |
+| DATA-01 | Phase 1 | Pending |
+| DATA-02 | Phase 1 | Pending |
+| DATA-03 | Phase 1 | Pending |
+| DATA-04 | Phase 1 | Pending |
+| DATA-05 | Phase 1 | Pending |
+| DATA-06 | Phase 1 | Pending |
+| TOOL-01 | Phase 2 | Pending |
+| TOOL-02 | Phase 2 | Pending |
+| TOOL-03 | Phase 2 | Pending |
+| TOOL-04 | Phase 3 | Pending |
+| RESP-01 | Phase 2 | Pending |
+| RESP-02 | Phase 2 | Pending |
+| RESP-03 | Phase 2 | Pending |
+| RESP-04 | Phase 2 | Pending |
+| RESP-05 | Phase 2 | Pending |
+| RESP-06 | Phase 3 | Pending |
+| DIFF-01 | Phase 2 | Pending |
+| DIFF-02 | Phase 2 | Pending |
+| DIFF-03 | Phase 2 | Pending |
+| DEPL-01 | Phase 4 | Pending |
+| DEPL-02 | Phase 4 | Pending |
+| DEPL-03 | Phase 4 | Pending |
+| DEPL-04 | Phase 4 | Pending |
+| DEPL-05 | Phase 4 | Pending |
+| DEMO-01 | Phase 4 | Pending |
+| DEMO-02 | Phase 4 | Pending |
+| DEMO-03 | Phase 4 | Pending |
 
 **Coverage:**
-- v1 requirements: 34 total
-- Mapped to phases: 34 (100%)
-- Unmapped: 0
+- v1 requirements: 27 total
+- Mapped to phases: 27
+- Unmapped: 0 ✓
 
 ---
-*Requirements defined: 2026-04-04*
-*Last updated: 2026-04-04 — Traceability updated after roadmap creation*
+*Requirements defined: 2026-04-11*
+*Last updated: 2026-04-11 after initial definition*
