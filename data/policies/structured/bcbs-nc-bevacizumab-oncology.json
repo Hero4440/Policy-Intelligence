@@ -1,0 +1,174 @@
+{
+  "id": "bcbs-nc-bevacizumab-oncology",
+  "payer": "BCBS-NC",
+  "plan": "Commercial",
+  "policyTitle": "Corporate Medical Policy: Preferred Injectable Oncology Program",
+  "drug": {
+    "brandName": "Avastin",
+    "genericName": "bevacizumab",
+    "aliases": ["Mvasi", "Zirabev", "Alymsys", "Vegzelma", "Avzivi"],
+    "products": [
+      { "name": "Mvasi (bevacizumab-awwb)", "tier": "preferred", "aliases": ["bevacizumab-awwb"] },
+      { "name": "Zirabev (bevacizumab-bvzr)", "tier": "preferred", "aliases": ["bevacizumab-bvzr"] },
+      { "name": "Avastin", "tier": "non-preferred", "aliases": [] },
+      { "name": "Alymsys (bevacizumab-maly)", "tier": "non-preferred", "aliases": ["bevacizumab-maly"] },
+      { "name": "Avzivi (bevacizumab-tnjn)", "tier": "non-preferred", "aliases": ["bevacizumab-tnjn"] },
+      { "name": "Jobevne (bevacizumab-nwgd)", "tier": "non-preferred", "aliases": ["bevacizumab-nwgd"] },
+      { "name": "Vegzelma (bevacizumab-adcd)", "tier": "non-preferred", "aliases": ["bevacizumab-adcd"] }
+    ]
+  },
+  "indication": "Oncology",
+  "indications": [
+    "Metastatic colorectal cancer",
+    "Non-squamous non-small cell lung cancer",
+    "Recurrent glioblastoma",
+    "Metastatic renal cell carcinoma",
+    "Persistent, recurrent, or metastatic cervical cancer",
+    "Epithelial ovarian, fallopian tube, or primary peritoneal cancer",
+    "Hepatocellular carcinoma"
+  ],
+  "coverageStatus": "covered-with-pa",
+  "paRequired": true,
+  "diagnosisRequirements": [
+    {
+      "icd10Codes": [],
+      "description": "FDA labeled indication for the requested agent and route of administration",
+      "evidenceText": "The patient has an FDA labeled indication for the requested agent and route of administration. The requested indication does NOT require genetic/specific diagnostic testing OR if genetic testing is required, both the testing has been performed AND the results indicate therapy with the requested agent is appropriate in FDA labeling.",
+      "source": {
+        "document": "BCBS NC - Corporate Medical Policy_ Preferred Injectable Oncology Program (Avastin example).pdf",
+        "page": 7,
+        "section": "Criteria for Medical Necessity - Initial Criteria for Approval - 2"
+      }
+    }
+  ],
+  "stepTherapy": [
+    {
+      "drugName": "Preferred bevacizumab biosimilar (Mvasi or Zirabev)",
+      "duration": "Until documented serious adverse event",
+      "failureCriteria": "Documented serious adverse event that required medical intervention to both preferred bevacizumab biosimilar products (bevacizumab-awwb [Mvasi], bevacizumab-bvzr [Zirabev]) that is not anticipated with the requested product",
+      "evidenceText": "If the request is for bevacizumab (Avastin) or a non-preferred bevacizumab biosimilar product, then both of the following criteria are met: The patient has a documented serious adverse event that required medical intervention to both preferred bevacizumab biosimilar products that is not anticipated with the requested product; AND The prescriber has completed and submitted an FDA MedWatch Adverse Event Reporting Form [medical record documentation required].",
+      "source": {
+        "document": "BCBS NC - Corporate Medical Policy_ Preferred Injectable Oncology Program (Avastin example).pdf",
+        "page": 8,
+        "section": "Criteria for Medical Necessity - Initial Criteria for Approval - 4"
+      }
+    }
+  ],
+  "otherRequirements": [
+    {
+      "category": "preferred product requirement",
+      "requirement": "For bevacizumab (Avastin) or non-preferred biosimilar products, patient must have documented serious adverse event to all preferred biosimilar products and prescriber must submit FDA MedWatch Adverse Event Reporting Form",
+      "evidenceText": "If the request is for bevacizumab (Avastin) or a non-preferred bevacizumab biosimilar product (e.g., bevacizumab-maly [Alymsys], bevacizumab-tnjn [Avzivi], bevacizumab-nwgd [Jobevne], bevacizumab-adcd [Vegzelma]), then both of the following criteria are met: a. The patient has a documented serious adverse event that required medical intervention to both preferred bevacizumab biosimilar products (i.e., bevacizumab-awwb [Mvasi], bevacizumab-bvzr [Zirabev]) that is not anticipated with the requested product; AND b. The prescriber has completed and submitted an FDA MedWatch Adverse Event Reporting Form [medical record documentation required].",
+      "source": {
+        "document": "BCBS NC - Corporate Medical Policy_ Preferred Injectable Oncology Program (Avastin example).pdf",
+        "page": 8,
+        "section": "Criteria for Medical Necessity - Initial Criteria for Approval - 4"
+      },
+      "ambiguous": false
+    },
+    {
+      "category": "clinical benefit requirement",
+      "requirement": "Patient is currently being treated with the requested agent and has been stable on therapy for at least 180 days; OR patient has been treated with the requested agent within the past 180 days AND is at risk if therapy is changed",
+      "evidenceText": "ONE of the following: a. The patient is currently being treated with the requested agent and has been stable on therapy for at least 180 days; OR b. The patient has been treated with the requested agent within the past 180 days AND is at risk if therapy is changed.",
+      "source": {
+        "document": "BCBS NC - Corporate Medical Policy_ Preferred Injectable Oncology Program (Avastin example).pdf",
+        "page": 7,
+        "section": "Criteria for Medical Necessity - Initial Criteria for Approval - 1"
+      },
+      "ambiguous": false
+    },
+    {
+      "category": "first-line or prerequisite therapy",
+      "requirement": "The requested agent will be used as a first-line agent AND is FDA labeled as a first-line agent for the requested indication, OR the patient has used the appropriate number and type(s) of prerequisite agent(s) listed in the FDA labeling",
+      "evidenceText": "ONE of the following: i. The requested agent will be used as a first-line agent AND is FDA labeled as a first-line agent for the requested indication, including any genomic aberrations (e.g., EGFR, ALK) and/or tumor expression factors (e.g., PD-L1 Tumor Proportion Score [TPS] values); OR ii. The patient has used the appropriate number and type(s) of prerequisite agent(s) listed in the FDA labeling for the requested indication, including any genomic aberrations (e.g., EGFR, ALK) and/or tumor expression factors (e.g., PD-L1 Tumor Proportion Score [TPS] values); OR iii. The patient has an intolerance, FDA labeled contraindication, or hypersensitivity to ALL of the required prerequisite agent(s) listed in the FDA labeling for the requested indication.",
+      "source": {
+        "document": "BCBS NC - Corporate Medical Policy_ Preferred Injectable Oncology Program (Avastin example).pdf",
+        "page": 7,
+        "section": "Criteria for Medical Necessity - Initial Criteria for Approval - 2(b)"
+      },
+      "ambiguous": false
+    },
+    {
+      "category": "combination therapy requirement",
+      "requirement": "The requested agent is being used as monotherapy AND is approved for use as monotherapy in the FDA labeling OR the requested agent will be used in combination as combination therapy with all agent(s) and/or treatments listed for concomitant use in the FDA labeling",
+      "evidenceText": "ONE of the following: i. The requested agent is being used as monotherapy AND is approved for use as monotherapy in the FDA labeling for the requested indication, including any genomic aberrations (e.g., EGFR, ALK) and/or tumor expression factors (e.g., PD-L1 Tumor Proportion Score [TPS] values); OR ii. The requested agent will be used in combination as combination therapy with all agent(s) and/or treatments (e.g., radiation) listed for concomitant use in the FDA labeling for the requested indication.",
+      "source": {
+        "document": "BCBS NC - Corporate Medical Policy_ Preferred Injectable Oncology Program (Avastin example).pdf",
+        "page": 7,
+        "section": "Criteria for Medical Necessity - Initial Criteria for Approval - 2(c)"
+      },
+      "ambiguous": false
+    },
+    {
+      "category": "performance status",
+      "requirement": "The FDA label does NOT include a performance status requirement; OR The patient meets the performance status requirement in the FDA labeling",
+      "evidenceText": "ONE of the following: i. The FDA label does NOT include a performance status requirement; OR ii. The patient meets the performance status requirement in the FDA labeling.",
+      "source": {
+        "document": "BCBS NC - Corporate Medical Policy_ Preferred Injectable Oncology Program (Avastin example).pdf",
+        "page": 8,
+        "section": "Criteria for Medical Necessity - Initial Criteria for Approval - 3(d)"
+      },
+      "ambiguous": false
+    },
+    {
+      "category": "nccn guideline support",
+      "requirement": "The patient has an indication that is supported by ALL requirements in NCCN 1 or 2A recommended use for the requested agent (i.e., the indication must be supported by ALL requirements in the NCCN 'Recommended Use' box [e.g., performance status, disease severity, previous failures, monotherapy vs combination therapy vs concomitant therapy] [medical record documentation required])",
+      "evidenceText": "The patient has an indication that is supported by ALL requirements in NCCN 1 or 2A recommended use for the requested agent (i.e., the indication must be supported by ALL requirements in the NCCN 'Recommended Use' box [e.g., performance status, disease severity, previous failures, monotherapy vs combination therapy vs concomitant therapy] [medical record documentation required]); AND",
+      "source": {
+        "document": "BCBS NC - Corporate Medical Policy_ Preferred Injectable Oncology Program (Avastin example).pdf",
+        "page": 8,
+        "section": "Criteria for Medical Necessity - Initial Criteria for Approval - 3"
+      },
+      "ambiguous": false
+    },
+    {
+      "category": "no disease progression",
+      "requirement": "The patient has not experienced disease progression or unacceptable toxicity on the same treatment as the requested agent or during treatment with another agent from the same drug class in a prior line of therapy unless there is acceptable supporting literature for use beyond progression in a different combination regimen",
+      "evidenceText": "The patient has not experienced disease progression or unacceptable toxicity on the same treatment as the requested agent or during treatment with another agent from the same drug class in a prior line of therapy (e.g., PD-L1/PD-1 inhibitors) unless there is acceptable supporting literature for use beyond progression in a different combination regimen; AND",
+      "source": {
+        "document": "BCBS NC - Corporate Medical Policy_ Preferred Injectable Oncology Program (Avastin example).pdf",
+        "page": 8,
+        "section": "Criteria for Medical Necessity - Initial Criteria for Approval - 7"
+      },
+      "ambiguous": false
+    },
+    {
+      "category": "age requirement",
+      "requirement": "The patient's age is within FDA labeling for the requested indication or NCCN 1 or 2A compendia supported recommendation for the requested agent",
+      "evidenceText": "The patient's age is within FDA labeling for the requested indication or NCCN 1 or 2A compendia supported recommendation for the requested agent; OR The prescriber has provided information in support of using the requested agent for the patient's age; AND",
+      "source": {
+        "document": "BCBS NC - Corporate Medical Policy_ Preferred Injectable Oncology Program (Avastin example).pdf",
+        "page": 9,
+        "section": "Criteria for Medical Necessity - Initial Criteria for Approval - 8"
+      },
+      "ambiguous": false
+    },
+    {
+      "category": "dosing requirement",
+      "requirement": "The requested quantity (dose) and treatment duration (and maximum units) is within FDA labeled dosing for the requested indication or NCCN 1 or 2A compendia supported dosing for the requested indication",
+      "evidenceText": "The requested quantity (dose) and treatment duration (and maximum units) is within FDA labeled dosing for the requested indication or NCCN 1 or 2A compendia supported dosing for the requested indication.",
+      "source": {
+        "document": "BCBS NC - Corporate Medical Policy_ Preferred Injectable Oncology Program (Avastin example).pdf",
+        "page": 9,
+        "section": "Criteria for Medical Necessity - Initial Criteria for Approval - 10"
+      },
+      "ambiguous": false
+    },
+    {
+      "category": "approval duration",
+      "requirement": "365 days (1 year)",
+      "evidenceText": "Duration of Approval: 365 days (1 year)",
+      "source": {
+        "document": "BCBS NC - Corporate Medical Policy_ Preferred Injectable Oncology Program (Avastin example).pdf",
+        "page": 9,
+        "section": "Criteria for Medical Necessity - Duration of Approval"
+      },
+      "ambiguous": false
+    }
+  ],
+  "sourceDocument": {
+    "filename": "BCBS NC - Corporate Medical Policy_ Preferred Injectable Oncology Program (Avastin example).pdf",
+    "retrievalDate": "2026-04-12",
+    "effectiveDate": "2026-01"
+  }
+}
