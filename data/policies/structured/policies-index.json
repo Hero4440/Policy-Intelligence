@@ -1,7 +1,7 @@
 {
   "version": "1.0",
-  "generatedDate": "2026-04-04",
-  "therapeuticArea": "Rheumatoid Arthritis",
+  "generatedDate": "2026-04-12",
+  "therapeuticArea": "Rheumatoid Arthritis, Oncology, Non-Oncology",
   "policies": [
     {
       "id": "uhc-adalimumab-ra",
@@ -32,6 +32,18 @@
       "file": "aetna-upadacitinib-ra.json",
       "payer": "Aetna",
       "drug": "upadacitinib"
+    },
+    {
+      "id": "bcbs-nc-bevacizumab-oncology",
+      "file": "bcbs-nc-bevacizumab-oncology.json",
+      "payer": "BCBS-NC",
+      "drug": "bevacizumab"
+    },
+    {
+      "id": "cigna-rituximab-nononcology",
+      "file": "cigna-rituximab-nononcology.json",
+      "payer": "Cigna",
+      "drug": "rituximab"
     }
   ]
 }
