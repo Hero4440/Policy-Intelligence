@@ -5,6 +5,9 @@ import cors from 'cors';
 import { registerGetDrugCoverage } from './tools/get_drug_coverage.js';
 import { registerGetPriorAuthCriteria } from './tools/get_prior_auth_criteria.js';
 import { registerCheckPatientReadiness } from './tools/check_patient_readiness.js';
+import { registerListPolicies } from './tools/list_policies.js';
+import { registerGetPolicySummary } from './tools/get_policy_summary.js';
+import { registerCompareDrug } from './tools/compare_drug_across_payers.js';
 import { getAllPolicies } from './policy_store/loader.js';
 import { fileURLToPath } from 'url';
 
@@ -26,7 +29,7 @@ export function createMcpApp() {
     const policies = getAllPolicies();
     res.json({
       status: 'ok',
-      tools: 3,
+      tools: 6,
       policies: policies.length,
       payers: [...new Set(policies.map(p => p.payer))],
       drugs: [...new Set(policies.map(p => p.drug.genericName))],
@@ -54,6 +57,9 @@ export function createMcpApp() {
     registerGetDrugCoverage(server);
     registerGetPriorAuthCriteria(server);
     registerCheckPatientReadiness(server);
+    registerListPolicies(server);
+    registerGetPolicySummary(server);
+    registerCompareDrug(server);
 
     const transport = new StreamableHTTPServerTransport({
       sessionIdGenerator: undefined
