@@ -54,10 +54,11 @@ loadPolicies();
  */
 export function findPolicy(payer: string, drugGeneric: string): PolicyRecord | undefined {
   // Extract payer prefix if plan identifier format (e.g., "uhc-commercial" -> "uhc")
-  const payerKey = payer.toLowerCase().split('-')[0];
+  const payerQuery = payer.toLowerCase();
+  const payerKey = payerQuery.split('-')[0];
 
   return policies.find(p =>
-    p.payer.toLowerCase() === payerKey &&
+    (p.payer.toLowerCase() === payerQuery || p.payer.toLowerCase() === payerKey) &&
     p.drug.genericName.toLowerCase() === drugGeneric.toLowerCase()
   );
 }
