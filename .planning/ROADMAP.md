@@ -13,7 +13,7 @@ PolicyLens MCP transforms medical-benefit drug policy PDFs into an intelligent M
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [ ] **Phase 1: Policy Data Foundation** - Normalize BCBS NC and Cigna policies with evidence mappings and drug aliases
-- [ ] **Phase 2: Core MCP Tools** - Build deterministic tools (list, summary, compare) with evidence grounding
+- [x] **Phase 2: Core MCP Tools** - Build deterministic tools (list, summary, compare) with evidence grounding (completed 2026-04-15)
 - [ ] **Phase 3: Hybrid Q&A Engine** - Build natural language Q&A tool with LLM fallback and validation
 - [ ] **Phase 4: Deployment + Integration** - Deploy via ngrok and validate Prompt Opinion integration
 
@@ -46,10 +46,11 @@ Plans:
   4. All three tools return responses with: human-readable answer + structured_result object + evidence array + confidence level (HIGH for deterministic lookups)
   5. Bevacizumab comparison identifies BCBS NC preferred vs non-preferred product split
   6. Rituximab summary extracts Cigna step therapy and prior auth requirements
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] TBD
+- [x] 02-01-PLAN.md — Shared response/evidence infrastructure + list_policies tool
+- [x] 02-02-PLAN.md — get_policy_summary + compare_drug_across_payers tools + MCP registration
 
 ### Phase 3: Hybrid Q&A Engine
 **Goal**: Natural language policy questions answered with evidence grounding via hybrid deterministic + LLM routing
@@ -90,6 +91,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Policy Data Foundation | 0/2 | Planned | - |
-| 2. Core MCP Tools | 0/TBD | Not started | - |
+| 2. Core MCP Tools | 2/2 | Complete   | 2026-04-15 |
 | 3. Hybrid Q&A Engine | 0/TBD | Not started | - |
 | 4. Deployment + Integration | 0/TBD | Not started | - |
