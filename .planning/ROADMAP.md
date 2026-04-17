@@ -62,10 +62,11 @@ Plans:
   3. LLM responses validated against evidence index (every claim must map to policy text)
   4. Tool returns "insufficient evidence" for questions that can't be grounded in loaded policy data
   5. Question "What prior authorization criteria does Cigna require for rituximab?" returns grounded answer with evidence snippets
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] TBD
+- [ ] 03-01-PLAN.md — Entity extraction, query routing, and evidence retrieval utilities
+- [ ] 03-02-PLAN.md — LLM client, claim validator, ask_policy_question tool, and MCP registration
 
 ### Phase 4: Deployment + Integration
 **Goal**: MCP server publicly accessible via ngrok and fully integrated with Prompt Opinion
@@ -92,5 +93,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 |-------|----------------|--------|-----------|
 | 1. Policy Data Foundation | 0/2 | Planned | - |
 | 2. Core MCP Tools | 2/2 | Complete   | 2026-04-15 |
-| 3. Hybrid Q&A Engine | 0/TBD | Not started | - |
+| 3. Hybrid Q&A Engine | 0/2 | Planned | - |
 | 4. Deployment + Integration | 0/TBD | Not started | - |
