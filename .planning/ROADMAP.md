@@ -14,7 +14,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [ ] **Phase 1: Policy Data Foundation** - Normalize BCBS NC and Cigna policies with evidence mappings and drug aliases
 - [x] **Phase 2: Core MCP Tools** - Build deterministic tools (list, summary, compare) with evidence grounding (completed 2026-04-15)
-- [ ] **Phase 3: Hybrid Q&A Engine** - Build natural language Q&A tool with LLM fallback and validation
+- [x] **Phase 3: Hybrid Q&A Engine** - Build natural language Q&A tool with LLM fallback and validation (completed 2026-04-17)
 - [ ] **Phase 4: Deployment + Integration** - Deploy via ngrok and validate Prompt Opinion integration
 
 ## Phase Details
@@ -66,7 +66,7 @@ Plans:
 
 Plans:
 - [x] 03-01-PLAN.md — Entity extraction, query routing, and evidence retrieval utilities
-- [ ] 03-02-PLAN.md — LLM client, claim validator, ask_policy_question tool, and MCP registration
+- [x] 03-02-PLAN.md — LLM client, claim validator, ask_policy_question tool, and MCP registration
 
 ### Phase 4: Deployment + Integration
 **Goal**: MCP server publicly accessible via ngrok and fully integrated with Prompt Opinion
@@ -93,5 +93,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 |-------|----------------|--------|-----------|
 | 1. Policy Data Foundation | 0/2 | Planned | - |
 | 2. Core MCP Tools | 2/2 | Complete   | 2026-04-15 |
-| 3. Hybrid Q&A Engine | 1/2 | In progress | - |
+| 3. Hybrid Q&A Engine | 2/2 | Complete | 2026-04-17 |
 | 4. Deployment + Integration | 0/TBD | Not started | - |

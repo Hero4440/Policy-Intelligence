@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-04-11)
 
 **Core value:** Every policy question answered must include source-backed evidence from loaded policy documents. No evidence, no answer.
-**Current focus:** Phase 3: Hybrid Q&A Engine
+**Current focus:** Phase 4: Deployment + Integration
 
 ## Current Position
 
-Phase: 3 of 4 (Hybrid Q&A Engine)
-Plan: 2 of 2
-Status: Phase 3 Plan 01 complete; executing Plan 02
-Last activity: 2026-04-17 — Phase 3 Plan 01 executed
+Phase: 4 of 4 (Deployment + Integration)
+Plan: 0 of TBD
+Status: Phase 3 complete; ready for Phase 4 deployment work
+Last activity: 2026-04-17 — Phase 3 executed
 
-Progress: [███████░░░] 75%
+Progress: [████████░░] 75%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 5
-- Average duration: 6.6 minutes
-- Total execution time: 0.47 hours
+- Total plans completed: 6
+- Average duration: 6.67 minutes
+- Total execution time: 0.58 hours
 
 **By Phase:**
 
@@ -29,7 +29,7 @@ Progress: [███████░░░] 75%
 |-------|-------|-------|----------|
 | Phase 01 | 2 | 7 min | 3.5 min |
 | Phase 02 | 2 | 16 min | 8 min |
-| Phase 03 | 1 | 10 min | 10 min |
+| Phase 03 | 2 | 17 min | 8.5 min |
 
 **Recent Plans:**
 
@@ -38,6 +38,7 @@ Progress: [███████░░░] 75%
 | Phase 02 P01 | 8 min | 2 tasks | 4 files |
 | Phase 02 P02 | 8 min | 2 tasks | 4 files |
 | Phase 03 P01 | 10 min | 2 tasks | 3 files |
+| Phase 03 P02 | 7 min | 2 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -56,17 +57,19 @@ Recent decisions affecting current work:
 - [Phase 01-02]: Cigna requires trial of ALL three rituximab biosimilars before brand Rituxan
 - [Phase 02-01]: Deterministic tools use a standard response envelope: answer, structured_result, evidence, confidence
 - [Phase 02-02]: Single-payer comparison results are allowed, but are marked MEDIUM confidence with a partial-data note
+- [Phase 03-01]: Deterministic summary routing requires both payer and drug entities; under-specified summary questions fall through to LLM or insufficient-evidence handling
+- [Phase 03-02]: ask_policy_question returns structured route metadata and fails closed with a tool error when Anthropic credentials are missing
 
 ### Pending Todos
 
-- Complete Phase 3 Plan 02: LLM client, claim validator, `ask_policy_question`, and MCP registration.
+- Start Phase 4: deploy the MCP server through ngrok and validate Prompt Opinion integration end to end.
 
 ### Blockers/Concerns
 
-- Anthropic SDK installation is required before the LLM-backed path can compile and run.
+- `ANTHROPIC_API_KEY` must be configured in the deployment environment for live LLM-backed answers.
 
 ## Session Continuity
 
 Last session: 2026-04-17 (execute-phase)
-Stopped at: Phase 3 Plan 01 complete; Plan 02 in progress
-Resume file: .planning/phases/03-hybrid-q-a-engine/03-01-SUMMARY.md
+Stopped at: Phase 3 complete; ready for Phase 4
+Resume file: .planning/phases/03-hybrid-q-a-engine/03-02-SUMMARY.md
