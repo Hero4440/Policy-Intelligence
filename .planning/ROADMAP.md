@@ -65,7 +65,7 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 03-01-PLAN.md — Entity extraction, query routing, and evidence retrieval utilities
+- [x] 03-01-PLAN.md — Entity extraction, query routing, and evidence retrieval utilities
 - [ ] 03-02-PLAN.md — LLM client, claim validator, ask_policy_question tool, and MCP registration
 
 ### Phase 4: Deployment + Integration
@@ -93,5 +93,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 |-------|----------------|--------|-----------|
 | 1. Policy Data Foundation | 0/2 | Planned | - |
 | 2. Core MCP Tools | 2/2 | Complete   | 2026-04-15 |
-| 3. Hybrid Q&A Engine | 0/2 | Planned | - |
+| 3. Hybrid Q&A Engine | 1/2 | In progress | - |
 | 4. Deployment + Integration | 0/TBD | Not started | - |
