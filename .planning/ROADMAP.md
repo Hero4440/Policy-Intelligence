@@ -79,10 +79,11 @@ Plans:
   4. Health endpoint accessible and returns accurate policy/payer/drug counts
   5. Demo scenario works: bevacizumab cross-payer comparison shows BCBS NC preferred/non-preferred distinction
   6. Demo scenario works: rituximab Q&A from Prompt Opinion returns evidence-backed answer about Cigna prior auth criteria
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] TBD
+- [ ] 04-01-PLAN.md — Update smoke test for all 7 tools + create ngrok deployment script
+- [ ] 04-02-PLAN.md — Update deployment/integration docs + verify end-to-end Prompt Opinion integration
 
 ## Progress
 
