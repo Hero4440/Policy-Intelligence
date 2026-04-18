@@ -8,6 +8,7 @@ import { registerCheckPatientReadiness } from './tools/check_patient_readiness.j
 import { registerListPolicies } from './tools/list_policies.js';
 import { registerGetPolicySummary } from './tools/get_policy_summary.js';
 import { registerCompareDrug } from './tools/compare_drug_across_payers.js';
+import { registerAskPolicyQuestion } from './tools/ask_policy_question.js';
 import { getAllPolicies } from './policy_store/loader.js';
 import { fileURLToPath } from 'url';
 
@@ -29,7 +30,7 @@ export function createMcpApp() {
     const policies = getAllPolicies();
     res.json({
       status: 'ok',
-      tools: 6,
+      tools: 7,
       policies: policies.length,
       payers: [...new Set(policies.map(p => p.payer))],
       drugs: [...new Set(policies.map(p => p.drug.genericName))],
@@ -60,6 +61,7 @@ export function createMcpApp() {
     registerListPolicies(server);
     registerGetPolicySummary(server);
     registerCompareDrug(server);
+    registerAskPolicyQuestion(server);
 
     const transport = new StreamableHTTPServerTransport({
       sessionIdGenerator: undefined

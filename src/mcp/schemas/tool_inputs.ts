@@ -39,3 +39,7 @@ export const policySummaryInput = z.object({
 export const compareDrugInput = z.object({
   drug_family: z.string().describe("Drug family to compare across payers. Accepts generic name (e.g., 'bevacizumab'), brand name (e.g., 'Avastin'), or biosimilar name (e.g., 'Mvasi'). Resolved via drug alias system to canonical generic name.")
 });
+
+export const askPolicyQuestionInput = z.object({
+  question: z.string().describe('Natural language question about loaded medical insurance policies. Examples: "What prior authorization criteria does Cigna require for rituximab?", "Compare bevacizumab coverage across payers", "What policies are loaded?"')
+});
