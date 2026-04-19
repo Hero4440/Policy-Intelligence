@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-04-11)
 
 **Core value:** Every policy question answered must include source-backed evidence from loaded policy documents. No evidence, no answer.
-**Current focus:** Phase 4: Deployment + Integration
+**Current focus:** Phase 4 complete
 
 ## Current Position
 
 Phase: 4 of 4 (Deployment + Integration)
-Plan: 0 of TBD
-Status: Phase 3 complete; ready for Phase 4 deployment work
-Last activity: 2026-04-17 — Phase 3 executed
+Plan: 2 of 2
+Status: Phase 4 complete; ngrok deployment and Prompt Opinion integration approved
+Last activity: 2026-04-18 — Phase 4 plan 02 approved
 
-Progress: [████████░░] 75%
+Progress: [██████████] 100%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 6
-- Average duration: 6.67 minutes
-- Total execution time: 0.58 hours
+- Total plans completed: 8
+- Average duration: 6.88 minutes
+- Total execution time: 0.92 hours
 
 **By Phase:**
 
@@ -30,6 +30,7 @@ Progress: [████████░░] 75%
 | Phase 01 | 2 | 7 min | 3.5 min |
 | Phase 02 | 2 | 16 min | 8 min |
 | Phase 03 | 2 | 17 min | 8.5 min |
+| Phase 04 | 2 | 35 min | 17.5 min |
 
 **Recent Plans:**
 
@@ -39,6 +40,8 @@ Progress: [████████░░] 75%
 | Phase 02 P02 | 8 min | 2 tasks | 4 files |
 | Phase 03 P01 | 10 min | 2 tasks | 3 files |
 | Phase 03 P02 | 7 min | 2 tasks | 7 files |
+| Phase 04 P01 | 25 min | 2 tasks | 9 files |
+| Phase 04 P02 | 10 min | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -58,18 +61,18 @@ Recent decisions affecting current work:
 - [Phase 02-01]: Deterministic tools use a standard response envelope: answer, structured_result, evidence, confidence
 - [Phase 02-02]: Single-payer comparison results are allowed, but are marked MEDIUM confidence with a partial-data note
 - [Phase 03-01]: Deterministic summary routing requires both payer and drug entities; under-specified summary questions fall through to LLM or insufficient-evidence handling
-- [Phase 03-02]: ask_policy_question returns structured route metadata and fails closed with a tool error when Anthropic credentials are missing
+- [Phase 03-02]: ask_policy_question returns structured route metadata and uses the local Ollama-compatible LLM path for non-deterministic questions
 
 ### Pending Todos
 
-- Start Phase 4: deploy the MCP server through ngrok and validate Prompt Opinion integration end to end.
+- None. All planned phases are complete.
 
 ### Blockers/Concerns
 
-- `ANTHROPIC_API_KEY` must be configured in the deployment environment for live LLM-backed answers.
+- Local Ollama access is still required in the deployment environment for live LLM-backed answers.
 
 ## Session Continuity
 
-Last session: 2026-04-17 (execute-phase)
-Stopped at: Phase 3 complete; ready for Phase 4
-Resume file: .planning/phases/03-hybrid-q-a-engine/03-02-SUMMARY.md
+Last session: 2026-04-18 (execute-phase)
+Stopped at: Phase 4 complete
+Resume file: .planning/phases/04-deployment-integration/04-02-SUMMARY.md

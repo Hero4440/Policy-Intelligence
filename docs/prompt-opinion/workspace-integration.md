@@ -48,35 +48,51 @@ Once the MCP connection is saved:
 1. Go to `Agents`
 2. Create or edit the PolicyPilot agent
 3. Attach the `PolicyPilot MCP Server` connection
-4. Add all three tools:
+4. Add all seven tools:
    - `get_drug_coverage`
    - `get_prior_auth_criteria`
    - `check_patient_readiness`
+   - `list_policies`
+   - `get_policy_summary`
+   - `compare_drug_across_payers`
+   - `ask_policy_question`
 5. Save the agent
 
 Recommended agent framing:
 
 ```text
-You are PolicyPilot, a prior authorization readiness assistant. Use the attached MCP tools to answer coverage, prior authorization criteria, and patient readiness questions. Always ground responses in policy evidence. When discussing patient readiness, use cautious clinical language such as "appears to match", "may be missing", and "documentation may be needed".
+You are PolicyPilot, a medical policy analysis assistant. Use the attached MCP tools to answer drug coverage, prior authorization, cross-payer comparison, and natural language policy questions. Always ground responses in policy evidence. When comparing policies across payers, highlight key differences in preferred products, step therapy requirements, and prior auth criteria.
 ```
 
 ## In-platform validation flow
 
 Use one of the demo patients from Phase 4 and test the following sequence:
 
-1. Coverage check
-   - Ask: `Is Humira covered for this patient’s plan?`
+1. Policy listing
+   - Ask: `What policies are loaded?`
+   - Expected: response uses `list_policies`
+
+2. Policy summary
+   - Ask: `Summarize the BCBS NC bevacizumab policy`
+   - Expected: response uses `get_policy_summary` with evidence-backed normalized details
+
+3. Cross-payer comparison
+   - Ask: `Compare bevacizumab coverage across payers`
+   - Expected: response uses `compare_drug_across_payers` and shows the BCBS NC preferred/non-preferred split
+
+4. Natural-language Q&A
+   - Ask: `What prior authorization criteria does Cigna require for rituximab?`
+   - Expected: response uses `ask_policy_question`, returns grounded answer, and cites evidence
+
+5. Coverage check
+   - Ask: `Is bevacizumab covered under BCBS NC?`
    - Expected: response uses `get_drug_coverage` and cites policy evidence
 
-2. Criteria check
-   - Ask: `What are the prior authorization requirements for Humira?`
-   - Expected: response uses `get_prior_auth_criteria` and returns structured requirements with evidence
-
-3. Readiness check
-   - Ask: `Is this patient ready for Humira prior authorization submission?`
+6. Readiness check
+   - Ask: `Is this patient ready for bevacizumab prior authorization submission?`
    - Expected: response uses `check_patient_readiness`
    - If SHARP context is working, the tool should attempt FHIR retrieval and return automated readiness analysis
-   - If SHARP context is not working, the tool will return checklist mode and that should be treated as a configuration failure for Phase `05-02`
+   - If SHARP context is not working, the tool will return checklist mode and that should be treated as a configuration failure for the readiness workflow
 
 ## Supported SHARP payload shapes in code
 
@@ -158,8 +174,11 @@ Fill this section during the live workspace step.
 - [ ] MCP connection saved successfully
 - [ ] Connection test passes
 - [ ] SHARP FHIR context enabled
-- [ ] PolicyPilot agent shows all three tools
+- [ ] PolicyPilot agent shows all seven tools
+- [ ] Policy listing works
+- [ ] Policy summary works
+- [ ] Cross-payer comparison works
+- [ ] Rituximab Q&A works with grounded evidence
 - [ ] Coverage question works
-- [ ] Criteria question works
 - [ ] Readiness question performs automated analysis instead of checklist fallback
 - [ ] Observed Prompt Opinion wording recorded above

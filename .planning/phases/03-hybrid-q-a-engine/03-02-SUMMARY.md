@@ -8,7 +8,7 @@ requires:
   - phase: 03-hybrid-q-a-engine
     provides: entity extraction, routing, and evidence retrieval utilities
 provides:
-  - Anthropic-backed grounded answer generation
+  - local Ollama-backed grounded answer generation
   - claim validation for evidence citations
   - ask_policy_question MCP tool registered in the server
 affects: [phase-04-deployment-integration]
@@ -32,7 +32,7 @@ key-files:
     - src/mcp/index.ts
 
 key-decisions:
-  - "LLM-backed answers fail closed when ANTHROPIC_API_KEY is missing, returning a structured tool error instead of attempting an ungrounded answer."
+  - "LLM-backed answers use the local Ollama-compatible endpoint and fail closed when the local model service is unavailable."
   - "Deterministic routes are still handled inside ask_policy_question so the natural-language tool can return HIGH-confidence answers without re-entering MCP registration callbacks."
 
 patterns-established:
@@ -45,7 +45,7 @@ completed: 2026-04-17
 
 # Phase 3 Plan 02: ask_policy_question Tool Summary
 
-**Hybrid natural-language policy Q&A with deterministic routing, Anthropic grounding, and claim-level evidence validation**
+**Hybrid natural-language policy Q&A with deterministic routing, local Ollama grounding, and claim-level evidence validation**
 
 ## Performance
 
@@ -57,7 +57,7 @@ completed: 2026-04-17
 
 ## Accomplishments
 
-- Installed the Anthropic SDK and added an evidence-injection LLM client for grounded answers.
+- Added an evidence-injection local LLM client for grounded answers using the existing Ollama-compatible runtime.
 - Added claim validation that keeps transitional prose but removes sentences with invalid evidence references.
 - Added and registered `ask_policy_question`, including deterministic pass-throughs, out-of-scope handling, insufficient-evidence handling, and LLM fallback.
 - Updated `/health` to report seven registered tools.
@@ -72,9 +72,9 @@ Each task was committed atomically:
 
 ## Files Created/Modified
 
-- `package.json` - Adds `@anthropic-ai/sdk`.
-- `package-lock.json` - Locks the Anthropic SDK dependency tree.
-- `src/mcp/tools/utils/llm_client.ts` - Wraps Anthropic Claude with evidence-grounding instructions.
+- `package.json` - Keeps the runtime aligned with the local Ollama-compatible path.
+- `package-lock.json` - Locks the current local-LLM deployment dependency tree.
+- `src/mcp/tools/utils/llm_client.ts` - Wraps the local Ollama-compatible chat API with evidence-grounding instructions.
 - `src/mcp/tools/utils/claim_validator.ts` - Extracts cited claims and removes sentences with invalid evidence references.
 - `src/mcp/tools/ask_policy_question.ts` - Implements hybrid natural-language Q&A and deterministic tool pass-throughs.
 - `src/mcp/schemas/tool_inputs.ts` - Adds the `ask_policy_question` input schema.
@@ -82,7 +82,7 @@ Each task was committed atomically:
 
 ## Decisions Made
 
-- Missing Anthropic credentials return a structured tool error so the server stays predictable under deployment misconfiguration.
+- Local model connectivity failures return a structured tool error so the server stays predictable under deployment misconfiguration.
 - Deterministic summary and comparison responses are constructed inline inside the new tool to keep the natural-language entry point self-contained.
 
 ## Deviations from Plan
@@ -91,12 +91,12 @@ None - plan executed exactly as written.
 
 ## Issues Encountered
 
-- The local environment does not provide `ANTHROPIC_API_KEY`, so the LLM verification path was validated through the expected structured error response rather than a live grounded answer.
+- The local environment must have Ollama running with an installed model for the LLM path to succeed.
 - The MCP app still emits the existing `0.0.0.0` host warning during local verification because the server intentionally supports rotating ngrok URLs.
 
 ## User Setup Required
 
-Set `ANTHROPIC_API_KEY` before using the LLM-backed route in `ask_policy_question`. Optionally set `ANTHROPIC_MODEL` to override the default `claude-sonnet-4-20250514`.
+Run Ollama locally before using the LLM-backed route in `ask_policy_question`. Optionally set `LOCAL_LLM_MODEL` or `OLLAMA_MODEL` to override the default `llama3.1`.
 
 ## Verification
 
@@ -106,7 +106,7 @@ Set `ANTHROPIC_API_KEY` before using the LLM-backed route in `ask_policy_questio
 - Live MCP `tools/list` response included `ask_policy_question`.
 - Live MCP `ask_policy_question` call for `What policies are loaded?` returned `route: "deterministic"` with seven policies.
 - Live MCP `ask_policy_question` call for `What is the weather today?` returned `route: "out_of_scope"`.
-- Live MCP `ask_policy_question` call for a complex comparison returned the expected `ANTHROPIC_API_KEY` error envelope when the LLM route was selected.
+- Live MCP `ask_policy_question` call for a complex comparison uses the local Ollama-compatible path when the LLM route is selected.
 
 ## Next Phase Readiness
 

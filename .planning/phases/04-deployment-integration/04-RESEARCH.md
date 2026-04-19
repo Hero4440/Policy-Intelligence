@@ -335,20 +335,22 @@ const expectedTools = [
 - Prompt Opinion connection test fails first time, works on retry
 - Browser shows "You are about to visit..." warning page
 
-### Pitfall 6: Missing ANTHROPIC_API_KEY for ask_policy_question
+### Pitfall 6: Local Ollama unavailable for ask_policy_question
 
-**What goes wrong:** First 3 tools work but `ask_policy_question` returns tool error about missing Anthropic credentials. Demo fails when asking natural language questions.
+**What goes wrong:** The deterministic tools work, but `ask_policy_question` fails when the local Ollama-compatible service is down or the configured model is missing. Demo fails when asking natural language questions.
 
-**Why it happens:** Phase 3 configured `ask_policy_question` to fail closed when `ANTHROPIC_API_KEY` environment variable is missing. Tool works deterministically but LLM fallback requires valid API key.
+**Why it happens:** Phase 3 uses the local Ollama-compatible path for non-deterministic questions. Tool works deterministically, but the LLM fallback requires a reachable local model service and an installed model.
 
 **How to avoid:**
-- Set `ANTHROPIC_API_KEY` environment variable before starting server
+- Start Ollama before starting the server
+- Verify the local model list with `curl http://127.0.0.1:11434/api/tags`
+- Set `LOCAL_LLM_MODEL` or `OLLAMA_MODEL` to a model that is actually installed
 - Test Q&A tool specifically during smoke test validation
-- Document API key requirement in deployment runbook
+- Document the local model requirement in the deployment runbook
 
 **Warning signs:**
 - `list_policies`, `get_policy_summary`, `compare_drug_across_payers` work
-- `ask_policy_question` returns "Missing Anthropic API credentials" error
+- `ask_policy_question` returns a local-model connection error
 - Tool returns route metadata but fails to execute LLM queries
 
 ## Code Examples
@@ -431,7 +433,7 @@ BASE_URL=https://abc123.ngrok-free.app npm run smoke:mcp
 ```bash
 # .env (add to .gitignore)
 NGROK_AUTHTOKEN=your_ngrok_authtoken_here
-ANTHROPIC_API_KEY=your_anthropic_key_here
+LOCAL_LLM_MODEL=llama3.1
 PUBLIC_BASE_URL=https://abc123.ngrok-free.app  # Set after starting ngrok
 
 # Start server with env vars loaded

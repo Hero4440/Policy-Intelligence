@@ -10,6 +10,10 @@ type JsonRpcResponse = {
     tools?: Array<{
       name?: string;
     }>;
+    content?: Array<{
+      type?: string;
+      text?: string;
+    }>;
   };
   error?: {
     code: number;
@@ -21,7 +25,11 @@ const baseUrl = (process.env.BASE_URL ?? 'http://localhost:3000').replace(/\/$/,
 const expectedTools = [
   'get_drug_coverage',
   'get_prior_auth_criteria',
-  'check_patient_readiness'
+  'check_patient_readiness',
+  'list_policies',
+  'get_policy_summary',
+  'compare_drug_across_payers',
+  'ask_policy_question'
 ];
 
 function fail(message: string): never {
@@ -75,6 +83,10 @@ async function main(): Promise<void> {
     fail(`health status was ${JSON.stringify(health.status)}`);
   }
 
+  if (health.tools !== 7) {
+    console.warn(`WARN: /health reported tools=${health.tools ?? 'unknown'} instead of 7`);
+  }
+
   console.log(
     `PASS: /health responded with status=ok tools=${health.tools ?? 'unknown'} policies=${health.policies ?? 'unknown'}`
   );
@@ -107,6 +119,51 @@ async function main(): Promise<void> {
   }
 
   console.log(`PASS: tools/list returned ${toolNames.length} tools including ${expectedTools.join(', ')}`);
+
+  const listPoliciesResponse = await fetchJsonRpc(`${baseUrl}/mcp`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json, text/event-stream'
+    },
+    body: JSON.stringify({
+      jsonrpc: '2.0',
+      id: 2,
+      method: 'tools/call',
+      params: {
+        name: 'list_policies',
+        arguments: {}
+      }
+    })
+  });
+
+  if (listPoliciesResponse.error) {
+    fail(
+      `list_policies returned JSON-RPC error ${listPoliciesResponse.error.code}: ${listPoliciesResponse.error.message}`
+    );
+  }
+
+  const contentEntry = listPoliciesResponse.result?.content?.find(entry => entry.type === 'text' && entry.text);
+  if (!contentEntry?.text) {
+    fail('list_policies response did not include a text content entry');
+  }
+
+  let parsedContent: { answer?: string };
+  try {
+    parsedContent = JSON.parse(contentEntry.text) as { answer?: string };
+  } catch (error) {
+    fail(
+      `list_policies text content was not valid JSON: ${
+        error instanceof Error ? error.message : String(error)
+      }`
+    );
+  }
+
+  if (!parsedContent.answer) {
+    fail('list_policies response JSON did not include an answer field');
+  }
+
+  console.log('PASS: list_policies tool call returned valid response');
   console.log('Smoke test passed');
 }
 

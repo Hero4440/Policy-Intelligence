@@ -15,7 +15,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [ ] **Phase 1: Policy Data Foundation** - Normalize BCBS NC and Cigna policies with evidence mappings and drug aliases
 - [x] **Phase 2: Core MCP Tools** - Build deterministic tools (list, summary, compare) with evidence grounding (completed 2026-04-15)
 - [x] **Phase 3: Hybrid Q&A Engine** - Build natural language Q&A tool with LLM fallback and validation (completed 2026-04-17)
-- [ ] **Phase 4: Deployment + Integration** - Deploy via ngrok and validate Prompt Opinion integration
+- [x] **Phase 4: Deployment + Integration** - Deploy via ngrok and validate Prompt Opinion integration (completed 2026-04-18)
 
 ## Phase Details
 
@@ -74,16 +74,16 @@ Plans:
 **Requirements**: DEPL-01, DEPL-02, DEPL-03, DEPL-04, DEPL-05, DEMO-01, DEMO-02, DEMO-03
 **Success Criteria** (what must be TRUE):
   1. MCP server running with ngrok tunnel providing public HTTPS URL
-  2. Prompt Opinion connects to server and discovers all 4 tools (list_policies, get_policy_summary, compare_drug_across_payers, ask_policy_question)
-  3. All 4 tools callable from Prompt Opinion with correct StreamableHTTP transport and CORS headers
+  2. Prompt Opinion connects to server and discovers all 7 tools
+  3. All 7 tools callable from Prompt Opinion with correct StreamableHTTP transport and CORS headers
   4. Health endpoint accessible and returns accurate policy/payer/drug counts
   5. Demo scenario works: bevacizumab cross-payer comparison shows BCBS NC preferred/non-preferred distinction
   6. Demo scenario works: rituximab Q&A from Prompt Opinion returns evidence-backed answer about Cigna prior auth criteria
 **Plans**: 2 plans
 
 Plans:
-- [ ] 04-01-PLAN.md — Update smoke test for all 7 tools + create ngrok deployment script
-- [ ] 04-02-PLAN.md — Update deployment/integration docs + verify end-to-end Prompt Opinion integration
+- [x] 04-01-PLAN.md — Update smoke test for all 7 tools + create ngrok deployment script
+- [x] 04-02-PLAN.md — Update deployment/integration docs + verify end-to-end Prompt Opinion integration
 
 ## Progress
 
@@ -95,4 +95,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | 1. Policy Data Foundation | 0/2 | Planned | - |
 | 2. Core MCP Tools | 2/2 | Complete   | 2026-04-15 |
 | 3. Hybrid Q&A Engine | 2/2 | Complete | 2026-04-17 |
-| 4. Deployment + Integration | 0/TBD | Not started | - |
+| 4. Deployment + Integration | 2/2 | Complete | 2026-04-18 |

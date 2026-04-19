@@ -382,7 +382,7 @@ export function registerAskPolicyQuestion(server: McpServer): void {
         } catch (error) {
           const message = error instanceof Error ? error.message : 'Unknown LLM error';
           return buildErrorResponse(message, {
-            hint: 'Check ANTHROPIC_API_KEY and ANTHROPIC_MODEL before using the LLM-backed route.',
+            hint: 'Check that Ollama is running and that LOCAL_LLM_MODEL or OLLAMA_MODEL points to an installed local model.',
             available_payers: uniqueSorted(getAllPolicies().map(policy => policy.payer)),
             available_drugs: uniqueSorted(getAllPolicies().map(policy => policy.drug.genericName))
           });
