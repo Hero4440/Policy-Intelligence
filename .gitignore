@@ -2,9 +2,13 @@ node_modules/
 dist/
 *.log
 .env
+.env.local
+.env.local.*
 .DS_Store
+**/.DS_Store
+**/.env.local
+**/.env.local.*
 /data/
-.DS_Store
 docs/hackaathon/
 docs/hackaathon2/
 data/ingestion/db.json
