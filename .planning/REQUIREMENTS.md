@@ -1,131 +1,208 @@
-# Requirements: PolicyLens MCP
+# Requirements: PolicyPilot v2.0
 
-**Defined:** 2026-04-11
-**Core Value:** Every policy question answered must include source-backed evidence from loaded policy documents.
+**Defined:** 2026-04-21
+**Core Value:** Every policy question answered must include source-backed evidence — and every coverage evaluation must show exactly which criteria are met, missing, or ambiguous.
 
-## v1 Requirements
+## v2.0 Requirements
 
-Requirements for hackathon POC. Each maps to roadmap phases.
+Requirements for the full product milestone. Each maps to a roadmap phase.
 
-### Policy Data
+### Storage & Data Layer
 
-- [ ] **DATA-01**: System loads and validates BCBS NC Preferred Injectable Oncology Program policy into normalized schema
-- [ ] **DATA-02**: System loads and validates Cigna Rituximab IV Non-Oncology policy into normalized schema
-- [ ] **DATA-03**: Each normalized policy includes: payer, policy title, effective date, drug family, preferred products, non-preferred products, prior auth required, step/fail-first logic, covered indications, notable restrictions
-- [ ] **DATA-04**: Each extracted field has mapped evidence snippets from the source policy text
-- [ ] **DATA-05**: Drug alias normalization resolves bevacizumab family names (Avastin, bevacizumab-awwb/Mvasi, bevacizumab-bvzr/Zirabev, etc.)
-- [ ] **DATA-06**: Drug alias normalization resolves rituximab family names (Rituxan, rituximab-abbs/Truxima, rituximab-pvvr/Ruxience, etc.)
+- [ ] **STOR-01**: System stores normalized policy JSON files in `data/policies/structured/` with one file per policy version
+- [ ] **STOR-02**: System maintains `data/policies/index.json` registry tracking all policies with metadata (payer, title, drug family, versions, current version pointer)
+- [ ] **STOR-03**: System stores raw uploaded PDFs in `data/policies/raw/`
+- [ ] **STOR-04**: System stores patient case folders in `data/patients/{case-id}/` with documents and extracted facts as JSON
+- [ ] **STOR-05**: System stores coverage evaluation results as `data/evaluations/{eval-id}.json`
+- [ ] **STOR-06**: System computes structured hash on normalized policy JSON and creates a diff record when a policy is re-uploaded with changes
 
-### MCP Tools
+### Policy Management
 
-- [ ] **TOOL-01**: `list_policies` tool returns all loaded policies with metadata (payer, title, effective date, drug families covered)
-- [ ] **TOOL-02**: `get_policy_summary` tool returns structured normalized summary for one policy including all DATA-03 fields with evidence
-- [ ] **TOOL-03**: `compare_drug_across_payers` tool accepts drug_family input and returns side-by-side comparison across loaded payers
-- [ ] **TOOL-04**: `ask_policy_question` tool accepts natural-language question and returns evidence-grounded answer using hybrid approach (deterministic first, LLM fallback)
+- [ ] **PLCY-01**: User can upload a PDF policy document via the portal and trigger parsing
+- [ ] **PLCY-02**: System extracts text from PDF and normalizes it into a structured PolicyRecord JSON (payer, title, drug family, products, prior auth, step therapy, indications, restrictions, evidence snippets)
+- [ ] **PLCY-03**: User can view the Policy Rules page listing all loaded policies with filters by payer, drug family, and status
+- [ ] **PLCY-04**: User can view a Policy Detail page with tabs: Overview, Products, Indications, Criteria, Evidence, Versions
+- [ ] **PLCY-05**: User can view a Structured Rules Editor showing each policy field with its value, evidence snippet, and ambiguity flag
+- [ ] **PLCY-06**: User can edit a structured rule field, flag it as ambiguous, and save a new version
+- [ ] **PLCY-07**: User can view the version history of a policy and select any version to inspect
 
-### Response Quality
+### Policy Compare
 
-- [ ] **RESP-01**: Every tool response includes human-readable answer text
-- [ ] **RESP-02**: Every tool response includes structured_result object with typed fields
-- [ ] **RESP-03**: Every tool response includes evidence array with source text snippets
-- [ ] **RESP-04**: Every tool response includes confidence level (HIGH/MEDIUM/LOW)
-- [ ] **RESP-05**: System never answers without evidence — if information is unclear or missing, explicitly says so
-- [ ] **RESP-06**: System does not hallucinate missing facts — deterministic lookup preferred over LLM generation
+- [ ] **COMP-01**: User can select a drug family and one or more payers to generate a side-by-side comparison table
+- [ ] **COMP-02**: Comparison table shows preferred products, non-preferred products, prior auth required, step therapy, covered indications, key restrictions — one column per payer
+- [ ] **COMP-03**: System auto-generates difference highlights (e.g. "Florida Blue has explicit fail/intolerance requirement")
+- [ ] **COMP-04**: Each comparison cell links to the source evidence snippet
 
-### Differentiators
+### Policy Insights
 
-- [ ] **DIFF-01**: Comparison tool identifies preferred vs non-preferred biosimilar products per payer (e.g., BCBS NC bevacizumab preferred/non-preferred split)
-- [ ] **DIFF-02**: Summary and comparison tools extract step therapy / fail-first logic (e.g., Cigna rituximab step requirements)
-- [ ] **DIFF-03**: Comparison tool highlights specific criteria differences between payers for the same drug family
+- [ ] **INSG-01**: User can view a heat map grid of payer × rule type × coverage status (green/yellow/red) on the Policy Insights page
+- [ ] **INSG-02**: User can filter the heat map by drug family, payer, rule type, and version
+- [ ] **INSG-03**: User can view a knowledge graph showing drug → payer → policy → rule relationships
+- [ ] **INSG-04**: Clicking a heat map cell or graph node opens an evidence panel with the source snippet and page reference
 
-### Deployment
+### Policy Changes
 
-- [ ] **DEPL-01**: MCP server deployable via ngrok as public URL
-- [ ] **DEPL-02**: Prompt Opinion can connect to the MCP server and discover all registered tools
-- [ ] **DEPL-03**: StreamableHTTP transport configured with stateless per-request server instances
-- [ ] **DEPL-04**: CORS configured to allow Prompt Opinion cross-origin requests
-- [ ] **DEPL-05**: Health endpoint returns server status with loaded policy/payer/drug counts
+- [ ] **CHNG-01**: User can view the Policy Changes page showing a timeline of policy uploads/updates sorted by date
+- [ ] **CHNG-02**: Change table shows policy, field changed, old value, new value, and severity (cosmetic / operational / clinical)
+- [ ] **CHNG-03**: User can view the Version Diff page for any two versions: structured field changes + raw text diff side-by-side
+- [ ] **CHNG-04**: System classifies each diff as cosmetic (formatting), operational (minor wording), or clinical/coverage impact (PA, step therapy, product tier changes)
 
-### Demo Scenarios
+### Patient Cases
 
-- [ ] **DEMO-01**: Bevacizumab cross-payer comparison works and shows BCBS NC preferred/non-preferred split
-- [ ] **DEMO-02**: Rituximab Q&A works — "What prior authorization criteria does Cigna require for rituximab?" returns grounded answer
-- [ ] **DEMO-03**: All 4 tools discoverable and callable from Prompt Opinion
+- [ ] **PATC-01**: User can create a new patient case with payer, requested drug, diagnosis, and synthetic patient name
+- [ ] **PATC-02**: User can view the Patient Cases page listing all cases with status (missing docs / ready for eval / complete)
+- [ ] **PATC-03**: User can upload patient documents to a case (clinical note, prior treatment history, lab results, referral, medication order, denial letter)
+- [ ] **PATC-04**: System extracts structured facts from uploaded documents: diagnosis, requested drug, prior therapies, prescriber type, insurance info
+- [ ] **PATC-05**: User can view extracted facts alongside source document evidence on the Patient Case Detail page
 
-## v2 Requirements
+### Coverage Evaluation
 
-Deferred to post-hackathon.
+- [ ] **EVAL-01**: User can trigger a coverage evaluation for a patient case against a selected policy version
+- [ ] **EVAL-02**: Evaluation produces a coverage status: Covered / PA Required / Likely Eligible but Docs Missing / Not Covered / Preferred Alternative Required / Unclear
+- [ ] **EVAL-03**: Evaluation shows a requirement checklist with each policy criterion marked PASS / MISSING / UNKNOWN / NEEDS REVIEW
+- [ ] **EVAL-04**: Each checklist item links to the matched patient fact and the source policy evidence
+- [ ] **EVAL-05**: Evaluation result is saved to `data/evaluations/` and viewable later
 
-### Additional Policies
+### Next-Step Generator
 
-- **DATA-V2-01**: Florida Blue bevacizumab policy loaded and normalized
-- **DATA-V2-02**: Priority Health covered-alternative logic for Avastin
-- **DATA-V2-03**: Support for 10+ policy documents
+- [ ] **NEXT-01**: After coverage evaluation, system generates an ordered list of recommended next steps for the clinic staff user
+- [ ] **NEXT-02**: System generates a list of missing documentation items with checkboxes
+- [ ] **NEXT-03**: System generates a patient-friendly plain-language explanation of coverage status and what the clinic needs to do
+- [ ] **NEXT-04**: System generates a payer analyst explanation of which policy criteria apply and what evidence is needed
 
-### Advanced Features
+### Evidence Explorer
 
-- **FEAT-V2-01**: Change tracking between policy versions
-- **FEAT-V2-02**: Full patient-policy matching workflow with FHIR data
-- **FEAT-V2-03**: Visual analytics / heat map of coverage across payers
-- **FEAT-V2-04**: Knowledge graph of drug-payer-indication relationships
+- [ ] **EVID-01**: User can search all loaded policy evidence snippets by keyword on the Evidence Explorer page
+- [ ] **EVID-02**: Search results show source policy, page number, section heading, snippet text, and linked policy fields
+- [ ] **EVID-03**: User can click a result to open the full policy detail at that evidence item
 
-### Infrastructure
+### Chat
 
-- **INFRA-V2-01**: Cloud deployment (beyond ngrok)
-- **INFRA-V2-02**: User authentication
-- **INFRA-V2-03**: Full web portal UI
+- [ ] **CHAT-01**: User can ask natural-language questions about loaded policies on the Chat page
+- [ ] **CHAT-02**: Chat responses include inline evidence citations (policy name, page, section)
+- [ ] **CHAT-03**: Chat sidebar shows the evidence snippets cited in the current response
+
+### Expanded MCP Tools
+
+- [ ] **MCP-01**: `upload_policy_document` tool accepts file path or URL, triggers parse + store pipeline
+- [ ] **MCP-02**: `parse_policy_document` tool parses an already-uploaded document into structured JSON
+- [ ] **MCP-03**: `list_policy_versions` tool returns all versions for a given policy with metadata
+- [ ] **MCP-04**: `diff_policy_versions` tool returns structured diff between two policy versions
+- [ ] **MCP-05**: `get_policy_evidence` tool returns evidence snippets for a given policy field
+- [ ] **MCP-06**: `search_policy_rules` tool keyword-searches across all policy rules and evidence
+- [ ] **MCP-07**: `extract_patient_facts` tool extracts structured facts from a patient document
+- [ ] **MCP-08**: `evaluate_patient_against_policy` tool runs coverage evaluation and returns checklist + status
+- [ ] **MCP-09**: `generate_next_steps` tool returns role-specific next steps for a coverage evaluation
+- [ ] **MCP-10**: `get_case_summary` tool returns full summary of a patient case with evaluation result
+
+### Portal UI
+
+- [ ] **UI-01**: Dashboard page with KPI cards (policies loaded, active cases, PA required, missing docs, recent changes) and quick actions
+- [ ] **UI-02**: Role switcher: Clinic Staff / Payer Analyst / Patient view modes adjusting dashboard and case detail content
+- [ ] **UI-03**: Global navigation: Dashboard, Policy Rules, Policy Compare, Policy Insights, Policy Changes, Patients, Evidence Explorer, Chat
+
+## Future Requirements
+
+### Authentication
+
+- **AUTH-01**: User can sign in with email and password
+- **AUTH-02**: Session persists across browser refresh
+- **AUTH-03**: Role-based access (clinic staff vs payer analyst vs patient)
+
+### Multi-Tenant
+
+- **TENT-01**: Organization-level policy isolation
+- **TENT-02**: Admin can manage org users and permissions
+
+### Notifications
+
+- **NOTF-01**: User receives alert when a watched policy is updated
+- **NOTF-02**: User receives alert when a case evaluation changes status
 
 ## Out of Scope
 
 | Feature | Reason |
 |---------|--------|
-| Universal PDF parser | Every payer formats differently; multi-month R&D effort beyond POC |
-| Pharmacy benefit / formulary lookup | POC is medical benefit only — different data structures |
-| Real-time policy update ingestion | Requires crawler infrastructure; static data sufficient for POC |
-| ePA submission workflow | Complex regulatory domain beyond policy intelligence |
-| Multi-indication coverage analysis | Exponential complexity; focus on primary indications in 2 docs |
-| Appeal/exception guidance | Legal/regulatory domain beyond policy parsing |
-| Full web portal | Prompt Opinion IS the product surface for this POC |
-| Mobile app | Web-first, Prompt Opinion integration only |
-| Production enterprise architecture | Hackathon pragmatism — in-memory, file-based, minimal infrastructure |
+| Supabase / PostgreSQL | File-based JSON sufficient for demo scale; DB adds complexity without value |
+| Real patient data | Compliance — synthetic/de-identified only |
+| OAuth / SSO | Not needed for demo/hackathon scope |
+| Mobile app | Web-first |
+| A2A protocol | MCP-based only per Prompt Opinion requirement |
+| Python/FastAPI rewrite | Stay on TypeScript/Node, avoid migration cost |
+| Real-time notifications | Future feature |
+| Interactive D3 knowledge graph | Static/simple graph acceptable for v2.0 |
+| Multi-tenant org management | Future feature |
 
 ## Traceability
 
+Updated during roadmap creation.
+
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| DATA-01 | Phase 1 | Pending |
-| DATA-02 | Phase 1 | Pending |
-| DATA-03 | Phase 1 | Pending |
-| DATA-04 | Phase 1 | Pending |
-| DATA-05 | Phase 1 | Pending |
-| DATA-06 | Phase 1 | Pending |
-| TOOL-01 | Phase 2 | Pending |
-| TOOL-02 | Phase 2 | Pending |
-| TOOL-03 | Phase 2 | Pending |
-| TOOL-04 | Phase 3 | Pending |
-| RESP-01 | Phase 2 | Pending |
-| RESP-02 | Phase 2 | Pending |
-| RESP-03 | Phase 2 | Pending |
-| RESP-04 | Phase 2 | Pending |
-| RESP-05 | Phase 2 | Pending |
-| RESP-06 | Phase 3 | Pending |
-| DIFF-01 | Phase 2 | Pending |
-| DIFF-02 | Phase 2 | Pending |
-| DIFF-03 | Phase 2 | Pending |
-| DEPL-01 | Phase 4 | Pending |
-| DEPL-02 | Phase 4 | Pending |
-| DEPL-03 | Phase 4 | Pending |
-| DEPL-04 | Phase 4 | Pending |
-| DEPL-05 | Phase 4 | Pending |
-| DEMO-01 | Phase 4 | Pending |
-| DEMO-02 | Phase 4 | Pending |
-| DEMO-03 | Phase 4 | Pending |
+| STOR-01 | TBD | Pending |
+| STOR-02 | TBD | Pending |
+| STOR-03 | TBD | Pending |
+| STOR-04 | TBD | Pending |
+| STOR-05 | TBD | Pending |
+| STOR-06 | TBD | Pending |
+| PLCY-01 | TBD | Pending |
+| PLCY-02 | TBD | Pending |
+| PLCY-03 | TBD | Pending |
+| PLCY-04 | TBD | Pending |
+| PLCY-05 | TBD | Pending |
+| PLCY-06 | TBD | Pending |
+| PLCY-07 | TBD | Pending |
+| COMP-01 | TBD | Pending |
+| COMP-02 | TBD | Pending |
+| COMP-03 | TBD | Pending |
+| COMP-04 | TBD | Pending |
+| INSG-01 | TBD | Pending |
+| INSG-02 | TBD | Pending |
+| INSG-03 | TBD | Pending |
+| INSG-04 | TBD | Pending |
+| CHNG-01 | TBD | Pending |
+| CHNG-02 | TBD | Pending |
+| CHNG-03 | TBD | Pending |
+| CHNG-04 | TBD | Pending |
+| PATC-01 | TBD | Pending |
+| PATC-02 | TBD | Pending |
+| PATC-03 | TBD | Pending |
+| PATC-04 | TBD | Pending |
+| PATC-05 | TBD | Pending |
+| EVAL-01 | TBD | Pending |
+| EVAL-02 | TBD | Pending |
+| EVAL-03 | TBD | Pending |
+| EVAL-04 | TBD | Pending |
+| EVAL-05 | TBD | Pending |
+| NEXT-01 | TBD | Pending |
+| NEXT-02 | TBD | Pending |
+| NEXT-03 | TBD | Pending |
+| NEXT-04 | TBD | Pending |
+| EVID-01 | TBD | Pending |
+| EVID-02 | TBD | Pending |
+| EVID-03 | TBD | Pending |
+| CHAT-01 | TBD | Pending |
+| CHAT-02 | TBD | Pending |
+| CHAT-03 | TBD | Pending |
+| MCP-01 | TBD | Pending |
+| MCP-02 | TBD | Pending |
+| MCP-03 | TBD | Pending |
+| MCP-04 | TBD | Pending |
+| MCP-05 | TBD | Pending |
+| MCP-06 | TBD | Pending |
+| MCP-07 | TBD | Pending |
+| MCP-08 | TBD | Pending |
+| MCP-09 | TBD | Pending |
+| MCP-10 | TBD | Pending |
+| UI-01 | TBD | Pending |
+| UI-02 | TBD | Pending |
+| UI-03 | TBD | Pending |
 
 **Coverage:**
-- v1 requirements: 27 total
-- Mapped to phases: 27
-- Unmapped: 0 ✓
+- v2.0 requirements: 55 total
+- Mapped to phases: 0 (pending roadmap)
+- Unmapped: 55 ⚠️
 
 ---
-*Requirements defined: 2026-04-11*
-*Last updated: 2026-04-11 after initial definition*
+*Requirements defined: 2026-04-21*
+*Last updated: 2026-04-21 after v2.0 milestone start*
