@@ -122,7 +122,7 @@ Requirements for the full product milestone. Each maps to a roadmap phase.
 ## Out of Scope
 
 | Feature | Reason |
-|---------|--------|
+| ------- | ------ |
 | Supabase / PostgreSQL | File-based JSON sufficient for demo scale; DB adds complexity without value |
 | Real patient data | Compliance — synthetic/de-identified only |
 | OAuth / SSO | Not needed for demo/hackathon scope |
@@ -135,74 +135,74 @@ Requirements for the full product milestone. Each maps to a roadmap phase.
 
 ## Traceability
 
-Updated during roadmap creation.
-
 | Requirement | Phase | Status |
-|-------------|-------|--------|
-| STOR-01 | TBD | Pending |
-| STOR-02 | TBD | Pending |
-| STOR-03 | TBD | Pending |
-| STOR-04 | TBD | Pending |
-| STOR-05 | TBD | Pending |
-| STOR-06 | TBD | Pending |
-| PLCY-01 | TBD | Pending |
-| PLCY-02 | TBD | Pending |
-| PLCY-03 | TBD | Pending |
-| PLCY-04 | TBD | Pending |
-| PLCY-05 | TBD | Pending |
-| PLCY-06 | TBD | Pending |
-| PLCY-07 | TBD | Pending |
-| COMP-01 | TBD | Pending |
-| COMP-02 | TBD | Pending |
-| COMP-03 | TBD | Pending |
-| COMP-04 | TBD | Pending |
-| INSG-01 | TBD | Pending |
-| INSG-02 | TBD | Pending |
-| INSG-03 | TBD | Pending |
-| INSG-04 | TBD | Pending |
-| CHNG-01 | TBD | Pending |
-| CHNG-02 | TBD | Pending |
-| CHNG-03 | TBD | Pending |
-| CHNG-04 | TBD | Pending |
-| PATC-01 | TBD | Pending |
-| PATC-02 | TBD | Pending |
-| PATC-03 | TBD | Pending |
-| PATC-04 | TBD | Pending |
-| PATC-05 | TBD | Pending |
-| EVAL-01 | TBD | Pending |
-| EVAL-02 | TBD | Pending |
-| EVAL-03 | TBD | Pending |
-| EVAL-04 | TBD | Pending |
-| EVAL-05 | TBD | Pending |
-| NEXT-01 | TBD | Pending |
-| NEXT-02 | TBD | Pending |
-| NEXT-03 | TBD | Pending |
-| NEXT-04 | TBD | Pending |
-| EVID-01 | TBD | Pending |
-| EVID-02 | TBD | Pending |
-| EVID-03 | TBD | Pending |
-| CHAT-01 | TBD | Pending |
-| CHAT-02 | TBD | Pending |
-| CHAT-03 | TBD | Pending |
-| MCP-01 | TBD | Pending |
-| MCP-02 | TBD | Pending |
-| MCP-03 | TBD | Pending |
-| MCP-04 | TBD | Pending |
-| MCP-05 | TBD | Pending |
-| MCP-06 | TBD | Pending |
-| MCP-07 | TBD | Pending |
-| MCP-08 | TBD | Pending |
-| MCP-09 | TBD | Pending |
-| MCP-10 | TBD | Pending |
-| UI-01 | TBD | Pending |
-| UI-02 | TBD | Pending |
-| UI-03 | TBD | Pending |
+| ----------- | ----- | ------ |
+| STOR-01 | Phase 5 | Pending |
+| STOR-02 | Phase 5 | Pending |
+| STOR-03 | Phase 5 | Pending |
+| STOR-04 | Phase 5 | Pending |
+| STOR-05 | Phase 5 | Pending |
+| STOR-06 | Phase 5 | Pending |
+| PLCY-01 | Phase 6 | Pending |
+| PLCY-02 | Phase 6 | Pending |
+| PLCY-03 | Phase 6 | Pending |
+| PLCY-04 | Phase 6 | Pending |
+| PLCY-05 | Phase 6 | Pending |
+| PLCY-06 | Phase 6 | Pending |
+| PLCY-07 | Phase 6 | Pending |
+| COMP-01 | Phase 7 | Pending |
+| COMP-02 | Phase 7 | Pending |
+| COMP-03 | Phase 7 | Pending |
+| COMP-04 | Phase 7 | Pending |
+| INSG-01 | Phase 7 | Pending |
+| INSG-02 | Phase 7 | Pending |
+| INSG-03 | Phase 7 | Pending |
+| INSG-04 | Phase 7 | Pending |
+| CHNG-01 | Phase 8 | Pending |
+| CHNG-02 | Phase 8 | Pending |
+| CHNG-03 | Phase 8 | Pending |
+| CHNG-04 | Phase 8 | Pending |
+| PATC-01 | Phase 9 | Pending |
+| PATC-02 | Phase 9 | Pending |
+| PATC-03 | Phase 9 | Pending |
+| PATC-04 | Phase 9 | Pending |
+| PATC-05 | Phase 9 | Pending |
+| EVAL-01 | Phase 9 | Pending |
+| EVAL-02 | Phase 9 | Pending |
+| EVAL-03 | Phase 9 | Pending |
+| EVAL-04 | Phase 9 | Pending |
+| EVAL-05 | Phase 9 | Pending |
+| NEXT-01 | Phase 10 | Pending |
+| NEXT-02 | Phase 10 | Pending |
+| NEXT-03 | Phase 10 | Pending |
+| NEXT-04 | Phase 10 | Pending |
+| EVID-01 | Phase 10 | Pending |
+| EVID-02 | Phase 10 | Pending |
+| EVID-03 | Phase 10 | Pending |
+| CHAT-01 | Phase 10 | Pending |
+| CHAT-02 | Phase 10 | Pending |
+| CHAT-03 | Phase 10 | Pending |
+| MCP-01 | Phase 11 | Pending |
+| MCP-02 | Phase 11 | Pending |
+| MCP-03 | Phase 11 | Pending |
+| MCP-04 | Phase 11 | Pending |
+| MCP-05 | Phase 11 | Pending |
+| MCP-06 | Phase 11 | Pending |
+| MCP-07 | Phase 11 | Pending |
+| MCP-08 | Phase 11 | Pending |
+| MCP-09 | Phase 11 | Pending |
+| MCP-10 | Phase 11 | Pending |
+| UI-01 | Phase 12 | Pending |
+| UI-02 | Phase 12 | Pending |
+| UI-03 | Phase 12 | Pending |
 
 **Coverage:**
-- v2.0 requirements: 55 total
-- Mapped to phases: 0 (pending roadmap)
-- Unmapped: 55 ⚠️
+
+- v2.0 requirements: 58 total
+- Mapped to phases: 58 (100%)
+- Unmapped: 0
 
 ---
+
 *Requirements defined: 2026-04-21*
-*Last updated: 2026-04-21 after v2.0 milestone start*
+*Last updated: 2026-04-21 after v2.0 roadmap creation*
