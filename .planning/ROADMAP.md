@@ -146,7 +146,14 @@ Plans:
 4. A patient case folder exists at `data/patients/{case-id}/` with its documents and extracted facts readable as JSON
 5. A saved coverage evaluation is retrievable by ID from `data/evaluations/{eval-id}.json`
 
-**Plans**: TBD
+**Plans**: 4 plans
+
+Plans:
+
+- [ ] 05-01-PLAN.md — Storage types + directory scaffold (src/storage/types.ts, paths.ts, .gitignore)
+- [ ] 05-02-PLAN.md — Policy file store + diff engine (src/storage/policy-store.ts)
+- [ ] 05-03-PLAN.md — Patient case + evaluation stores (src/storage/patient-store.ts, evaluation-store.ts)
+- [ ] 05-04-PLAN.md — Startup disk scan + index rebuild wired into server
 
 ---
 
@@ -302,7 +309,7 @@ v2.0: Phases 5 → 6 → 7 → 8 → 9 → 10 → 11 → 12
 | 2. Core MCP Tools | 2/2 | Complete | 2026-04-15 |
 | 3. Hybrid Q&A Engine | 2/2 | Complete | 2026-04-17 |
 | 4. Deployment + Integration | 2/2 | Complete | 2026-04-18 |
-| 5. File-Based Storage Foundation | 0/TBD | Not started | - |
+| 5. File-Based Storage Foundation | 0/4 | Not started | - |
 | 6. Policy Management + Ingestion | 0/TBD | Not started | - |
 | 7. Policy Compare + Insights | 0/TBD | Not started | - |
 | 8. Policy Changes + Versioning | 0/TBD | Not started | - |
