@@ -160,11 +160,11 @@ Plans:
 **Plans:** 5 plans
 
 Plans:
-- [ ] 10-01-PLAN.md — Next-steps domain module + GET /api/patients/evaluations/:evalId/next-steps route
-- [ ] 10-02-PLAN.md — Next Steps tab in patient case detail view (clinic, patient, analyst sub-sections)
-- [ ] 10-03-PLAN.md — Evidence search domain module + GET /api/evidence/search route
-- [ ] 10-04-PLAN.md — Evidence Explorer page UI + fetchEvidenceSearch client + App.tsx nav wiring
-- [ ] 10-05-PLAN.md — Chat API (POST /api/chat/policy-qa) + Chat page UI + evidence sidebar + App.tsx nav wiring
+- [x] 10-01-PLAN.md — Next-steps domain module + GET /api/patients/evaluations/:evalId/next-steps route
+- [x] 10-02-PLAN.md — Next Steps tab in patient case detail view (clinic, patient, analyst sub-sections)
+- [x] 10-03-PLAN.md — Evidence search domain module + GET /api/evidence/search route
+- [x] 10-04-PLAN.md — Evidence Explorer page UI + fetchEvidenceSearch client + App.tsx nav wiring
+- [x] 10-05-PLAN.md — Chat API (POST /api/chat/policy-qa) + Chat page UI + evidence sidebar + App.tsx nav wiring
 
 ---
 
@@ -185,7 +185,14 @@ Plans:
 5. `evaluate_patient_against_policy` tool returns coverage status and a full requirement checklist with PASS/MISSING/UNKNOWN labels and evidence links
 6. `generate_next_steps` and `get_case_summary` tools return role-specific guidance and full case summary callable from Prompt Opinion
 
-**Plans**: TBD
+**Plans:** 5 plans
+
+Plans:
+- [ ] 11-01-PLAN.md — upload_policy_document + parse_policy_document tools (MCP-01, MCP-02)
+- [ ] 11-02-PLAN.md — list_policy_versions + diff_policy_versions tools (MCP-03, MCP-04)
+- [ ] 11-03-PLAN.md — get_policy_evidence + search_policy_rules tools (MCP-05, MCP-06)
+- [ ] 11-04-PLAN.md — extract_patient_facts + evaluate_patient_against_policy tools (MCP-07, MCP-08)
+- [ ] 11-05-PLAN.md — generate_next_steps + get_case_summary tools + full MCP index wiring (MCP-09, MCP-10)
 
 ---
 
@@ -220,5 +227,5 @@ Plans:
 | 8. Policy Changes + Versioning | v2.0 | 0/4 | Not started | - |
 | 9. Patient Cases + Coverage Evaluation | v2.0 | 0/5 | Not started | - |
 | 10. Next Steps + Evidence Explorer + Chat | v2.0 | 0/5 | Planned | - |
-| 11. Expanded MCP Tools | v2.0 | 0/TBD | Not started | - |
+| 11. Expanded MCP Tools | v2.0 | 0/5 | Planned | - |
 | 12. Portal UI + Dashboard + Deployment | v2.0 | 0/TBD | Not started | - |
