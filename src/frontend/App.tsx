@@ -14,6 +14,9 @@ import { CompareBuilderView } from './components/compare-builder-view.js';
 import { PatientSidebar } from './components/patient-sidebar.js';
 import { PatientCasesView } from './components/patient-cases-view.js';
 import { PatientCaseDetailView } from './components/patient-case-detail-view.js';
+import { PolicyCompareBuilder } from './components/policy-compare-builder.js';
+import { PolicyCompareView } from './components/policy-compare-view.js';
+import { PolicyInsightsBuilder, PolicyInsightsView } from './components/policy-insights-view.js';
 import type { TabId } from './components/detail-tabs.js';
 import {
   fetchAntonRxChanges,
@@ -37,9 +40,18 @@ import {
   type StoredPatientCase,
   uploadPatientDocument
 } from './data/patients.js';
+import {
+  fetchPolicyCompareOptions,
+  fetchPolicyComparison,
+  fetchPolicyInsights,
+  type PolicyCompareOptions,
+  type PolicyComparePayload,
+  type PolicyEvidenceRef,
+  type PolicyInsightsPayload
+} from './data/policies.js';
 
 export default function App() {
-  const [activePage, setActivePage] = useState<'workspace' | 'compare' | 'data' | 'patients'>('workspace');
+  const [activePage, setActivePage] = useState<'workspace' | 'compare' | 'insights' | 'data' | 'patients'>('workspace');
   const [drugQuery, setDrugQuery] = useState('adalimumab');
   const [selectedIssuer, setSelectedIssuer] = useState('');
   const [activeTab, setActiveTab] = useState<TabId>('coverage');
@@ -59,6 +71,30 @@ export default function App() {
   const [selectedCase, setSelectedCase] = useState<StoredPatientCase | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [policyCompareOptions, setPolicyCompareOptions] = useState<PolicyCompareOptions | null>(null);
+  const [compareDrugFamily, setCompareDrugFamily] = useState('');
+  const [comparePayers, setComparePayers] = useState<string[]>([]);
+  const [compareVersion, setCompareVersion] = useState('');
+  const [policyComparison, setPolicyComparison] = useState<PolicyComparePayload | null>(null);
+  const [policyCompareError, setPolicyCompareError] = useState<string | null>(null);
+  const [isPolicyCompareLoading, setIsPolicyCompareLoading] = useState(false);
+  const [selectedCompareEvidence, setSelectedCompareEvidence] = useState<{ title: string; evidence: PolicyEvidenceRef[] } | null>(null);
+  const [insightsDrugFamily, setInsightsDrugFamily] = useState('');
+  const [insightsPayers, setInsightsPayers] = useState<string[]>([]);
+  const [insightsRuleType, setInsightsRuleType] = useState('');
+  const [insightsVersion, setInsightsVersion] = useState('');
+  const [policyInsights, setPolicyInsights] = useState<PolicyInsightsPayload | null>(null);
+  const [policyInsightsError, setPolicyInsightsError] = useState<string | null>(null);
+  const [isPolicyInsightsLoading, setIsPolicyInsightsLoading] = useState(false);
+  const [selectedInsightsEvidence, setSelectedInsightsEvidence] = useState<{ title: string; evidence: PolicyEvidenceRef[] } | null>(null);
+  const comparePayerOptions = useMemo(
+    () => policyCompareOptions?.drugFamilies.find((entry) => entry.key === compareDrugFamily)?.payers ?? [],
+    [policyCompareOptions, compareDrugFamily]
+  );
+  const insightsPayerOptions = useMemo(
+    () => policyCompareOptions?.drugFamilies.find((entry) => entry.key === insightsDrugFamily)?.payers ?? [],
+    [policyCompareOptions, insightsDrugFamily]
+  );
 
   async function refreshDataViews() {
     const [summaryPayload, sourcePayload, issuerPayload] = await Promise.all([
@@ -91,6 +127,48 @@ export default function App() {
   useEffect(() => {
     void refreshPatientCases();
   }, []);
+
+  useEffect(() => {
+    void fetchPolicyCompareOptions()
+      .then((payload) => {
+        setPolicyCompareOptions(payload);
+        if (!compareDrugFamily && payload.drugFamilies[0]) {
+          setCompareDrugFamily(payload.drugFamilies[0].key);
+          setComparePayers(payload.drugFamilies[0].payers.slice(0, 3));
+        }
+        if (!insightsDrugFamily && payload.drugFamilies[0]) {
+          setInsightsDrugFamily(payload.drugFamilies[0].key);
+          setInsightsPayers(payload.drugFamilies[0].payers);
+        }
+      })
+      .catch((loadError) => {
+        const message = loadError instanceof Error ? loadError.message : 'Failed to load compare options';
+        setPolicyCompareError(message);
+        setPolicyInsightsError(message);
+      });
+  }, []);
+
+  useEffect(() => {
+    const family = policyCompareOptions?.drugFamilies.find((entry) => entry.key === compareDrugFamily);
+    if (!family) {
+      return;
+    }
+    setComparePayers((current) => {
+      const filtered = current.filter((payer) => family.payers.includes(payer));
+      return filtered.length >= 2 ? filtered : family.payers.slice(0, 3);
+    });
+  }, [policyCompareOptions, compareDrugFamily]);
+
+  useEffect(() => {
+    const family = policyCompareOptions?.drugFamilies.find((entry) => entry.key === insightsDrugFamily);
+    if (!family) {
+      return;
+    }
+    setInsightsPayers((current) => {
+      const filtered = current.filter((payer) => family.payers.includes(payer));
+      return filtered.length > 0 ? filtered : family.payers;
+    });
+  }, [policyCompareOptions, insightsDrugFamily]);
 
   useEffect(() => {
     if (!drugQuery.trim()) {
@@ -154,6 +232,49 @@ export default function App() {
       .catch(() => setSelectedCase(null));
   }, [selectedCaseId]);
 
+  useEffect(() => {
+    if (!compareDrugFamily || comparePayers.length < 2 || activePage !== 'compare') {
+      return;
+    }
+
+    setIsPolicyCompareLoading(true);
+    setPolicyCompareError(null);
+
+    void fetchPolicyComparison({
+      drugFamily: compareDrugFamily,
+      payers: comparePayers,
+      version: compareVersion ? Number(compareVersion) : undefined
+    })
+      .then((payload) => setPolicyComparison(payload))
+      .catch((loadError) => {
+        setPolicyComparison(null);
+        setPolicyCompareError(loadError instanceof Error ? loadError.message : 'Failed to load policy comparison');
+      })
+      .finally(() => setIsPolicyCompareLoading(false));
+  }, [activePage, compareDrugFamily, comparePayers, compareVersion]);
+
+  useEffect(() => {
+    if (!insightsDrugFamily || activePage !== 'insights') {
+      return;
+    }
+
+    setIsPolicyInsightsLoading(true);
+    setPolicyInsightsError(null);
+
+    void fetchPolicyInsights({
+      drugFamily: insightsDrugFamily,
+      payers: insightsPayers,
+      ruleType: insightsRuleType ? insightsRuleType as Parameters<typeof fetchPolicyInsights>[0]['ruleType'] : undefined,
+      version: insightsVersion ? Number(insightsVersion) : undefined
+    })
+      .then((payload) => setPolicyInsights(payload))
+      .catch((loadError) => {
+        setPolicyInsights(null);
+        setPolicyInsightsError(loadError instanceof Error ? loadError.message : 'Failed to load policy insights');
+      })
+      .finally(() => setIsPolicyInsightsLoading(false));
+  }, [activePage, insightsDrugFamily, insightsPayers, insightsRuleType, insightsVersion]);
+
   async function handleIngestionComplete(result: IngestionUploadResult) {
     setIngestionSummary(result.summary);
     setIngestedSources((current) => {
@@ -200,6 +321,13 @@ export default function App() {
     setComparePlanIds(matches.slice(0, 4).map((match) => match.planId));
   }
 
+  function toggleStringValue(current: string[], nextValue: string) {
+    if (current.includes(nextValue)) {
+      return current.filter((value) => value !== nextValue);
+    }
+    return [...current, nextValue];
+  }
+
   async function handleCreatePatientCase(input: {
     patientName: string;
     payer: string;
@@ -220,6 +348,23 @@ export default function App() {
     const payload = await uploadPatientDocument(input);
     setSelectedCase(payload.case);
     await refreshPatientCases(payload.case.caseId);
+  }
+
+  function renderPhaseSidebar(title: string, copy: string) {
+    return (
+      <aside className="sidebar">
+        <div className="sidebar-section">
+          <p className="eyebrow">PolicyPilot</p>
+          <h2 className="sidebar-title">{title}</h2>
+          <p className="sidebar-copy">{copy}</p>
+        </div>
+
+        <div className="sidebar-section sidebar-note">
+          <span className="note-badge">Phase 7</span>
+          <p>Every compare cell and insight cell is wired to evidence. The graph is intentionally simple and static.</p>
+        </div>
+      </aside>
+    );
   }
 
   function renderCoverageDetail() {
@@ -360,6 +505,13 @@ export default function App() {
           </button>
           <button
             type="button"
+            className={`page-nav-btn${activePage === 'insights' ? ' page-nav-btn-active' : ''}`}
+            onClick={() => setActivePage('insights')}
+          >
+            Insights
+          </button>
+          <button
+            type="button"
             className={`page-nav-btn${activePage === 'data' ? ' page-nav-btn-active' : ''}`}
             onClick={() => setActivePage('data')}
           >
@@ -377,6 +529,16 @@ export default function App() {
       sidebar={
         activePage === 'patients' ? (
           <PatientSidebar caseCount={patientCases.length} selectedCaseName={selectedCase?.patientName} />
+        ) : activePage === 'compare' ? (
+          renderPhaseSidebar(
+            'Cross-payer compare',
+            'Choose a drug family and at least two payers to inspect preferred products, prior auth, step therapy, covered indications, and restrictions.'
+          )
+        ) : activePage === 'insights' ? (
+          renderPhaseSidebar(
+            'Heat map and graph',
+            'Filter the current policy corpus and drill into payer-by-rule patterns through a heat map and relationship graph.'
+          )
         ) : (
           <Sidebar
             issuers={issuers}
@@ -403,11 +565,28 @@ export default function App() {
             onIngestionComplete={handleIngestionComplete}
           />
         ) : activePage === 'compare' ? (
-          <CompareBuilderView
-            matches={matches}
-            selectedPlanIds={comparePlanIds}
-            onTogglePlan={toggleComparePlan}
-            onSelectTopPlans={selectTopComparePlans}
+          <PolicyCompareBuilder
+            options={policyCompareOptions}
+            payerOptions={comparePayerOptions}
+            selectedDrugFamily={compareDrugFamily}
+            selectedPayers={comparePayers}
+            selectedVersion={compareVersion}
+            onDrugFamilyChange={setCompareDrugFamily}
+            onTogglePayer={(payer) => setComparePayers((current) => toggleStringValue(current, payer))}
+            onVersionChange={setCompareVersion}
+          />
+        ) : activePage === 'insights' ? (
+          <PolicyInsightsBuilder
+            options={policyCompareOptions}
+            payerOptions={insightsPayerOptions}
+            selectedDrugFamily={insightsDrugFamily}
+            selectedPayers={insightsPayers}
+            selectedRuleType={insightsRuleType}
+            selectedVersion={insightsVersion}
+            onDrugFamilyChange={setInsightsDrugFamily}
+            onTogglePayer={(payer) => setInsightsPayers((current) => toggleStringValue(current, payer))}
+            onRuleTypeChange={setInsightsRuleType}
+            onVersionChange={setInsightsVersion}
           />
         ) : (
           <>
@@ -444,10 +623,22 @@ export default function App() {
             catalogSummary={catalogSummary}
           />
         ) : activePage === 'compare' ? (
-          <CompareView
-            drugQuery={drugQuery}
-            matches={compareMatches}
-            selectedPlanId={comparePlanIds[0] ?? ''}
+          <PolicyCompareView
+            comparison={policyComparison}
+            loading={isPolicyCompareLoading}
+            error={policyCompareError}
+            selectedEvidence={selectedCompareEvidence}
+            onOpenEvidence={(title, evidence) => setSelectedCompareEvidence({ title, evidence })}
+            onClearEvidence={() => setSelectedCompareEvidence(null)}
+          />
+        ) : activePage === 'insights' ? (
+          <PolicyInsightsView
+            insights={policyInsights}
+            loading={isPolicyInsightsLoading}
+            error={policyInsightsError}
+            selectedEvidence={selectedInsightsEvidence}
+            onOpenEvidence={(title, evidence) => setSelectedInsightsEvidence({ title, evidence })}
+            onClearEvidence={() => setSelectedInsightsEvidence(null)}
           />
         ) : (
           <>

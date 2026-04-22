@@ -549,6 +549,34 @@ select {
   gap: 12px;
 }
 
+.compare-highlight-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.compare-highlight-card {
+  padding: 16px 18px;
+  border: 1px solid rgba(132, 181, 206, 0.18);
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(20, 58, 76, 0.88), rgba(9, 24, 35, 0.92));
+}
+
+.compare-highlight-card p,
+.compare-highlight-card small {
+  margin: 0;
+}
+
+.compare-highlight-card small {
+  display: block;
+  margin-top: 8px;
+  color: #8fb8cb;
+}
+
+.compare-highlight-muted {
+  background: rgba(9, 24, 35, 0.88);
+}
+
 .compare-builder-actions {
   display: flex;
   align-items: center;
@@ -932,6 +960,20 @@ select {
   color: #cae4f2;
 }
 
+.compare-cell-button {
+  width: 100%;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.compare-cell-button small {
+  color: #8fb8cb;
+}
+
 .compare-header {
   display: flex;
   flex-direction: column;
@@ -953,9 +995,115 @@ select {
   background: rgba(13, 34, 48, 0.96);
 }
 
+.compare-label-help {
+  display: block;
+  margin-top: 8px;
+  color: #7fa8bb;
+  font-size: 0.74rem;
+  font-weight: 400;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
 .compare-codes {
   font-family: 'IBM Plex Mono', monospace;
   font-size: 0.82rem;
+}
+
+.compare-cell-favorable,
+.heatmap-cell-favorable {
+  background: rgba(26, 64, 49, 0.92);
+}
+
+.compare-cell-conditional,
+.heatmap-cell-conditional {
+  background: rgba(89, 64, 18, 0.92);
+}
+
+.compare-cell-restrictive,
+.heatmap-cell-restrictive {
+  background: rgba(78, 33, 36, 0.92);
+}
+
+.compare-cell-unknown,
+.heatmap-cell-unknown {
+  background: rgba(28, 45, 56, 0.92);
+}
+
+.evidence-panel {
+  margin-top: 20px;
+  padding: 18px;
+  border: 1px solid rgba(132, 181, 206, 0.18);
+  border-radius: 24px;
+  background: rgba(7, 21, 31, 0.8);
+}
+
+.evidence-panel-list {
+  display: grid;
+  gap: 12px;
+}
+
+.heatmap-grid {
+  display: grid;
+  gap: 1px;
+  border-radius: 20px;
+  overflow: hidden;
+  background: rgba(136, 184, 203, 0.12);
+}
+
+.heatmap-cell {
+  min-height: 108px;
+}
+
+.graph-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+}
+
+.graph-node {
+  padding: 16px;
+  border: 1px solid rgba(132, 181, 206, 0.16);
+  border-radius: 18px;
+  background: rgba(8, 23, 34, 0.78);
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.graph-node strong {
+  color: #e5f5ff;
+}
+
+.graph-node small {
+  color: #8fb8cb;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.graph-node-drug {
+  background: linear-gradient(135deg, rgba(34, 83, 105, 0.9), rgba(12, 32, 45, 0.92));
+}
+
+.graph-node-payer {
+  background: linear-gradient(135deg, rgba(32, 66, 82, 0.9), rgba(10, 26, 36, 0.92));
+}
+
+.graph-node-policy {
+  background: linear-gradient(135deg, rgba(58, 72, 34, 0.9), rgba(24, 31, 14, 0.92));
+}
+
+.graph-node-rule {
+  background: linear-gradient(135deg, rgba(72, 48, 22, 0.9), rgba(29, 19, 8, 0.92));
+}
+
+.graph-edge-list {
+  display: grid;
+  gap: 12px;
+  margin-top: 16px;
 }
 
 /* ── Change dashboard ── */

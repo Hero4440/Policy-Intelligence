@@ -11,6 +11,7 @@ import { registerAntonRxRoutes } from './antonrx-routes.js';
 import { registerChatRoutes } from './chat.js';
 import { registerIngestionRoutes } from './ingestion/index.js';
 import { registerPatientRoutes } from './patient-routes.js';
+import { registerPolicyRoutes } from './policy-routes.js';
 import { registerUploadRoutes } from './uploads.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -30,6 +31,7 @@ app.use(express.json({ limit: '25mb' }));
 
 app.use(createMcpApp());
 registerAntonRxRoutes(app);
+registerPolicyRoutes(app);
 registerPatientRoutes(app);
 registerIngestionRoutes(app);
 registerUploadRoutes(app);

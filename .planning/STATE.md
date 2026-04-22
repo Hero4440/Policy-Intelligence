@@ -6,19 +6,19 @@ See: .planning/PROJECT.md (updated 2026-04-22)
 
 **Core value:** Every policy question answered must include source-backed evidence from loaded policy documents — and every coverage evaluation must show exactly which criteria are met, missing, or ambiguous.
 
-**Current focus:** v2.0 Full Product — Phase 6 is next (Policy Management + Ingestion)
+**Current focus:** v2.0 Full Product — Phase 7 implementation is done; manual browser UAT is next
 
 ## Current Position
 
-Phase: 6 — Policy Management + Ingestion
-Plan: —
-Status: Not started
-Last activity: 2026-04-22 — v1.0 POC milestone completed and archived
+Phase: 7 — Policy Compare + Insights
+Plan: 07-05
+Status: Awaiting human verification
+Last activity: 2026-04-22 — Phase 7 implementation completed; browser UAT checklist prepared
 
 ```text
 v2.0 Progress: [          ] 0/7 phases
-Phase 6:  [ ] Policy Management + Ingestion
-Phase 7:  [ ] Policy Compare + Insights
+Phase 6:  [x] Policy Management + Ingestion
+Phase 7:  [~] Policy Compare + Insights
 Phase 8:  [ ] Policy Changes + Versioning
 Phase 9:  [ ] Patient Cases + Coverage Evaluation
 Phase 10: [ ] Next Steps + Evidence Explorer + Chat
@@ -56,7 +56,7 @@ Phase 12: [ ] Portal UI + Dashboard + Deployment
 
 ## Session Continuity
 
-Last session: 2026-04-22 (v1.0 milestone completion)
-Stopped at: v1.0 archived — ROADMAP.md reorganized, PROJECT.md evolved, git tag pending
-Resume file: .planning/ROADMAP.md
-Next action: `/gsd:plan-phase 6` (after `/clear`)
+Last session: 2026-04-22 (Phase 7 implementation)
+Stopped at: Compare and Insights are implemented; blocking manual browser UAT remains before sign-off
+Resume file: .planning/phases/07-policy-compare-insights/07-UAT.md
+Next action: Run the browser checklist in `07-UAT.md`, then create `07-05-SUMMARY.md` and advance to Phase 8

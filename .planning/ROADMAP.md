@@ -76,7 +76,14 @@ Plans:
 5. Clicking a heat map cell opens an evidence panel showing the source snippet and page reference
 6. A knowledge graph shows drug → payer → policy → rule relationships as a static/simple visual
 
-**Plans**: TBD
+**Plans:** 5 plans
+
+Plans:
+- [ ] 07-01-PLAN.md — v2 compare domain + compare API endpoints + frontend data client
+- [ ] 07-02-PLAN.md — Policy Compare page UI + shared evidence panel + App nav wiring
+- [ ] 07-03-PLAN.md — Deterministic difference highlights above the compare table
+- [ ] 07-04-PLAN.md — Policy Insights API + filterable heat map + evidence panel drill-in
+- [ ] 07-05-PLAN.md — Knowledge graph + end-to-end human verification
 
 ---
 
@@ -95,7 +102,13 @@ Plans:
 3. User opens the Version Diff page for two versions of a policy and sees structured field-level changes alongside a raw text diff — both views on the same screen
 4. System has classified each diff: formatting changes are labeled cosmetic, wording changes are labeled operational, and changes to PA criteria, step therapy, or product tier are labeled clinical
 
-**Plans**: TBD
+**Plans**: 4 plans
+
+Plans:
+- [ ] 08-01-PLAN.md — Classified change-history engine + timeline/change API routes
+- [ ] 08-02-PLAN.md — Policy Changes page UI + nav wiring + change table filters
+- [ ] 08-03-PLAN.md — Version Diff backend + per-version text snapshots + diff API route
+- [ ] 08-04-PLAN.md — Version Diff page UI + end-to-end human verification
 
 ---
 

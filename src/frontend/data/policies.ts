@@ -1,99 +1,184 @@
-import policiesIndex from '../../../data/policies/structured/policies-index.json';
-import uhcAdalimumab from '../../../data/policies/structured/uhc-adalimumab-ra.json';
-import uhcEtanercept from '../../../data/policies/structured/uhc-etanercept-ra.json';
-import aetnaAdalimumab from '../../../data/policies/structured/aetna-adalimumab-ra.json';
-import cignaInfliximab from '../../../data/policies/structured/cigna-infliximab-ra.json';
-import aetnaUpadacitinib from '../../../data/policies/structured/aetna-upadacitinib-ra.json';
+export type PolicyCompareRowKey =
+  | 'preferred_products'
+  | 'non_preferred_products'
+  | 'prior_auth'
+  | 'step_therapy'
+  | 'covered_indications'
+  | 'key_restrictions';
 
-export type CoverageStatus = 'covered' | 'covered-with-pa' | 'not-covered';
+export type PolicyStatusTone = 'favorable' | 'conditional' | 'restrictive' | 'unknown';
 
-export type PolicyRecord = {
+export interface PolicyEvidenceRef {
   id: string;
+  snippet: string;
+  document: string;
+  page: number | null;
+  section: string;
+  fieldLabel: string;
+  policyId: string;
+  policyVersion: number;
+  payer: string;
+}
+
+export interface PolicyCompareCell {
+  rowKey: PolicyCompareRowKey;
+  value: string;
+  status: PolicyStatusTone;
+  evidence: PolicyEvidenceRef[];
+}
+
+export interface PolicyCompareColumn {
+  policyId: string;
   payer: string;
   plan: string;
-  indication: string;
-  coverageStatus: CoverageStatus;
-  paRequired: boolean;
-  drug: {
-    brandName: string;
-    genericName: string;
-    aliases: string[];
+  title: string;
+  drugFamilyKey: string;
+  drugFamilyLabel: string;
+  policyVersion: number;
+  effectiveDate: string;
+  coverageStatus: 'covered' | 'covered-with-pa' | 'excluded';
+  cells: Record<PolicyCompareRowKey, PolicyCompareCell>;
+}
+
+export interface PolicyCompareRowDefinition {
+  key: PolicyCompareRowKey;
+  label: string;
+  description: string;
+}
+
+export interface PolicyCompareHighlight {
+  kind: string;
+  text: string;
+  payers: string[];
+  rowKeys: PolicyCompareRowKey[];
+}
+
+export interface PolicyDrugFamilyOption {
+  key: string;
+  label: string;
+  payers: string[];
+}
+
+export interface PolicyCompareOptions {
+  drugFamilies: PolicyDrugFamilyOption[];
+  payers: string[];
+  versions: number[];
+  ruleTypes: Array<{ key: PolicyCompareRowKey; label: string }>;
+}
+
+export interface PolicyComparePayload {
+  drugFamily: PolicyDrugFamilyOption;
+  selectedPayers: string[];
+  rows: PolicyCompareRowDefinition[];
+  columns: PolicyCompareColumn[];
+  highlights: PolicyCompareHighlight[];
+}
+
+export interface PolicyInsightCell {
+  payer: string;
+  ruleType: PolicyCompareRowKey;
+  status: PolicyStatusTone;
+  value: string;
+  evidence: PolicyEvidenceRef[];
+}
+
+export interface PolicyGraphNode {
+  id: string;
+  label: string;
+  kind: 'drug' | 'payer' | 'policy' | 'rule';
+  evidence: PolicyEvidenceRef[];
+}
+
+export interface PolicyGraphEdge {
+  from: string;
+  to: string;
+  label: string;
+}
+
+export interface PolicyInsightsPayload {
+  drugFamily: PolicyDrugFamilyOption;
+  filters: {
+    payerOptions: string[];
+    versionOptions: number[];
+    ruleTypeOptions: Array<{ key: PolicyCompareRowKey; label: string }>;
   };
-  diagnosisRequirements: Array<{
-    description: string;
-    evidenceText: string;
-    icd10Codes: string[];
-    source: {
-      document: string;
-      page: number;
-      section: string;
-    };
-  }>;
-  stepTherapy: Array<{
-    drugName: string;
-    dosage: string;
-    duration: string;
-    failureCriteria: string;
-    evidenceText: string;
-    source: {
-      document: string;
-      page: number;
-      section: string;
-    };
-  }>;
-  otherRequirements: Array<{
-    category: string;
-    requirement: string;
-    evidenceText: string;
-    ambiguous: boolean;
-    source: {
-      document: string;
-      page: number;
-      section: string;
-    };
-  }>;
-  sourceDocument: {
-    filename: string;
-    url?: string;
-    retrievalDate: string;
-    effectiveDate: string;
+  heatmap: {
+    rows: Array<{ key: PolicyCompareRowKey; label: string }>;
+    payers: string[];
+    cells: PolicyInsightCell[];
   };
-};
-
-const detailedPolicies: PolicyRecord[] = [
-  uhcAdalimumab,
-  uhcEtanercept,
-  aetnaAdalimumab,
-  cignaInfliximab,
-  aetnaUpadacitinib
-] as PolicyRecord[];
-
-export const policyDataset = {
-  version: policiesIndex.version,
-  generatedDate: policiesIndex.generatedDate,
-  therapeuticArea: policiesIndex.therapeuticArea,
-  policies: detailedPolicies
-};
-
-export function getPolicyById(id: string): PolicyRecord | undefined {
-  return detailedPolicies.find(policy => policy.id === id);
+  graph: {
+    nodes: PolicyGraphNode[];
+    edges: PolicyGraphEdge[];
+  };
 }
 
-export function listDrugs(): string[] {
-  return [...new Set(detailedPolicies.map(policy => policy.drug.genericName))].sort();
+async function fetchJson<T>(input: string): Promise<T> {
+  const response = await fetch(input);
+  if (!response.ok) {
+    let message = `Request failed with ${response.status}`;
+    try {
+      const payload = await response.json() as { error?: string };
+      if (payload.error) {
+        message = payload.error;
+      }
+    } catch {
+      // Ignore JSON parse failures and keep the default message.
+    }
+    throw new Error(message);
+  }
+  return response.json() as Promise<T>;
 }
 
-export function listPayers(): string[] {
-  return [...new Set(detailedPolicies.map(policy => policy.payer))].sort();
+export function fetchPolicyCompareOptions() {
+  return fetchJson<PolicyCompareOptions>('/api/policies/compare/options');
 }
 
-export function summarizeCoverageStatus(status: CoverageStatus): string {
+export function fetchPolicyComparison(input: {
+  drugFamily: string;
+  payers: string[];
+  version?: number;
+}) {
+  const params = new URLSearchParams({
+    drugFamily: input.drugFamily,
+    payers: input.payers.join(',')
+  });
+  if (input.version !== undefined) {
+    params.set('version', String(input.version));
+  }
+  return fetchJson<PolicyComparePayload>(`/api/policies/compare?${params.toString()}`);
+}
+
+export function fetchPolicyInsights(input: {
+  drugFamily: string;
+  payers?: string[];
+  ruleType?: PolicyCompareRowKey;
+  version?: number;
+}) {
+  const params = new URLSearchParams({
+    drugFamily: input.drugFamily
+  });
+  if (input.payers && input.payers.length > 0) {
+    params.set('payers', input.payers.join(','));
+  }
+  if (input.ruleType) {
+    params.set('ruleType', input.ruleType);
+  }
+  if (input.version !== undefined) {
+    params.set('version', String(input.version));
+  }
+  return fetchJson<PolicyInsightsPayload>(`/api/policies/insights?${params.toString()}`);
+}
+
+export function summarizePolicyStatus(status: PolicyStatusTone): string {
   switch (status) {
-    case 'covered':
-      return 'Covered';
-    case 'covered-with-pa':
-      return 'Covered with PA';
-    case 'not-covered':
-      return 'Not Covered';
+    case 'favorable':
+      return 'Favorable';
+    case 'conditional':
+      return 'Conditional';
+    case 'restrictive':
+      return 'Restrictive';
+    case 'unknown':
+      return 'Unknown';
   }
 }
