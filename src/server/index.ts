@@ -5,11 +5,12 @@ import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import { createMcpApp } from '../mcp/index.js';
 import { getPoliciesFromMemory, loadStorageOnStartup } from '../storage/startup.js';
-import { listPatientCases } from '../storage/patient-store.js';
+import { ensureSeedPatientCases, listPatientCases } from '../storage/patient-store.js';
 import { listEvaluations } from '../storage/evaluation-store.js';
 import { registerAntonRxRoutes } from './antonrx-routes.js';
 import { registerChatRoutes } from './chat.js';
 import { registerIngestionRoutes } from './ingestion/index.js';
+import { registerPatientRoutes } from './patient-routes.js';
 import { registerUploadRoutes } from './uploads.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -29,6 +30,7 @@ app.use(express.json({ limit: '25mb' }));
 
 app.use(createMcpApp());
 registerAntonRxRoutes(app);
+registerPatientRoutes(app);
 registerIngestionRoutes(app);
 registerUploadRoutes(app);
 registerChatRoutes(app);
@@ -64,6 +66,7 @@ if (process.env.NODE_ENV === 'production' && existsSync(distDir)) {
 
 const PORT = Number(process.env.PORT || 3000);
 loadStorageOnStartup();
+ensureSeedPatientCases();
 app.listen(PORT, () => {
   console.error(`PolicyPilot server listening on port ${PORT}`);
   console.error(`API health: http://localhost:${PORT}/api/health`);

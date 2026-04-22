@@ -11,6 +11,9 @@ import { IngestionPanel } from './components/ingestion-panel.js';
 import { DataOverviewView } from './components/data-overview-view.js';
 import { InfoChip } from './components/info-chip.js';
 import { CompareBuilderView } from './components/compare-builder-view.js';
+import { PatientSidebar } from './components/patient-sidebar.js';
+import { PatientCasesView } from './components/patient-cases-view.js';
+import { PatientCaseDetailView } from './components/patient-case-detail-view.js';
 import type { TabId } from './components/detail-tabs.js';
 import {
   fetchAntonRxChanges,
@@ -27,9 +30,16 @@ import {
   type IngestionUploadResult,
   type AntonRxPlanDrugDetail
 } from './data/antonrx.js';
+import {
+  createStoredPatientCase,
+  fetchPatientCase,
+  fetchPatientCases,
+  type StoredPatientCase,
+  uploadPatientDocument
+} from './data/patients.js';
 
 export default function App() {
-  const [activePage, setActivePage] = useState<'workspace' | 'compare' | 'data'>('workspace');
+  const [activePage, setActivePage] = useState<'workspace' | 'compare' | 'data' | 'patients'>('workspace');
   const [drugQuery, setDrugQuery] = useState('adalimumab');
   const [selectedIssuer, setSelectedIssuer] = useState('');
   const [activeTab, setActiveTab] = useState<TabId>('coverage');
@@ -44,6 +54,9 @@ export default function App() {
   const [catalogSummary, setCatalogSummary] = useState<AntonRxCatalogSummary | null>(null);
   const [refreshToken, setRefreshToken] = useState(0);
   const [selectedPatientId, setSelectedPatientId] = useState('');
+  const [patientCases, setPatientCases] = useState<StoredPatientCase[]>([]);
+  const [selectedCaseId, setSelectedCaseId] = useState('');
+  const [selectedCase, setSelectedCase] = useState<StoredPatientCase | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -60,9 +73,24 @@ export default function App() {
     setIssuers(issuerPayload.issuers);
   }
 
+  async function refreshPatientCases(preferredCaseId?: string) {
+    const payload = await fetchPatientCases();
+    setPatientCases(payload.cases);
+    const nextSelectedCaseId = preferredCaseId && payload.cases.some((entry) => entry.caseId === preferredCaseId)
+      ? preferredCaseId
+      : payload.cases.some((entry) => entry.caseId === selectedCaseId)
+        ? selectedCaseId
+        : payload.cases[0]?.caseId ?? '';
+    setSelectedCaseId(nextSelectedCaseId);
+  }
+
   useEffect(() => {
     void refreshDataViews();
   }, [refreshToken]);
+
+  useEffect(() => {
+    void refreshPatientCases();
+  }, []);
 
   useEffect(() => {
     if (!drugQuery.trim()) {
@@ -115,6 +143,17 @@ export default function App() {
       .catch(() => setDetail(null));
   }, [selectedPlanId, drugQuery]);
 
+  useEffect(() => {
+    if (!selectedCaseId) {
+      setSelectedCase(null);
+      return;
+    }
+
+    void fetchPatientCase(selectedCaseId)
+      .then((payload) => setSelectedCase(payload.case))
+      .catch(() => setSelectedCase(null));
+  }, [selectedCaseId]);
+
   async function handleIngestionComplete(result: IngestionUploadResult) {
     setIngestionSummary(result.summary);
     setIngestedSources((current) => {
@@ -159,6 +198,28 @@ export default function App() {
 
   function selectTopComparePlans() {
     setComparePlanIds(matches.slice(0, 4).map((match) => match.planId));
+  }
+
+  async function handleCreatePatientCase(input: {
+    patientName: string;
+    payer: string;
+    requestedDrug: string;
+    diagnosis: string;
+  }) {
+    const created = await createStoredPatientCase(input);
+    await refreshPatientCases(created.case.caseId);
+  }
+
+  async function handleUploadPatientDocument(input: {
+    caseId: string;
+    fileName: string;
+    content: string;
+    contentType?: string;
+    documentType?: string;
+  }) {
+    const payload = await uploadPatientDocument(input);
+    setSelectedCase(payload.case);
+    await refreshPatientCases(payload.case.caseId);
   }
 
   function renderCoverageDetail() {
@@ -304,19 +365,37 @@ export default function App() {
           >
             Data
           </button>
+          <button
+            type="button"
+            className={`page-nav-btn${activePage === 'patients' ? ' page-nav-btn-active' : ''}`}
+            onClick={() => setActivePage('patients')}
+          >
+            Patients
+          </button>
         </nav>
       }
       sidebar={
-        <Sidebar
-          issuers={issuers}
-          selectedIssuer={selectedIssuer}
-          drugQuery={drugQuery}
-          onIssuerChange={setSelectedIssuer}
-          onDrugQueryChange={setDrugQuery}
-        />
+        activePage === 'patients' ? (
+          <PatientSidebar caseCount={patientCases.length} selectedCaseName={selectedCase?.patientName} />
+        ) : (
+          <Sidebar
+            issuers={issuers}
+            selectedIssuer={selectedIssuer}
+            drugQuery={drugQuery}
+            onIssuerChange={setSelectedIssuer}
+            onDrugQueryChange={setDrugQuery}
+          />
+        )
       }
       listPane={
-        activePage === 'data' ? (
+        activePage === 'patients' ? (
+          <PatientCasesView
+            cases={patientCases}
+            selectedCaseId={selectedCaseId}
+            onSelectCase={setSelectedCaseId}
+            onCreateCase={handleCreatePatientCase}
+          />
+        ) : activePage === 'data' ? (
           <IngestionPanel
             ingestedSources={ingestedSources}
             ingestionSummary={ingestionSummary}
@@ -356,7 +435,9 @@ export default function App() {
         )
       }
       detailPane={
-        activePage === 'data' ? (
+        activePage === 'patients' ? (
+          <PatientCaseDetailView patientCase={selectedCase} onUploadDocument={handleUploadPatientDocument} />
+        ) : activePage === 'data' ? (
           <DataOverviewView
             ingestedSources={ingestedSources}
             ingestionSummary={ingestionSummary}

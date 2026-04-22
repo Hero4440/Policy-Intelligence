@@ -50,7 +50,38 @@ export interface PatientCase {
   createdAt: string;
   updatedAt: string;
   documentFiles: string[];
+  documents?: PatientDocumentRecord[];
+  extractedFacts?: PatientFactRecord[];
   extractedFactsFile?: string;
+  seeded?: boolean;
+}
+
+export interface PatientDocumentRecord {
+  documentId: string;
+  fileName: string;
+  documentType: string;
+  contentType: string;
+  storedAt: string;
+  summary: string;
+  factCount: number;
+}
+
+export interface PatientFactRecord {
+  factId: string;
+  category:
+    | 'diagnosis'
+    | 'medication'
+    | 'coverage'
+    | 'requested_drug'
+    | 'payer'
+    | 'prescriber'
+    | 'prior_therapy'
+    | 'clinical_note';
+  label: string;
+  value: string;
+  sourceDocumentId: string;
+  evidenceSnippet?: string;
+  confidence: 'high' | 'medium';
 }
 
 export interface EvaluationChecklistItem {
