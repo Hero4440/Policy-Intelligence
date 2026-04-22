@@ -1,9 +1,11 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { ChangeEvent, FormEvent } from 'react';
-import type {
-  PatientPolicyOption,
-  StoredCoverageEvaluation,
-  StoredPatientCase
+import {
+  fetchNextSteps,
+  type NextStepsPayload,
+  type PatientPolicyOption,
+  type StoredCoverageEvaluation,
+  type StoredPatientCase
 } from '../data/patients.js';
 
 type PatientCaseDetailViewProps = {
@@ -25,6 +27,8 @@ type PatientCaseDetailViewProps = {
     documentType?: string;
   }) => Promise<void>;
 };
+
+type PatientEvaluationTab = 'coverage' | 'next-steps';
 
 function formatDate(value: string): string {
   try {
@@ -93,6 +97,11 @@ export function PatientCaseDetailView({
   const [evaluationError, setEvaluationError] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [isEvaluating, setIsEvaluating] = useState(false);
+  const [activeEvaluationTab, setActiveEvaluationTab] = useState<PatientEvaluationTab>('coverage');
+  const [nextSteps, setNextSteps] = useState<NextStepsPayload | null>(null);
+  const [nextStepsLoading, setNextStepsLoading] = useState(false);
+  const [nextStepsError, setNextStepsError] = useState<string | null>(null);
+
   const factsByDocument = useMemo(() => {
     if (!patientCase) {
       return new Map<string, number>();
@@ -104,11 +113,51 @@ export function PatientCaseDetailView({
     }
     return counts;
   }, [patientCase]);
+
   const selectedPolicy = useMemo(
     () => policyOptions.find((option) => option.policyId === selectedPolicyId) ?? null,
     [policyOptions, selectedPolicyId]
   );
   const latestEvaluation = evaluations[0] ?? null;
+
+  useEffect(() => {
+    setNextSteps(null);
+    setNextStepsError(null);
+    setActiveEvaluationTab('coverage');
+  }, [latestEvaluation?.evalId]);
+
+  useEffect(() => {
+    if (!latestEvaluation || nextSteps || nextStepsLoading) {
+      return;
+    }
+
+    let cancelled = false;
+    setNextStepsLoading(true);
+    setNextStepsError(null);
+
+    void fetchNextSteps(latestEvaluation.evalId)
+      .then((payload) => {
+        if (cancelled) {
+          return;
+        }
+        setNextSteps(payload);
+      })
+      .catch((error) => {
+        if (cancelled) {
+          return;
+        }
+        setNextStepsError(error instanceof Error ? error.message : 'Failed to load next steps');
+      })
+      .finally(() => {
+        if (!cancelled) {
+          setNextStepsLoading(false);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [latestEvaluation, nextSteps, nextStepsLoading]);
 
   async function handleFileUpload(event: ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
@@ -384,6 +433,23 @@ export function PatientCaseDetailView({
           <div className="empty-state">Loading saved evaluations…</div>
         ) : latestEvaluation ? (
           <div className="patient-evaluation-results">
+            <div className="tab-bar patient-evaluation-tab-bar">
+              <button
+                type="button"
+                className={`tab-btn${activeEvaluationTab === 'coverage' ? ' tab-btn-active' : ''}`}
+                onClick={() => setActiveEvaluationTab('coverage')}
+              >
+                Coverage
+              </button>
+              <button
+                type="button"
+                className={`tab-btn${activeEvaluationTab === 'next-steps' ? ' tab-btn-active' : ''}`}
+                onClick={() => setActiveEvaluationTab('next-steps')}
+              >
+                Next Steps
+              </button>
+            </div>
+
             <article className="detail-card patient-evaluation-summary">
               <div className="patient-doc-header">
                 <p className="detail-card-title">Latest result</p>
@@ -397,39 +463,116 @@ export function PatientCaseDetailView({
               <small>{formatDate(latestEvaluation.evaluatedAt)}</small>
             </article>
 
-            <div className="patient-checklist">
-              {latestEvaluation.checklist.map((item) => (
-                <article key={`${item.category}-${item.criterion}`} className="detail-card patient-checklist-item">
-                  <div className="patient-doc-header">
-                    <p className="detail-card-title">{item.criterion}</p>
-                    <span className={`status-badge ${checklistStatusTone(item.status)}`}>
-                      {item.status}
-                    </span>
-                  </div>
-                  <p>{item.rationale}</p>
-                  <div className="patient-evidence-grid">
-                    <div className="patient-evidence-card">
-                      <span className="detail-label">Patient evidence</span>
-                      <strong>{item.matchedFact ? `${item.matchedFact.label}: ${item.matchedFact.value}` : 'No matched fact'}</strong>
-                      <small>
-                        {item.patientEvidence?.sourceDocumentName || item.patientEvidence?.sourceDocumentId || 'No linked patient document'}
-                        {item.patientEvidence?.snippet ? ` · ${item.patientEvidence.snippet}` : ''}
-                      </small>
+            {activeEvaluationTab === 'coverage' ? (
+              <div className="patient-checklist">
+                {latestEvaluation.checklist.map((item) => (
+                  <article key={`${item.category}-${item.criterion}`} className="detail-card patient-checklist-item">
+                    <div className="patient-doc-header">
+                      <p className="detail-card-title">{item.criterion}</p>
+                      <span className={`status-badge ${checklistStatusTone(item.status)}`}>
+                        {item.status}
+                      </span>
                     </div>
-                    <div className="patient-evidence-card">
-                      <span className="detail-label">Policy evidence</span>
-                      <strong>{item.policyEvidence.fieldLabel}</strong>
-                      <small>
-                        {item.policyEvidence.document}
-                        {item.policyEvidence.page ? ` · page ${item.policyEvidence.page}` : ''}
-                        {` · ${item.policyEvidence.section}`}
-                      </small>
-                      <p>{item.policyEvidence.snippet}</p>
+                    <p>{item.rationale}</p>
+                    <div className="patient-evidence-grid">
+                      <div className="patient-evidence-card">
+                        <span className="detail-label">Patient evidence</span>
+                        <strong>{item.matchedFact ? `${item.matchedFact.label}: ${item.matchedFact.value}` : 'No matched fact'}</strong>
+                        <small>
+                          {item.patientEvidence?.sourceDocumentName || item.patientEvidence?.sourceDocumentId || 'No linked patient document'}
+                          {item.patientEvidence?.snippet ? ` · ${item.patientEvidence.snippet}` : ''}
+                        </small>
+                      </div>
+                      <div className="patient-evidence-card">
+                        <span className="detail-label">Policy evidence</span>
+                        <strong>{item.policyEvidence.fieldLabel}</strong>
+                        <small>
+                          {item.policyEvidence.document}
+                          {item.policyEvidence.page ? ` · page ${item.policyEvidence.page}` : ''}
+                          {` · ${item.policyEvidence.section}`}
+                        </small>
+                        <p>{item.policyEvidence.snippet}</p>
+                      </div>
                     </div>
+                  </article>
+                ))}
+              </div>
+            ) : (
+              <div className="next-steps-tab">
+                <details open>
+                  <summary>Clinic Next Steps</summary>
+                  {nextStepsLoading && <p>Generating next steps…</p>}
+                  {nextStepsError && <p className="error-text">{nextStepsError}</p>}
+                  {nextSteps && (
+                    <ol>
+                      {nextSteps.clinicNextSteps.map((step) => (
+                        <li key={step}>{step}</li>
+                      ))}
+                    </ol>
+                  )}
+                </details>
+
+                <details>
+                  <summary>Missing Documentation ({nextSteps?.missingDocsList.length ?? 0} items)</summary>
+                  {nextSteps && nextSteps.missingDocsList.length > 0 ? (
+                    <ul className="missing-docs-list">
+                      {nextSteps.missingDocsList.map((item) => (
+                        <li key={`${item.category}-${item.criterion}`}>
+                          <label>
+                            <input type="checkbox" /> {item.criterion}
+                          </label>
+                          <small>{item.rationale}</small>
+                          <small className="evidence-ref">
+                            {item.policyEvidence.document}
+                            {item.policyEvidence.page ? ` · page ${item.policyEvidence.page}` : ''}
+                            {item.policyEvidence.section ? ` · ${item.policyEvidence.section}` : ''}
+                          </small>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : nextSteps ? (
+                    <p>No missing documentation items — all criteria are satisfied.</p>
+                  ) : null}
+                </details>
+
+                <details>
+                  <summary>Patient-Friendly Explanation</summary>
+                  <div className="patient-explanation">
+                    {(nextSteps?.patientExplanation || '').split(/\n\n+/).filter(Boolean).map((paragraph) => (
+                      <p key={paragraph}>{paragraph}</p>
+                    ))}
                   </div>
-                </article>
-              ))}
-            </div>
+                </details>
+
+                <details>
+                  <summary>Payer Analyst Breakdown</summary>
+                  {nextSteps?.payerAnalystBreakdown && (
+                    <>
+                      <p>{nextSteps.payerAnalystBreakdown.summary}</p>
+                      <div className="patient-checklist">
+                        {nextSteps.payerAnalystBreakdown.criteriaAnalysis.map((item) => (
+                          <article key={`${item.criterion}-${item.status}`} className="detail-card">
+                            <div className="patient-doc-header">
+                              <p className="detail-card-title">{item.criterion}</p>
+                              <span className={`status-badge ${checklistStatusTone(item.status as 'PASS' | 'MISSING' | 'UNKNOWN' | 'NEEDS REVIEW')}`}>
+                                {item.status}
+                              </span>
+                            </div>
+                            <p><strong>Clinic action:</strong> {item.clinicAction}</p>
+                            <p>{item.policyEvidence.snippet}</p>
+                            <small className="evidence-ref">
+                              {item.policyEvidence.document}
+                              {item.policyEvidence.page ? ` · page ${item.policyEvidence.page}` : ''}
+                              {item.policyEvidence.section ? ` · ${item.policyEvidence.section}` : ''}
+                            </small>
+                          </article>
+                        ))}
+                      </div>
+                    </>
+                  )}
+                </details>
+              </div>
+            )}
           </div>
         ) : (
           <div className="empty-state">No saved evaluation yet. Select a policy version and run an evaluation for this case.</div>

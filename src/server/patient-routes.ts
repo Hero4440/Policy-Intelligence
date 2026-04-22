@@ -8,6 +8,7 @@ import {
 } from '../storage/patient-store.js';
 import { updateCaseStatus } from '../storage/patient-store.js';
 import { evaluatePatientCaseAgainstPolicy, getPatientPolicyOptions } from './patient-evaluation.js';
+import { EvaluationNotFoundError, generateNextSteps } from './next-steps.js';
 
 type CreatePatientCasePayload = {
   patientName?: string;
@@ -155,5 +156,22 @@ export function registerPatientRoutes(app: Express) {
     }
 
     res.json({ evaluation });
+  });
+
+  app.get('/api/patients/evaluations/:evalId/next-steps', async (req: Request, res: Response) => {
+    const evalId = Array.isArray(req.params.evalId) ? req.params.evalId[0] : req.params.evalId;
+
+    try {
+      const payload = await generateNextSteps(evalId);
+      res.json(payload);
+    } catch (error) {
+      if (error instanceof EvaluationNotFoundError) {
+        res.status(404).json({ error: 'Evaluation not found' });
+        return;
+      }
+
+      const message = error instanceof Error ? error.message : 'Failed to generate next steps';
+      res.status(500).json({ error: message });
+    }
   });
 }

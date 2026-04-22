@@ -1,4 +1,5 @@
 import type { Express, Request, Response } from 'express';
+import { registerPolicyQaChatRoute } from './policy-qa-chat.js';
 import {
   compareDrugAcrossPlans,
   getCatalogSummary,
@@ -75,4 +76,6 @@ export function registerAntonRxRoutes(app: Express) {
       changeWatch: getChangeWatch(drug, issuer)
     });
   });
+
+  registerPolicyQaChatRoute(app);
 }

@@ -101,6 +101,44 @@ export interface StoredCoverageEvaluation {
   checklist: StoredEvaluationChecklistItem[];
 }
 
+export interface MissingDocItem {
+  criterion: string;
+  category: string;
+  rationale: string;
+  policyEvidence: {
+    snippet: string;
+    document: string;
+    page: number | null;
+    section: string;
+    fieldLabel: string;
+  };
+}
+
+export interface PayerAnalystCriterion {
+  criterion: string;
+  status: string;
+  policyEvidence: {
+    snippet: string;
+    document: string;
+    page: number | null;
+    section: string;
+  };
+  clinicAction: string;
+}
+
+export interface PayerAnalystBreakdown {
+  summary: string;
+  criteriaAnalysis: PayerAnalystCriterion[];
+}
+
+export interface NextStepsPayload {
+  evalId: string;
+  clinicNextSteps: string[];
+  missingDocsList: MissingDocItem[];
+  patientExplanation: string;
+  payerAnalystBreakdown: PayerAnalystBreakdown;
+}
+
 export interface PatientPolicyOption {
   policyId: string;
   payer: string;
@@ -265,6 +303,15 @@ export async function createCaseEvaluation(input: {
   }
 
   return response.json() as Promise<{ evaluation: StoredCoverageEvaluation }>;
+}
+
+export async function fetchNextSteps(evalId: string): Promise<NextStepsPayload> {
+  const response = await fetch(`/api/patients/evaluations/${encodeURIComponent(evalId)}/next-steps`);
+  if (!response.ok) {
+    throw new Error(`Failed to load next steps: ${response.status}`);
+  }
+
+  return response.json() as Promise<NextStepsPayload>;
 }
 
 export async function fetchEvaluation(evalId: string): Promise<{ evaluation: StoredCoverageEvaluation }> {

@@ -39,6 +39,10 @@ export function getEvaluation(evalId: string): CoverageEvaluation | null {
   }
 }
 
+export function readEvaluation(evalId: string): CoverageEvaluation | null {
+  return getEvaluation(evalId);
+}
+
 export function listEvaluations(filter?: {
   caseId?: string;
   policyId?: string;

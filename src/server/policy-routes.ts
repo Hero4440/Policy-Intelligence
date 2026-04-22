@@ -1,6 +1,7 @@
 import type { Express, Request, Response } from 'express';
 import { buildPolicyComparison, getPolicyCompareOptions } from './policy-compare.js';
 import { buildPolicyVersionDiff, listPolicyChangeEvents } from './policy-changes.js';
+import { searchPolicyEvidence } from './evidence-search.js';
 import { buildPolicyInsights } from './policy-insights.js';
 
 function parseCsvQuery(value: unknown): string[] {
@@ -29,6 +30,26 @@ function parseSeverityQuery(value: unknown): 'cosmetic' | 'operational' | 'clini
 }
 
 export function registerPolicyRoutes(app: Express) {
+  app.get('/api/evidence/search', (req: Request, res: Response) => {
+    const query = typeof req.query.q === 'string' ? req.query.q : '';
+    if (!query.trim()) {
+      res.status(400).json({ error: 'Query parameter q is required' });
+      return;
+    }
+
+    try {
+      const results = searchPolicyEvidence(query.trim());
+      res.json({
+        query: query.trim(),
+        count: results.length,
+        results
+      });
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Failed to search evidence';
+      res.status(500).json({ error: message });
+    }
+  });
+
   app.get('/api/policies/compare/options', (_req: Request, res: Response) => {
     res.json(getPolicyCompareOptions());
   });

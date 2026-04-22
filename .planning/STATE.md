@@ -6,22 +6,22 @@ See: .planning/PROJECT.md (updated 2026-04-22)
 
 **Core value:** Every policy question answered must include source-backed evidence from loaded policy documents — and every coverage evaluation must show exactly which criteria are met, missing, or ambiguous.
 
-**Current focus:** v2.0 Full Product — Phase 8 implementation is complete; manual browser UAT is next
+**Current focus:** v2.0 Full Product — Phase 10 implementation is complete; browser UAT is next
 
 ## Current Position
 
-Phase: 8 — Policy Changes + Versioning
-Plan: 08-04
-Status: Awaiting human verification
-Last activity: 2026-04-22 — Phase 8 implementation completed; browser UAT checklist remains
+Phase: 10 — Next Steps + Evidence Explorer + Chat
+Plan: 10-05
+Status: Implementation complete; awaiting human verification
+Last activity: 2026-04-22 — Phase 10 code completed; TypeScript and frontend build verification passed
 
 ```text
 v2.0 Progress: [          ] 0/7 phases
 Phase 6:  [x] Policy Management + Ingestion
 Phase 7:  [~] Policy Compare + Insights
 Phase 8:  [~] Policy Changes + Versioning
-Phase 9:  [ ] Patient Cases + Coverage Evaluation
-Phase 10: [ ] Next Steps + Evidence Explorer + Chat
+Phase 9:  [x] Patient Cases + Coverage Evaluation
+Phase 10: [x] Next Steps + Evidence Explorer + Chat
 Phase 11: [ ] Expanded MCP Tools
 Phase 12: [ ] Portal UI + Dashboard + Deployment
 ```
@@ -34,9 +34,9 @@ Phase 12: [ ] Portal UI + Dashboard + Deployment
 - Codebase: 7,611 lines TypeScript
 
 **v2.0 Velocity:**
-- Total plans completed: 0
+- Total plans completed: 10
 - Average duration: —
-- Total execution time: 0 hours
+- Total execution time: —
 
 ## Accumulated Context
 
@@ -56,7 +56,7 @@ Phase 12: [ ] Portal UI + Dashboard + Deployment
 
 ## Session Continuity
 
-Last session: 2026-04-22 (Phase 8 implementation)
-Stopped at: Phase 8 code is implemented; blocking manual browser UAT remains before sign-off
-Resume file: .planning/phases/08-policy-changes-versioning/08-UAT.md
-Next action: Run the browser checklist in `08-UAT.md`, then create `08-04-SUMMARY.md` and advance to Phase 9
+Last session: 2026-04-22 (Phase 10 implementation)
+Stopped at: Phase 10 code is implemented; browser UAT still remains before sign-off
+Resume file: .planning/phases/10-next-steps-evidence-explorer-chat
+Next action: run manual browser verification for the Patients Next Steps tab, Evidence Explorer, and Chat pages, then advance to Phase 11

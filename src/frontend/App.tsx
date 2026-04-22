@@ -14,6 +14,8 @@ import { CompareBuilderView } from './components/compare-builder-view.js';
 import { PatientSidebar } from './components/patient-sidebar.js';
 import { PatientCasesView } from './components/patient-cases-view.js';
 import { PatientCaseDetailView } from './components/patient-case-detail-view.js';
+import { EvidenceExplorerView } from './components/evidence-explorer-view.js';
+import { ChatView } from './components/chat-view.js';
 import { PolicyCompareBuilder } from './components/policy-compare-builder.js';
 import { PolicyCompareView } from './components/policy-compare-view.js';
 import { PolicyChangesFilters, PolicyChangesView } from './components/policy-changes-view.js';
@@ -57,13 +59,14 @@ import {
   type PolicyChangesResponse,
   type PolicyCompareOptions,
   type PolicyComparePayload,
+  type EvidenceSearchResult,
   type PolicyEvidenceRef,
   type PolicyInsightsPayload,
   type PolicyVersionDiffPayload
 } from './data/policies.js';
 
 export default function App() {
-  const [activePage, setActivePage] = useState<'workspace' | 'compare' | 'insights' | 'changes' | 'data' | 'patients'>('workspace');
+  const [activePage, setActivePage] = useState<'workspace' | 'compare' | 'insights' | 'changes' | 'data' | 'patients' | 'evidence-explorer' | 'chat'>('workspace');
   const [drugQuery, setDrugQuery] = useState('adalimumab');
   const [selectedIssuer, setSelectedIssuer] = useState('');
   const [activeTab, setActiveTab] = useState<TabId>('coverage');
@@ -510,6 +513,12 @@ export default function App() {
     );
   }
 
+  function handleEvidenceExplorerSelectPolicy(_policyId: string, result: EvidenceSearchResult) {
+    setDrugQuery(result.drugFamily);
+    setSelectedIssuer(result.payer);
+    setActivePage('workspace');
+  }
+
   function renderCoverageDetail() {
     if (!detail) {
       return <div className="empty-state">Choose a plan result to inspect plan and drug detail.</div>;
@@ -674,11 +683,37 @@ export default function App() {
           >
             Patients
           </button>
+          <button
+            type="button"
+            className={`page-nav-btn${activePage === 'evidence-explorer' ? ' page-nav-btn-active' : ''}`}
+            onClick={() => setActivePage('evidence-explorer')}
+          >
+            Evidence Explorer
+          </button>
+          <button
+            type="button"
+            className={`page-nav-btn${activePage === 'chat' ? ' page-nav-btn-active' : ''}`}
+            onClick={() => setActivePage('chat')}
+          >
+            Chat
+          </button>
         </nav>
       }
       sidebar={
         activePage === 'patients' ? (
           <PatientSidebar caseCount={patientCases.length} selectedCaseName={selectedCase?.patientName} />
+        ) : activePage === 'evidence-explorer' ? (
+          renderPhaseSidebar(
+            'Keyword evidence search',
+            'Search all stored policy evidence snippets by rule language, document section, or field label.'
+          )
+        ) : activePage === 'chat' ? (
+          renderPhaseSidebar(
+            'Grounded policy chat',
+            'Ask freeform questions and inspect the cited evidence for each answer.',
+            'Phase 10',
+            'The chat route reuses the Phase 3 evidence retrieval and grounded answer flow.'
+          )
         ) : activePage === 'compare' ? (
           renderPhaseSidebar(
             'Cross-payer compare',
@@ -714,6 +749,14 @@ export default function App() {
             onSelectCase={setSelectedCaseId}
             onCreateCase={handleCreatePatientCase}
           />
+        ) : activePage === 'evidence-explorer' ? (
+          <div className="workspace-column">
+            <div className="empty-state">Search from the detail pane to explore stored policy evidence.</div>
+          </div>
+        ) : activePage === 'chat' ? (
+          <div className="workspace-column">
+            <div className="empty-state">Use the detail pane to ask evidence-backed policy questions.</div>
+          </div>
         ) : activePage === 'data' ? (
           <IngestionPanel
             ingestedSources={ingestedSources}
@@ -795,6 +838,10 @@ export default function App() {
             onRunEvaluation={handleRunPatientEvaluation}
             onUploadDocument={handleUploadPatientDocument}
           />
+        ) : activePage === 'evidence-explorer' ? (
+          <EvidenceExplorerView onSelectPolicy={handleEvidenceExplorerSelectPolicy} />
+        ) : activePage === 'chat' ? (
+          <ChatView />
         ) : activePage === 'data' ? (
           <DataOverviewView
             ingestedSources={ingestedSources}

@@ -165,6 +165,25 @@ export interface PolicyVersionDiffPayload {
   };
 }
 
+export interface EvidenceSearchResult {
+  policyId: string;
+  policyTitle: string;
+  payer: string;
+  drugFamily: string;
+  version: number;
+  fieldLabel: string;
+  snippet: string;
+  document: string;
+  page: number | null;
+  section: string;
+}
+
+export interface EvidenceSearchResponse {
+  query: string;
+  count: number;
+  results: EvidenceSearchResult[];
+}
+
 async function fetchJson<T>(input: string): Promise<T> {
   const response = await fetch(input);
   if (!response.ok) {
@@ -255,6 +274,10 @@ export function fetchPolicyVersionDiff(policyId: string, fromVersion: number, to
     toVersion: String(toVersion)
   });
   return fetchJson<PolicyVersionDiffPayload>(`/api/policies/${policyId}/diff?${params.toString()}`);
+}
+
+export function fetchEvidenceSearch(query: string) {
+  return fetchJson<EvidenceSearchResponse>(`/api/evidence/search?q=${encodeURIComponent(query)}`);
 }
 
 export function summarizePolicyStatus(status: PolicyStatusTone): string {
