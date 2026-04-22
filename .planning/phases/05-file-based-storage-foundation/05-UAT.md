@@ -19,9 +19,7 @@ result: pass
 
 ### 2. Health Endpoint Reports Storage Counts
 expected: GET /api/health returns a JSON response that includes file-backed storage counts (e.g., number of policies, patient cases, evaluations on disk).
-result: issue
-reported: "Response has policies:7 but no patient case or evaluation counts. Missing file-backed storage counts beyond policies."
-severity: minor
+result: pass
 
 ### 3. Policy Persists Across Server Restart
 expected: After adding a policy via the API, restart the server. The policy is still available — the startup reload successfully reads it from disk and repopulates the in-memory cache.
@@ -42,19 +40,11 @@ result: pass
 ## Summary
 
 total: 6
-passed: 5
-issues: 1
+passed: 6
+issues: 0
 pending: 0
 skipped: 0
 
 ## Gaps
 
-- truth: "GET /api/health returns file-backed storage counts for policies, patient cases, and evaluations"
-  status: failed
-  reason: "User reported: Response has policies:7 but no patient case or evaluation counts. Missing file-backed storage counts beyond policies."
-  severity: minor
-  test: 2
-  root_cause: ""
-  artifacts: []
-  missing: []
-  debug_session: ""
+[none]

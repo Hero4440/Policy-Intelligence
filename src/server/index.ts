@@ -4,6 +4,9 @@ import { existsSync } from 'fs';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import { createMcpApp } from '../mcp/index.js';
+import { getPoliciesFromMemory, loadStorageOnStartup } from '../storage/startup.js';
+import { listPatientCases } from '../storage/patient-store.js';
+import { listEvaluations } from '../storage/evaluation-store.js';
 import { registerAntonRxRoutes } from './antonrx-routes.js';
 import { registerChatRoutes } from './chat.js';
 import { registerIngestionRoutes } from './ingestion/index.js';
@@ -31,10 +34,19 @@ registerUploadRoutes(app);
 registerChatRoutes(app);
 
 app.get('/api/health', (req, res) => {
+  const policies = getPoliciesFromMemory();
+  const payers = [...new Set(policies.map((policy) => policy.payer))];
   res.json({
     status: 'ok',
     service: 'policypilot-chat',
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
+    storage: {
+      policiesLoaded: policies.length,
+      payers,
+      payerCount: payers.length,
+      patientCases: listPatientCases().length,
+      evaluations: listEvaluations().length
+    }
   });
 });
 
@@ -51,6 +63,7 @@ if (process.env.NODE_ENV === 'production' && existsSync(distDir)) {
 }
 
 const PORT = Number(process.env.PORT || 3000);
+loadStorageOnStartup();
 app.listen(PORT, () => {
   console.error(`PolicyPilot server listening on port ${PORT}`);
   console.error(`API health: http://localhost:${PORT}/api/health`);
