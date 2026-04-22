@@ -19,7 +19,8 @@
     "smoke:mcp": "tsx tests/mcp/smoke-remote-server.ts",
     "frontend:dev": "vite",
     "frontend:build": "vite build",
-    "ingest:examples": "tsx scripts/ingest-example-policies.ts"
+    "ingest:examples": "tsx scripts/ingest-example-policies.ts",
+    "test:storage": "node --import tsx/esm tests/storage/storage-smoke.ts"
   },
   "keywords": [],
   "author": "",
