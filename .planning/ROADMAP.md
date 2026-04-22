@@ -157,7 +157,14 @@ Plans:
 5. Clicking an Evidence Explorer result opens the full Policy Detail page scrolled to that evidence item
 6. Chat page accepts a natural-language question and returns an answer with inline citations (policy name, page, section) — the sidebar shows the evidence snippets cited
 
-**Plans**: TBD
+**Plans:** 5 plans
+
+Plans:
+- [ ] 10-01-PLAN.md — Next-steps domain module + GET /api/patients/evaluations/:evalId/next-steps route
+- [ ] 10-02-PLAN.md — Next Steps tab in patient case detail view (clinic, patient, analyst sub-sections)
+- [ ] 10-03-PLAN.md — Evidence search domain module + GET /api/evidence/search route
+- [ ] 10-04-PLAN.md — Evidence Explorer page UI + fetchEvidenceSearch client + App.tsx nav wiring
+- [ ] 10-05-PLAN.md — Chat API (POST /api/chat/policy-qa) + Chat page UI + evidence sidebar + App.tsx nav wiring
 
 ---
 
@@ -212,6 +219,6 @@ Plans:
 | 7. Policy Compare + Insights | v2.0 | 0/5 | Not started | - |
 | 8. Policy Changes + Versioning | v2.0 | 0/4 | Not started | - |
 | 9. Patient Cases + Coverage Evaluation | v2.0 | 0/5 | Not started | - |
-| 10. Next Steps + Evidence Explorer + Chat | v2.0 | 0/TBD | Not started | - |
+| 10. Next Steps + Evidence Explorer + Chat | v2.0 | 0/5 | Planned | - |
 | 11. Expanded MCP Tools | v2.0 | 0/TBD | Not started | - |
 | 12. Portal UI + Dashboard + Deployment | v2.0 | 0/TBD | Not started | - |
