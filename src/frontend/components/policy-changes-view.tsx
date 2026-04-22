@@ -166,8 +166,8 @@ export function PolicyChangesView({
       <div className="changes-timeline">
         {response.events.map((event) => (
           <section key={`${event.policyId}-${event.fromVersion}-${event.toVersion}`} className="changes-event-card">
-            <div className="panel-header panel-header-spaced">
-              <div>
+            <div className="panel-header panel-header-spaced changes-event-header">
+              <div className="changes-event-meta">
                 <p className="detail-card-title">{event.policyTitle}</p>
                 <p className="compare-subtitle">
                   {event.payer} · {event.drugFamily} · v{event.fromVersion} → v{event.toVersion}

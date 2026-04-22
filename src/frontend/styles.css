@@ -1116,12 +1116,30 @@ select {
   border: 1px solid rgba(132, 181, 206, 0.16);
   border-radius: 24px;
   background: rgba(7, 21, 31, 0.76);
+  min-width: 0;
+  overflow: hidden;
+}
+
+.changes-event-header {
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.changes-event-meta {
+  flex: 1 1 320px;
+  min-width: 0;
+}
+
+.changes-event-header .page-nav-btn {
+  flex: 0 1 auto;
+  max-width: 100%;
 }
 
 .changes-summary-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
   gap: 16px;
   margin: 12px 0 16px;
 }
@@ -1129,12 +1147,15 @@ select {
 .changes-summary-row p {
   margin: 0;
   color: #d7eef8;
+  flex: 1 1 280px;
+  min-width: 0;
 }
 
 .changes-severity-chip-list {
   display: inline-flex;
   gap: 8px;
   flex-wrap: wrap;
+  max-width: 100%;
 }
 
 .changes-severity-chip {
