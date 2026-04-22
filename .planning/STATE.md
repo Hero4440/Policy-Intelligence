@@ -6,14 +6,14 @@ See: .planning/PROJECT.md (updated 2026-04-22)
 
 **Core value:** Every policy question answered must include source-backed evidence from loaded policy documents — and every coverage evaluation must show exactly which criteria are met, missing, or ambiguous.
 
-**Current focus:** v2.0 Full Product — Phase 8 planning is complete; implementation should start at 08-01
+**Current focus:** v2.0 Full Product — Phase 8 implementation is complete; manual browser UAT is next
 
 ## Current Position
 
 Phase: 8 — Policy Changes + Versioning
-Plan: 08-01
-Status: Ready to implement
-Last activity: 2026-04-22 — Phase 8 planning, status, and UAT docs prepared
+Plan: 08-04
+Status: Awaiting human verification
+Last activity: 2026-04-22 — Phase 8 implementation completed; browser UAT checklist remains
 
 ```text
 v2.0 Progress: [          ] 0/7 phases
@@ -56,7 +56,7 @@ Phase 12: [ ] Portal UI + Dashboard + Deployment
 
 ## Session Continuity
 
-Last session: 2026-04-22 (Phase 8 planning)
-Stopped at: Phase 8 planning is complete and implementation is queued
-Resume file: .planning/phases/08-policy-changes-versioning/08-01-PLAN.md
-Next action: Execute `08-01-PLAN.md`, then continue through `08-04` and verify against `08-UAT.md`
+Last session: 2026-04-22 (Phase 8 implementation)
+Stopped at: Phase 8 code is implemented; blocking manual browser UAT remains before sign-off
+Resume file: .planning/phases/08-policy-changes-versioning/08-UAT.md
+Next action: Run the browser checklist in `08-UAT.md`, then create `08-04-SUMMARY.md` and advance to Phase 9

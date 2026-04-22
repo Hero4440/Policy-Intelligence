@@ -2,32 +2,44 @@
 
 **Phase:** 08-policy-changes-versioning  
 **Updated:** 2026-04-22  
-**Overall state:** Planned, ready to implement
+**Overall state:** Implementation complete, awaiting manual browser UAT
 
 ## What Is Done
 
 - Phase 8 scope is defined in [08-CONTEXT.md](./08-CONTEXT.md)
-- The execution sequence is defined across four plans:
-  - [08-01-PLAN.md](./08-01-PLAN.md)
-  - [08-02-PLAN.md](./08-02-PLAN.md)
-  - [08-03-PLAN.md](./08-03-PLAN.md)
-  - [08-04-PLAN.md](./08-04-PLAN.md)
-- The roadmap now enumerates Phase 8 plans rather than leaving them as `TBD`
-- Phase 8 decisions already captured:
-  - build on the existing file-backed version store
-  - classify diffs deterministically as `cosmetic`, `operational`, or `clinical`
-  - add per-version text snapshots for the Version Diff page
+- Phase 8 implementation is complete across:
+  - backend change-history classification
+  - Policy Changes timeline API routes
+  - Policy Changes UI and nav wiring
+  - per-version text snapshots
+  - Version Diff API payload
+  - Version Diff UI
+- Implementation summaries are recorded in:
+  - [08-01-SUMMARY.md](./08-01-SUMMARY.md)
+  - [08-02-SUMMARY.md](./08-02-SUMMARY.md)
+  - [08-03-SUMMARY.md](./08-03-SUMMARY.md)
+- Implemented backend routes:
+  - `GET /api/policies/changes`
+  - `GET /api/policies/:policyId/changes`
+  - `GET /api/policies/:policyId/diff?fromVersion=N&toVersion=M`
+- Implemented frontend workflow:
+  - top-level `Changes` nav
+  - timeline filters for payer / drug family / severity
+  - field-level change table
+  - Version Diff screen with structured changes and side-by-side text snapshots
 
-## Planned Deliverables
+## Verification Already Completed
 
-- backend change-history engine with deterministic materiality classification
-- Policy Changes timeline page with field-level change table
-- Version Diff API with structured changes + side-by-side text snapshots
-- Version Diff UI with browser-based verification
+- `npx tsc --noEmit` passes
+- `npm run frontend:build` passes
+- direct runtime smoke check against the Phase 8 domain layer passes:
+  - policy change events build from stored versions
+  - severity counts are computed
+  - Version Diff payloads return structured changes and text snapshots
 
-## Verification Planned
+## What Is Still Required
 
-Browser verification for Phase 8 is tracked in [08-UAT.md](./08-UAT.md).
+Phase 8 is **not signed off** until the manual browser UAT in [08-UAT.md](./08-UAT.md) is run and recorded.
 
 Blocking gate from [08-04-PLAN.md](./08-04-PLAN.md):
 
@@ -41,8 +53,7 @@ Blocking gate from [08-04-PLAN.md](./08-04-PLAN.md):
 
 Mark Phase 8 complete only after:
 
-1. `08-01` through `08-04` are implemented
-2. `08-UAT.md` is updated with pass/fail results
-3. blocking issues, if any, are fixed
-4. `08-04-SUMMARY.md` is created
-5. `.planning/STATE.md` advances to Phase 9
+1. `08-UAT.md` is updated with pass/fail results
+2. blocking issues, if any, are fixed
+3. `08-04-SUMMARY.md` is created
+4. `.planning/STATE.md` advances to Phase 9
