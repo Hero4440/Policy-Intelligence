@@ -7,10 +7,10 @@ export function PatientSidebar({ caseCount, selectedCaseName }: PatientSidebarPr
   return (
     <aside className="sidebar">
       <div className="sidebar-section">
-        <p className="eyebrow">Milestone 6</p>
-        <h2 className="sidebar-title">Patient documents and extracted facts</h2>
+        <p className="eyebrow">Phase 9</p>
+        <h2 className="sidebar-title">Patient cases and coverage evaluation</h2>
         <p className="sidebar-copy">
-          Manage synthetic cases, upload clinical artifacts, and inspect the fact layer that will feed policy matching.
+          Manage synthetic cases, upload clinical artifacts, inspect extracted facts, and run evidence-backed coverage evaluation against stored policy versions.
         </p>
       </div>
 
@@ -25,8 +25,8 @@ export function PatientSidebar({ caseCount, selectedCaseName }: PatientSidebarPr
       </div>
 
       <div className="sidebar-section sidebar-note">
-        <span className="note-badge">Next</span>
-        <p>This page feeds Milestone 7 patient-to-policy evaluation by persisting case-linked evidence and document-derived facts.</p>
+        <span className="note-badge">Evaluation</span>
+        <p>Use the selected case to choose a policy version, run the checklist, and inspect the patient evidence and policy evidence side by side.</p>
       </div>
     </aside>
   );

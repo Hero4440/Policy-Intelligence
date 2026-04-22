@@ -129,7 +129,14 @@ Plans:
 5. Evaluation displays a requirement checklist with each policy criterion labeled PASS / MISSING / UNKNOWN / NEEDS REVIEW — each item links to the matched patient fact and the source policy evidence snippet
 6. Completed evaluation is saved and still viewable by case ID after a page refresh
 
-**Plans**: TBD
+**Plans**: 5 plans
+
+Plans:
+- [ ] 09-01-PLAN.md — Patient case intake backend + patient/document route hardening
+- [ ] 09-02-PLAN.md — Deterministic fact extraction + evidence-backed case detail payloads
+- [ ] 09-03-PLAN.md — Coverage evaluation engine + saved evaluation API routes
+- [ ] 09-04-PLAN.md — Patients page UI for intake, extracted facts, policy selection, and evaluation results
+- [ ] 09-05-PLAN.md — End-to-end human verification
 
 ---
 
@@ -202,9 +209,9 @@ Plans:
 | 4. Deployment + Integration | v1.0 | 2/2 | Complete | 2026-04-18 |
 | 5. File-Based Storage Foundation | v1.0 | 4/4 | Complete | 2026-04-22 |
 | 6. Policy Management + Ingestion | v2.0 | 0/5 | Planned | - |
-| 7. Policy Compare + Insights | v2.0 | 0/TBD | Not started | - |
-| 8. Policy Changes + Versioning | v2.0 | 0/TBD | Not started | - |
-| 9. Patient Cases + Coverage Evaluation | v2.0 | 0/TBD | Not started | - |
+| 7. Policy Compare + Insights | v2.0 | 0/5 | Not started | - |
+| 8. Policy Changes + Versioning | v2.0 | 0/4 | Not started | - |
+| 9. Patient Cases + Coverage Evaluation | v2.0 | 0/5 | Not started | - |
 | 10. Next Steps + Evidence Explorer + Chat | v2.0 | 0/TBD | Not started | - |
 | 11. Expanded MCP Tools | v2.0 | 0/TBD | Not started | - |
 | 12. Portal UI + Dashboard + Deployment | v2.0 | 0/TBD | Not started | - |

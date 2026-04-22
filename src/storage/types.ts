@@ -83,10 +83,20 @@ export interface PatientCase {
   seeded?: boolean;
 }
 
+export type PatientDocumentType =
+  | 'clinical_note'
+  | 'prior_treatment_history'
+  | 'lab_results'
+  | 'referral'
+  | 'medication_order'
+  | 'denial_letter'
+  | 'fhir_bundle'
+  | 'uploaded_document';
+
 export interface PatientDocumentRecord {
   documentId: string;
   fileName: string;
-  documentType: string;
+  documentType: PatientDocumentType;
   contentType: string;
   storedAt: string;
   summary: string;
@@ -103,6 +113,7 @@ export interface PatientFactRecord {
     | 'payer'
     | 'prescriber'
     | 'prior_therapy'
+    | 'insurance'
     | 'clinical_note';
   label: string;
   value: string;
@@ -111,11 +122,41 @@ export interface PatientFactRecord {
   confidence: 'high' | 'medium';
 }
 
+export type EvaluationChecklistStatus = 'PASS' | 'MISSING' | 'UNKNOWN' | 'NEEDS REVIEW';
+
+export interface PatientFactMatch {
+  factId: string;
+  label: string;
+  value: string;
+  sourceDocumentId: string;
+  evidenceSnippet?: string;
+  confidence: 'high' | 'medium';
+}
+
+export interface EvaluationPatientEvidence {
+  sourceDocumentId: string;
+  sourceDocumentName?: string;
+  snippet?: string;
+}
+
+export interface EvaluationPolicyEvidence {
+  policyId: string;
+  policyVersion: number;
+  document: string;
+  page: number | null;
+  section: string;
+  fieldLabel: string;
+  snippet: string;
+}
+
 export interface EvaluationChecklistItem {
   criterion: string;
-  status: 'PASS' | 'MISSING' | 'UNKNOWN' | 'NEEDS REVIEW';
-  matchedFact?: string;
-  evidenceSnippet?: string;
+  category: string;
+  status: EvaluationChecklistStatus;
+  rationale: string;
+  matchedFact?: PatientFactMatch;
+  patientEvidence?: EvaluationPatientEvidence;
+  policyEvidence: EvaluationPolicyEvidence;
 }
 
 export interface CoverageEvaluation {
@@ -123,6 +164,12 @@ export interface CoverageEvaluation {
   caseId: string;
   policyId: string;
   policyVersion: number;
+  policyTitle?: string;
+  payer?: string;
+  drugFamily?: string;
+  patientName?: string;
+  requestedDrug?: string;
+  diagnosis?: string;
   evaluatedAt: string;
   coverageStatus:
     | 'Covered'

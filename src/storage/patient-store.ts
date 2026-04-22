@@ -3,9 +3,11 @@ import { join } from 'path';
 import demoPatient01 from '../../data/patients/demo-patients/patient-01-full-match.json';
 import demoPatient02 from '../../data/patients/demo-patients/patient-02-partial-match.json';
 import demoPatient03 from '../../data/patients/demo-patients/patient-03-poor-match.json';
+import { normalizeDrugName } from '../../data/lookup/drug-aliases.js';
 import { extractPatientData } from '../mcp/fhir/extractors.js';
+import { hasEvaluationsForCase } from './evaluation-store.js';
 import { PATIENTS_DIR, ensureDataDirectories } from './paths.js';
-import type { PatientCase, PatientDocumentRecord, PatientFactRecord } from './types.js';
+import type { PatientCase, PatientDocumentRecord, PatientDocumentType, PatientFactRecord } from './types.js';
 
 type DocumentExtractionResult = {
   summary: string;
@@ -90,6 +92,40 @@ function sanitizeFileName(fileName: string): string {
   return fileName.replace(/[^a-zA-Z0-9._-]/g, '-');
 }
 
+function normalizeText(value: string): string {
+  return value.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+}
+
+function inferDocumentType(
+  explicitType: string | undefined,
+  fileName: string,
+  contentType: string | undefined
+): PatientDocumentType {
+  const normalizedExplicit = normalizeText(explicitType ?? '');
+  if (normalizedExplicit.includes('fhir')) return 'fhir_bundle';
+  if (normalizedExplicit.includes('clinical')) return 'clinical_note';
+  if (normalizedExplicit.includes('prior')) return 'prior_treatment_history';
+  if (normalizedExplicit.includes('lab')) return 'lab_results';
+  if (normalizedExplicit.includes('referral')) return 'referral';
+  if (normalizedExplicit.includes('medication')) return 'medication_order';
+  if (normalizedExplicit.includes('denial')) return 'denial_letter';
+
+  const normalizedName = normalizeText(fileName);
+  if (normalizedName.includes('fhir') || normalizedName.includes('bundle')) return 'fhir_bundle';
+  if (normalizedName.includes('prior treatment') || normalizedName.includes('prior history')) return 'prior_treatment_history';
+  if (normalizedName.includes('lab')) return 'lab_results';
+  if (normalizedName.includes('referral')) return 'referral';
+  if (normalizedName.includes('medication order') || normalizedName.includes('rx')) return 'medication_order';
+  if (normalizedName.includes('denial')) return 'denial_letter';
+  if (normalizedName.includes('note')) return 'clinical_note';
+
+  if ((contentType ?? '').includes('json')) {
+    return 'fhir_bundle';
+  }
+
+  return 'uploaded_document';
+}
+
 function buildFact(
   sourceDocumentId: string,
   category: PatientFactRecord['category'],
@@ -150,9 +186,31 @@ function extractFactsFromBundle(bundle: any, sourceDocumentId: string): Document
         'high'
       )
     );
+    facts.push(
+      buildFact(
+        sourceDocumentId,
+        'insurance',
+        'insurance',
+        [extracted.coverage.payerName, extracted.coverage.planName].filter(Boolean).join(' · '),
+        extracted.coverage.planName,
+        'high'
+      )
+    );
   }
 
   const firstMedication = extracted.medications[0]?.normalizedName || extracted.medications[0]?.name;
+  if (firstMedication) {
+    facts.push(
+      buildFact(
+        sourceDocumentId,
+        'requested_drug',
+        'requested drug',
+        firstMedication,
+        extracted.medications[0]?.name,
+        'high'
+      )
+    );
+  }
   return {
     summary: `${extractPatientNameFromBundle(bundle) ?? 'Patient'} · ${extracted.diagnoses.length} diagnoses · ${extracted.medications.length} medications`,
     facts,
@@ -176,13 +234,35 @@ function matchSecondField(text: string, expression: RegExp): string | undefined 
   return value || undefined;
 }
 
+function collectMultiValueField(text: string, expressions: RegExp[]): string[] {
+  const values = expressions
+    .map((expression) => matchField(text, expression))
+    .flatMap((value) => (value ? value.split(/[,;]\s*|\n+/) : []))
+    .map((value) => value.trim())
+    .filter(Boolean);
+  return [...new Set(values)];
+}
+
+function buildFactSummary(facts: PatientFactRecord[]): string {
+  const summary = facts
+    .slice(0, 3)
+    .map((fact) => `${fact.label}: ${fact.value}`)
+    .join(' · ');
+  return summary || 'Uploaded patient document';
+}
+
 function extractFactsFromText(text: string, sourceDocumentId: string): DocumentExtractionResult {
   const facts: PatientFactRecord[] = [];
-  const diagnosis = matchField(text, /diagnosis\s*[:\-]\s*(.+)/i);
-  const requestedDrug = matchField(text, /requested drug\s*[:\-]\s*(.+)/i);
-  const payer = matchSecondField(text, /(payer|insurance)\s*[:\-]\s*(.+)/i);
-  const prescriber = matchField(text, /prescriber\s*[:\-]\s*(.+)/i);
-  const priorTherapy = matchField(text, /prior therap(?:y|ies)\s*[:\-]\s*(.+)/i);
+  const diagnosis = matchField(text, /diagnos(?:is|es)\s*[:\-]\s*(.+)/i);
+  const requestedDrug = matchSecondField(text, /(requested drug|requested medication|drug requested|medication order)\s*[:\-]\s*(.+)/i)
+    ?? matchField(text, /drug\s*[:\-]\s*(.+)/i);
+  const payer = matchSecondField(text, /(payer|insurance|payor)\s*[:\-]\s*(.+)/i);
+  const prescriber = matchSecondField(text, /(prescriber|provider|ordering provider|prescriber type)\s*[:\-]\s*(.+)/i);
+  const priorTherapies = collectMultiValueField(text, [
+    /prior therap(?:y|ies)\s*[:\-]\s*(.+)/i,
+    /previous therap(?:y|ies)\s*[:\-]\s*(.+)/i,
+    /failed therap(?:y|ies)\s*[:\-]\s*(.+)/i
+  ]);
 
   const medicationLine = matchField(text, /medications?\s*[:\-]\s*(.+)/i);
   const medications = medicationLine
@@ -197,15 +277,16 @@ function extractFactsFromText(text: string, sourceDocumentId: string): DocumentE
   }
   if (payer) {
     facts.push(buildFact(sourceDocumentId, 'payer', 'payer', payer, payer, 'medium'));
+    facts.push(buildFact(sourceDocumentId, 'insurance', 'insurance', payer, payer, 'medium'));
   }
   if (prescriber) {
     facts.push(buildFact(sourceDocumentId, 'prescriber', 'prescriber', prescriber, prescriber, 'medium'));
   }
-  if (priorTherapy) {
+  for (const priorTherapy of priorTherapies) {
     facts.push(buildFact(sourceDocumentId, 'prior_therapy', 'prior therapy', priorTherapy, priorTherapy, 'medium'));
   }
   for (const medication of medications) {
-    facts.push(buildFact(sourceDocumentId, 'medication', 'medication', medication, medication, 'medium'));
+    facts.push(buildFact(sourceDocumentId, 'medication', normalizeDrugName(medication), medication, medication, 'medium'));
   }
 
   if (facts.length === 0) {
@@ -214,7 +295,7 @@ function extractFactsFromText(text: string, sourceDocumentId: string): DocumentE
   }
 
   return {
-    summary: facts.slice(0, 3).map((fact) => `${fact.label}: ${fact.value}`).join(' · '),
+    summary: buildFactSummary(facts),
     facts,
     patientName: matchField(text, /patient\s*[:\-]\s*(.+)/i),
     payer,
@@ -243,6 +324,9 @@ function mergeFacts(existingFacts: PatientFactRecord[], incomingFacts: PatientFa
 }
 
 function deriveCaseStatus(patientCase: PatientCase): PatientCase['status'] {
+  if (hasEvaluationsForCase(patientCase.caseId)) {
+    return 'complete';
+  }
   const documentCount = patientCase.documents?.length ?? patientCase.documentFiles.length;
   const factCount = patientCase.extractedFacts?.length ?? 0;
   if (documentCount === 0 || factCount === 0) {
@@ -343,12 +427,14 @@ export function addCaseDocument(input: {
   const contentBuffer = typeof input.content === 'string' ? Buffer.from(input.content, 'utf-8') : Buffer.from(input.content);
   writeFileSync(filePath, contentBuffer);
 
-  const newDocumentId = documentId();
-  const extraction = extractFactsFromDocumentContent(contentBuffer.toString('utf-8'), newDocumentId);
+  const existingDocument = (caseRecord.documents ?? []).find((document) => document.fileName === safeFileName);
+  const nextDocumentId = existingDocument?.documentId ?? documentId();
+  const extraction = extractFactsFromDocumentContent(contentBuffer.toString('utf-8'), nextDocumentId);
+  const inferredDocumentType = inferDocumentType(input.documentType, safeFileName, input.contentType);
   const document: PatientDocumentRecord = {
-    documentId: newDocumentId,
+    documentId: nextDocumentId,
     fileName: safeFileName,
-    documentType: input.documentType ?? extraction.documentType,
+    documentType: inferredDocumentType,
     contentType: input.contentType ?? 'text/plain',
     storedAt: now(),
     summary: extraction.summary,
@@ -359,8 +445,11 @@ export function addCaseDocument(input: {
     caseRecord.documentFiles.push(safeFileName);
   }
 
-  caseRecord.documents = [...(caseRecord.documents ?? []), document];
-  caseRecord.extractedFacts = mergeFacts(caseRecord.extractedFacts ?? [], extraction.facts, newDocumentId);
+  caseRecord.documents = [
+    ...(caseRecord.documents ?? []).filter((entry) => entry.documentId !== nextDocumentId),
+    document
+  ].sort((left, right) => right.storedAt.localeCompare(left.storedAt));
+  caseRecord.extractedFacts = mergeFacts(caseRecord.extractedFacts ?? [], extraction.facts, nextDocumentId);
   caseRecord.patientName = extraction.patientName ?? caseRecord.patientName;
   caseRecord.payer = extraction.payer ?? caseRecord.payer;
   caseRecord.diagnosis = extraction.diagnosis ?? caseRecord.diagnosis;

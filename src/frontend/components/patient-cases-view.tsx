@@ -49,6 +49,13 @@ export function PatientCasesView({
     }
   }
 
+  function renderStatus(status: StoredPatientCase['status']) {
+    return status
+      .split('-')
+      .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+      .join(' ');
+  }
+
   return (
     <>
       <div className="panel-header">
@@ -101,7 +108,7 @@ export function PatientCasesView({
               <div className="patient-case-card-header">
                 <strong>{patientCase.patientName}</strong>
                 <span className={`status-badge ${patientCase.status === 'ready-for-eval' ? 'status-green' : patientCase.status === 'complete' ? 'status-blue' : 'status-yellow'}`}>
-                  {patientCase.status}
+                  {renderStatus(patientCase.status)}
                 </span>
               </div>
               <p>{patientCase.payer} · {patientCase.requestedDrug}</p>

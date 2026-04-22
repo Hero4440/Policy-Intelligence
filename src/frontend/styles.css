@@ -268,6 +268,15 @@ select {
   color: #f1f7fb;
 }
 
+.field-select {
+  width: 100%;
+  padding: 13px 14px;
+  border: 1px solid rgba(136, 181, 203, 0.22);
+  border-radius: 16px;
+  background: rgba(13, 34, 48, 0.96);
+  color: #f1f7fb;
+}
+
 .sidebar-note {
   padding: 16px;
   border-radius: 20px;
@@ -1610,6 +1619,23 @@ select {
   gap: 16px;
 }
 
+.patient-upload-toolbar,
+.patient-eval-toolbar {
+  display: grid;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.patient-eval-toolbar {
+  grid-template-columns: minmax(220px, 1.1fr) minmax(160px, 0.7fr) auto;
+  align-items: end;
+}
+
+.patient-eval-field {
+  display: grid;
+  gap: 8px;
+}
+
 .upload-dropzone {
   display: grid;
   gap: 10px;
@@ -1627,6 +1653,40 @@ select {
   display: none;
 }
 
+.patient-facts-grid,
+.patient-checklist {
+  display: grid;
+  gap: 12px;
+}
+
+.patient-evaluation-results {
+  display: grid;
+  gap: 14px;
+}
+
+.patient-evaluation-summary {
+  background: linear-gradient(135deg, rgba(24, 77, 101, 0.42), rgba(10, 27, 38, 0.82));
+}
+
+.patient-checklist-item {
+  gap: 12px;
+}
+
+.patient-evidence-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.patient-evidence-card {
+  display: grid;
+  gap: 6px;
+  padding: 14px;
+  border: 1px solid rgba(132, 181, 206, 0.14);
+  border-radius: 18px;
+  background: rgba(7, 20, 30, 0.62);
+}
+
 @media (max-width: 1120px) {
   .workspace-grid {
     grid-template-columns: 1fr;
@@ -1640,7 +1700,9 @@ select {
   .ingestion-upload-row,
   .data-kind-grid,
   .change-dashboard,
-  .patient-upload-grid {
+  .patient-upload-grid,
+  .patient-eval-toolbar,
+  .patient-evidence-grid {
     grid-template-columns: 1fr;
   }
 

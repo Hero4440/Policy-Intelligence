@@ -1,9 +1,22 @@
 import { useMemo, useState } from 'react';
 import type { ChangeEvent, FormEvent } from 'react';
-import type { StoredPatientCase } from '../data/patients.js';
+import type {
+  PatientPolicyOption,
+  StoredCoverageEvaluation,
+  StoredPatientCase
+} from '../data/patients.js';
 
 type PatientCaseDetailViewProps = {
   patientCase: StoredPatientCase | null;
+  policyOptions: PatientPolicyOption[];
+  evaluations: StoredCoverageEvaluation[];
+  selectedPolicyId: string;
+  selectedPolicyVersion: number | '';
+  policyOptionsLoading: boolean;
+  evaluationsLoading: boolean;
+  onPolicyChange: (policyId: string) => void;
+  onPolicyVersionChange: (version: number) => void;
+  onRunEvaluation: (input: { caseId: string; policyId: string; policyVersion: number }) => Promise<void>;
   onUploadDocument: (input: {
     caseId: string;
     fileName: string;
@@ -27,11 +40,59 @@ function formatDate(value: string): string {
   }
 }
 
-export function PatientCaseDetailView({ patientCase, onUploadDocument }: PatientCaseDetailViewProps) {
+function titleCaseStatus(value: string): string {
+  return value
+    .split('-')
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(' ');
+}
+
+function evaluationStatusTone(status: StoredCoverageEvaluation['coverageStatus']): string {
+  if (status === 'Covered') {
+    return 'status-green';
+  }
+  if (status === 'PA Required' || status === 'Likely Eligible but Docs Missing') {
+    return 'status-yellow';
+  }
+  if (status === 'Preferred Alternative Required' || status === 'Not Covered') {
+    return 'status-red';
+  }
+  return 'status-gray';
+}
+
+function checklistStatusTone(status: 'PASS' | 'MISSING' | 'UNKNOWN' | 'NEEDS REVIEW'): string {
+  if (status === 'PASS') {
+    return 'status-green';
+  }
+  if (status === 'MISSING') {
+    return 'status-red';
+  }
+  if (status === 'UNKNOWN') {
+    return 'status-gray';
+  }
+  return 'status-yellow';
+}
+
+export function PatientCaseDetailView({
+  patientCase,
+  policyOptions,
+  evaluations,
+  selectedPolicyId,
+  selectedPolicyVersion,
+  policyOptionsLoading,
+  evaluationsLoading,
+  onPolicyChange,
+  onPolicyVersionChange,
+  onRunEvaluation,
+  onUploadDocument
+}: PatientCaseDetailViewProps) {
   const [textFileName, setTextFileName] = useState('clinical-note.txt');
+  const [documentType, setDocumentType] = useState('clinical_note');
   const [textContent, setTextContent] = useState('');
   const [uploadError, setUploadError] = useState<string | null>(null);
+  const [evaluationError, setEvaluationError] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [isEvaluating, setIsEvaluating] = useState(false);
   const factsByDocument = useMemo(() => {
     if (!patientCase) {
       return new Map<string, number>();
@@ -43,6 +104,11 @@ export function PatientCaseDetailView({ patientCase, onUploadDocument }: Patient
     }
     return counts;
   }, [patientCase]);
+  const selectedPolicy = useMemo(
+    () => policyOptions.find((option) => option.policyId === selectedPolicyId) ?? null,
+    [policyOptions, selectedPolicyId]
+  );
+  const latestEvaluation = evaluations[0] ?? null;
 
   async function handleFileUpload(event: ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
@@ -58,7 +124,8 @@ export function PatientCaseDetailView({ patientCase, onUploadDocument }: Patient
         caseId: patientCase.caseId,
         fileName: file.name,
         content,
-        contentType: file.type || 'text/plain'
+        contentType: file.type || 'text/plain',
+        documentType
       });
       event.target.value = '';
     } catch (error) {
@@ -82,7 +149,7 @@ export function PatientCaseDetailView({ patientCase, onUploadDocument }: Patient
         fileName: textFileName,
         content: textContent,
         contentType: 'text/plain',
-        documentType: 'clinical_note'
+        documentType
       });
       setTextContent('');
     } catch (error) {
@@ -92,8 +159,28 @@ export function PatientCaseDetailView({ patientCase, onUploadDocument }: Patient
     }
   }
 
+  async function handleRunEvaluation() {
+    if (!patientCase || !selectedPolicyId || selectedPolicyVersion === '') {
+      return;
+    }
+
+    setIsEvaluating(true);
+    setEvaluationError(null);
+    try {
+      await onRunEvaluation({
+        caseId: patientCase.caseId,
+        policyId: selectedPolicyId,
+        policyVersion: selectedPolicyVersion
+      });
+    } catch (error) {
+      setEvaluationError(error instanceof Error ? error.message : 'Failed to run evaluation');
+    } finally {
+      setIsEvaluating(false);
+    }
+  }
+
   if (!patientCase) {
-    return <div className="empty-state">Select a patient case to inspect documents and extracted facts.</div>;
+    return <div className="empty-state">Select a patient case to inspect documents, extracted facts, and coverage evaluation.</div>;
   }
 
   return (
@@ -104,7 +191,7 @@ export function PatientCaseDetailView({ patientCase, onUploadDocument }: Patient
           <h2>{patientCase.patientName}</h2>
         </div>
         <span className={`status-badge ${patientCase.status === 'ready-for-eval' ? 'status-green' : patientCase.status === 'complete' ? 'status-blue' : 'status-yellow'}`}>
-          {patientCase.status}
+          {titleCaseStatus(patientCase.status)}
         </span>
       </div>
 
@@ -125,11 +212,31 @@ export function PatientCaseDetailView({ patientCase, onUploadDocument }: Patient
 
       <div className="detail-section">
         <h3>Upload documents</h3>
+        <div className="patient-upload-toolbar">
+          <label className="field-label" htmlFor="patient-document-type">
+            Document type
+          </label>
+          <select
+            id="patient-document-type"
+            className="field-select"
+            value={documentType}
+            onChange={(event) => setDocumentType(event.target.value)}
+          >
+            <option value="clinical_note">Clinical note</option>
+            <option value="prior_treatment_history">Prior treatment history</option>
+            <option value="lab_results">Lab results</option>
+            <option value="referral">Referral</option>
+            <option value="medication_order">Medication order</option>
+            <option value="denial_letter">Denial letter</option>
+            <option value="fhir_bundle">FHIR bundle</option>
+            <option value="uploaded_document">Generic upload</option>
+          </select>
+        </div>
         <div className="patient-upload-grid">
           <label className="upload-dropzone">
             <input type="file" accept=".json,.txt,.md,.csv" onChange={handleFileUpload} />
-            <span>Upload FHIR bundle or note file</span>
-            <small>JSON and plain text are supported in this milestone.</small>
+            <span>Upload supported patient document</span>
+            <small>JSON/FHIR bundles and plain-text notes are supported in this milestone.</small>
           </label>
 
           <form className="patient-note-form" onSubmit={handleTextSubmit}>
@@ -146,7 +253,7 @@ export function PatientCaseDetailView({ patientCase, onUploadDocument }: Patient
               className="field-textarea"
               value={textContent}
               onChange={(event) => setTextContent(event.target.value)}
-              placeholder={'Diagnosis: Rheumatoid arthritis\nRequested Drug: adalimumab\nPrior Therapy: methotrexate for 90 days\nPrescriber: rheumatologist'}
+              placeholder={'Patient: Jane Example\nDiagnosis: Breast Cancer\nRequested Drug: Herceptin\nPrior Therapies: paclitaxel, docetaxel\nPrescriber: medical oncologist\nInsurance: Cigna Commercial'}
             />
 
             <button type="submit" className="primary-button" disabled={isUploading || !textContent.trim()}>
@@ -182,18 +289,150 @@ export function PatientCaseDetailView({ patientCase, onUploadDocument }: Patient
         {patientCase.extractedFacts.length === 0 ? (
           <div className="empty-state">Upload a document to populate extracted facts for this case.</div>
         ) : (
-          patientCase.extractedFacts.map((fact) => (
-            <article key={fact.factId} className="detail-card">
+          <div className="patient-facts-grid">
+            {patientCase.extractedFacts.map((fact) => (
+              <article key={fact.factId} className="detail-card">
+                <div className="patient-doc-header">
+                  <p className="detail-card-title">{fact.label}</p>
+                  <span className={`status-badge ${fact.confidence === 'high' ? 'status-green' : 'status-yellow'}`}>
+                    {fact.confidence}
+                  </span>
+                </div>
+                <p>{fact.value}</p>
+                <small>{fact.evidenceSnippet || `Source document ${fact.sourceDocumentId}`}</small>
+              </article>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div className="detail-section">
+        <h3>Coverage evaluation</h3>
+        <div className="patient-eval-toolbar">
+          <div className="patient-eval-field">
+            <label className="field-label" htmlFor="policy-select">
+              Policy
+            </label>
+            <select
+              id="policy-select"
+              className="field-select"
+              value={selectedPolicyId}
+              onChange={(event) => onPolicyChange(event.target.value)}
+              disabled={policyOptionsLoading || policyOptions.length === 0}
+            >
+              <option value="">Select policy</option>
+              {policyOptions.map((policy) => (
+                <option key={policy.policyId} value={policy.policyId}>
+                  {policy.title} · {policy.payer} · {policy.drugFamily}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="patient-eval-field">
+            <label className="field-label" htmlFor="policy-version-select">
+              Version
+            </label>
+            <select
+              id="policy-version-select"
+              className="field-select"
+              value={selectedPolicyVersion}
+              onChange={(event) => onPolicyVersionChange(Number(event.target.value))}
+              disabled={!selectedPolicy || selectedPolicy.versions.length === 0}
+            >
+              <option value="">Select version</option>
+              {selectedPolicy?.versions.map((version) => (
+                <option key={version} value={version}>
+                  Version {version}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <button
+            type="button"
+            className="primary-button"
+            disabled={
+              isEvaluating
+              || policyOptionsLoading
+              || !selectedPolicyId
+              || selectedPolicyVersion === ''
+              || patientCase.documents.length === 0
+            }
+            onClick={() => void handleRunEvaluation()}
+          >
+            {isEvaluating ? 'Evaluating…' : 'Run evaluation'}
+          </button>
+        </div>
+
+        {policyOptionsLoading && <div className="empty-state">Loading policy options…</div>}
+        {!policyOptionsLoading && policyOptions.length === 0 && (
+          <div className="empty-state">No policy versions are currently available for this case. Load policy data first.</div>
+        )}
+        {selectedPolicy && (
+          <div className="detail-section-help">
+            {selectedPolicy.matchReasons.map((reason) => (
+              <span key={reason} className={`status-badge ${selectedPolicy.relevance === 'recommended' ? 'status-green' : selectedPolicy.relevance === 'possible' ? 'status-yellow' : 'status-gray'}`}>
+                {reason}
+              </span>
+            ))}
+          </div>
+        )}
+        {evaluationError && <div className="chat-error">{evaluationError}</div>}
+
+        {evaluationsLoading ? (
+          <div className="empty-state">Loading saved evaluations…</div>
+        ) : latestEvaluation ? (
+          <div className="patient-evaluation-results">
+            <article className="detail-card patient-evaluation-summary">
               <div className="patient-doc-header">
-                <p className="detail-card-title">{fact.label}</p>
-                <span className={`status-badge ${fact.confidence === 'high' ? 'status-green' : 'status-yellow'}`}>
-                  {fact.confidence}
+                <p className="detail-card-title">Latest result</p>
+                <span className={`status-badge ${evaluationStatusTone(latestEvaluation.coverageStatus)}`}>
+                  {latestEvaluation.coverageStatus}
                 </span>
               </div>
-              <p>{fact.value}</p>
-              <small>{fact.evidenceSnippet || `Source document ${fact.sourceDocumentId}`}</small>
+              <p>
+                {latestEvaluation.policyTitle || latestEvaluation.policyId} · Version {latestEvaluation.policyVersion}
+              </p>
+              <small>{formatDate(latestEvaluation.evaluatedAt)}</small>
             </article>
-          ))
+
+            <div className="patient-checklist">
+              {latestEvaluation.checklist.map((item) => (
+                <article key={`${item.category}-${item.criterion}`} className="detail-card patient-checklist-item">
+                  <div className="patient-doc-header">
+                    <p className="detail-card-title">{item.criterion}</p>
+                    <span className={`status-badge ${checklistStatusTone(item.status)}`}>
+                      {item.status}
+                    </span>
+                  </div>
+                  <p>{item.rationale}</p>
+                  <div className="patient-evidence-grid">
+                    <div className="patient-evidence-card">
+                      <span className="detail-label">Patient evidence</span>
+                      <strong>{item.matchedFact ? `${item.matchedFact.label}: ${item.matchedFact.value}` : 'No matched fact'}</strong>
+                      <small>
+                        {item.patientEvidence?.sourceDocumentName || item.patientEvidence?.sourceDocumentId || 'No linked patient document'}
+                        {item.patientEvidence?.snippet ? ` · ${item.patientEvidence.snippet}` : ''}
+                      </small>
+                    </div>
+                    <div className="patient-evidence-card">
+                      <span className="detail-label">Policy evidence</span>
+                      <strong>{item.policyEvidence.fieldLabel}</strong>
+                      <small>
+                        {item.policyEvidence.document}
+                        {item.policyEvidence.page ? ` · page ${item.policyEvidence.page}` : ''}
+                        {` · ${item.policyEvidence.section}`}
+                      </small>
+                      <p>{item.policyEvidence.snippet}</p>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <div className="empty-state">No saved evaluation yet. Select a policy version and run an evaluation for this case.</div>
         )}
       </div>
     </div>

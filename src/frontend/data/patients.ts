@@ -19,7 +19,15 @@ export interface DemoPatient {
 export interface StoredPatientDocument {
   documentId: string;
   fileName: string;
-  documentType: string;
+  documentType:
+    | 'clinical_note'
+    | 'prior_treatment_history'
+    | 'lab_results'
+    | 'referral'
+    | 'medication_order'
+    | 'denial_letter'
+    | 'fhir_bundle'
+    | 'uploaded_document';
   contentType: string;
   storedAt: string;
   summary: string;
@@ -34,6 +42,74 @@ export interface StoredPatientFact {
   sourceDocumentId: string;
   evidenceSnippet?: string;
   confidence: 'high' | 'medium';
+}
+
+export interface EvaluationPolicyEvidence {
+  policyId: string;
+  policyVersion: number;
+  document: string;
+  page: number | null;
+  section: string;
+  fieldLabel: string;
+  snippet: string;
+}
+
+export interface EvaluationPatientEvidence {
+  sourceDocumentId: string;
+  sourceDocumentName?: string;
+  snippet?: string;
+}
+
+export interface EvaluationChecklistFact {
+  factId: string;
+  label: string;
+  value: string;
+  sourceDocumentId: string;
+  evidenceSnippet?: string;
+  confidence: 'high' | 'medium';
+}
+
+export interface StoredEvaluationChecklistItem {
+  criterion: string;
+  category: string;
+  status: 'PASS' | 'MISSING' | 'UNKNOWN' | 'NEEDS REVIEW';
+  rationale: string;
+  matchedFact?: EvaluationChecklistFact;
+  patientEvidence?: EvaluationPatientEvidence;
+  policyEvidence: EvaluationPolicyEvidence;
+}
+
+export interface StoredCoverageEvaluation {
+  evalId: string;
+  caseId: string;
+  policyId: string;
+  policyVersion: number;
+  policyTitle?: string;
+  payer?: string;
+  drugFamily?: string;
+  patientName?: string;
+  requestedDrug?: string;
+  diagnosis?: string;
+  evaluatedAt: string;
+  coverageStatus:
+    | 'Covered'
+    | 'PA Required'
+    | 'Likely Eligible but Docs Missing'
+    | 'Not Covered'
+    | 'Preferred Alternative Required'
+    | 'Unclear';
+  checklist: StoredEvaluationChecklistItem[];
+}
+
+export interface PatientPolicyOption {
+  policyId: string;
+  payer: string;
+  title: string;
+  drugFamily: string;
+  versions: number[];
+  currentVersion: number;
+  relevance: 'recommended' | 'possible' | 'other';
+  matchReasons: string[];
 }
 
 export interface StoredPatientCase {
@@ -145,4 +221,58 @@ export async function uploadPatientDocument(input: {
   }
 
   return response.json() as Promise<{ case: StoredPatientCase; document: StoredPatientDocument }>;
+}
+
+export async function fetchPatientPolicyOptions(caseId: string): Promise<{ caseId: string; policies: PatientPolicyOption[] }> {
+  const response = await fetch(`/api/patients/cases/${encodeURIComponent(caseId)}/policy-options`);
+  if (!response.ok) {
+    const payload = await response.json().catch(() => ({ error: 'Failed to load patient policy options' }));
+    throw new Error(typeof payload.error === 'string' ? payload.error : 'Failed to load patient policy options');
+  }
+
+  return response.json() as Promise<{ caseId: string; policies: PatientPolicyOption[] }>;
+}
+
+export async function fetchCaseEvaluations(caseId: string): Promise<{ evaluations: StoredCoverageEvaluation[] }> {
+  const response = await fetch(`/api/patients/cases/${encodeURIComponent(caseId)}/evaluations`);
+  if (!response.ok) {
+    const payload = await response.json().catch(() => ({ error: 'Failed to load case evaluations' }));
+    throw new Error(typeof payload.error === 'string' ? payload.error : 'Failed to load case evaluations');
+  }
+
+  return response.json() as Promise<{ evaluations: StoredCoverageEvaluation[] }>;
+}
+
+export async function createCaseEvaluation(input: {
+  caseId: string;
+  policyId: string;
+  policyVersion: number;
+}): Promise<{ evaluation: StoredCoverageEvaluation }> {
+  const response = await fetch(`/api/patients/cases/${encodeURIComponent(input.caseId)}/evaluations`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      policyId: input.policyId,
+      policyVersion: input.policyVersion
+    })
+  });
+
+  if (!response.ok) {
+    const payload = await response.json().catch(() => ({ error: 'Failed to create evaluation' }));
+    throw new Error(typeof payload.error === 'string' ? payload.error : 'Failed to create evaluation');
+  }
+
+  return response.json() as Promise<{ evaluation: StoredCoverageEvaluation }>;
+}
+
+export async function fetchEvaluation(evalId: string): Promise<{ evaluation: StoredCoverageEvaluation }> {
+  const response = await fetch(`/api/patients/evaluations/${encodeURIComponent(evalId)}`);
+  if (!response.ok) {
+    const payload = await response.json().catch(() => ({ error: 'Failed to load evaluation' }));
+    throw new Error(typeof payload.error === 'string' ? payload.error : 'Failed to load evaluation');
+  }
+
+  return response.json() as Promise<{ evaluation: StoredCoverageEvaluation }>;
 }

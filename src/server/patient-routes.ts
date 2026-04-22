@@ -1,10 +1,13 @@
 import type { Express, Request, Response } from 'express';
+import { getEvaluation, listEvaluations, saveEvaluation } from '../storage/evaluation-store.js';
 import {
   addCaseDocument,
   createPatientCase,
   getPatientCase,
   listPatientCases
 } from '../storage/patient-store.js';
+import { updateCaseStatus } from '../storage/patient-store.js';
+import { evaluatePatientCaseAgainstPolicy, getPatientPolicyOptions } from './patient-evaluation.js';
 
 type CreatePatientCasePayload = {
   patientName?: string;
@@ -19,6 +22,15 @@ type UploadPatientDocumentPayload = {
   contentType?: string;
   documentType?: string;
 };
+
+type CreateEvaluationPayload = {
+  policyId?: string;
+  policyVersion?: number;
+};
+
+function readCaseId(req: Request): string {
+  return Array.isArray(req.params.caseId) ? req.params.caseId[0] : req.params.caseId;
+}
 
 export function registerPatientRoutes(app: Express) {
   app.get('/api/patients/cases', (_req: Request, res: Response) => {
@@ -48,7 +60,7 @@ export function registerPatientRoutes(app: Express) {
   });
 
   app.get('/api/patients/cases/:caseId', (req: Request, res: Response) => {
-    const caseId = Array.isArray(req.params.caseId) ? req.params.caseId[0] : req.params.caseId;
+    const caseId = readCaseId(req);
     const patientCase = getPatientCase(caseId);
     if (!patientCase) {
       res.status(404).json({ error: 'Case not found' });
@@ -60,8 +72,22 @@ export function registerPatientRoutes(app: Express) {
     });
   });
 
+  app.get('/api/patients/cases/:caseId/policy-options', (req: Request, res: Response) => {
+    const caseId = readCaseId(req);
+
+    try {
+      res.json({
+        caseId,
+        policies: getPatientPolicyOptions(caseId)
+      });
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Failed to load patient policy options';
+      res.status(message.includes('Case not found') ? 404 : 400).json({ error: message });
+    }
+  });
+
   app.post('/api/patients/cases/:caseId/documents', (req: Request, res: Response) => {
-    const caseId = Array.isArray(req.params.caseId) ? req.params.caseId[0] : req.params.caseId;
+    const caseId = readCaseId(req);
     const { fileName, content, contentType, documentType } = req.body as UploadPatientDocumentPayload;
 
     if (!fileName?.trim() || typeof content !== 'string' || !content.length) {
@@ -86,5 +112,48 @@ export function registerPatientRoutes(app: Express) {
       const message = error instanceof Error ? error.message : 'Failed to upload document';
       res.status(message.includes('Case not found') ? 404 : 400).json({ error: message });
     }
+  });
+
+  app.get('/api/patients/cases/:caseId/evaluations', (req: Request, res: Response) => {
+    const caseId = readCaseId(req);
+    res.json({
+      evaluations: listEvaluations({ caseId })
+    });
+  });
+
+  app.post('/api/patients/cases/:caseId/evaluations', (req: Request, res: Response) => {
+    const caseId = readCaseId(req);
+    const { policyId, policyVersion } = req.body as CreateEvaluationPayload;
+
+    if (!policyId?.trim() || !Number.isFinite(policyVersion)) {
+      res.status(400).json({ error: 'policyId and numeric policyVersion are required' });
+      return;
+    }
+
+    try {
+      const evaluation = saveEvaluation(
+        evaluatePatientCaseAgainstPolicy({
+          caseId,
+          policyId: policyId.trim(),
+          policyVersion: Number(policyVersion)
+        })
+      );
+      updateCaseStatus(caseId, 'complete');
+      res.status(201).json({ evaluation });
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Failed to evaluate patient case';
+      res.status(/not found/i.test(message) ? 404 : 400).json({ error: message });
+    }
+  });
+
+  app.get('/api/patients/evaluations/:evalId', (req: Request, res: Response) => {
+    const evalId = Array.isArray(req.params.evalId) ? req.params.evalId[0] : req.params.evalId;
+    const evaluation = getEvaluation(evalId);
+    if (!evaluation) {
+      res.status(404).json({ error: 'Evaluation not found' });
+      return;
+    }
+
+    res.json({ evaluation });
   });
 }

@@ -36,9 +36,14 @@ import {
   type AntonRxPlanDrugDetail
 } from './data/antonrx.js';
 import {
+  createCaseEvaluation,
   createStoredPatientCase,
+  fetchCaseEvaluations,
   fetchPatientCase,
   fetchPatientCases,
+  fetchPatientPolicyOptions,
+  type PatientPolicyOption,
+  type StoredCoverageEvaluation,
   type StoredPatientCase,
   uploadPatientDocument
 } from './data/patients.js';
@@ -76,6 +81,12 @@ export default function App() {
   const [patientCases, setPatientCases] = useState<StoredPatientCase[]>([]);
   const [selectedCaseId, setSelectedCaseId] = useState('');
   const [selectedCase, setSelectedCase] = useState<StoredPatientCase | null>(null);
+  const [patientPolicyOptions, setPatientPolicyOptions] = useState<PatientPolicyOption[]>([]);
+  const [patientEvaluations, setPatientEvaluations] = useState<StoredCoverageEvaluation[]>([]);
+  const [selectedEvaluationPolicyId, setSelectedEvaluationPolicyId] = useState('');
+  const [selectedEvaluationPolicyVersion, setSelectedEvaluationPolicyVersion] = useState<number | ''>('');
+  const [isPatientPolicyOptionsLoading, setIsPatientPolicyOptionsLoading] = useState(false);
+  const [isPatientEvaluationsLoading, setIsPatientEvaluationsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [policyCompareOptions, setPolicyCompareOptions] = useState<PolicyCompareOptions | null>(null);
@@ -135,6 +146,24 @@ export default function App() {
         ? selectedCaseId
         : payload.cases[0]?.caseId ?? '';
     setSelectedCaseId(nextSelectedCaseId);
+  }
+
+  async function refreshPatientCaseWorkspace(caseId: string) {
+    setIsPatientPolicyOptionsLoading(true);
+    setIsPatientEvaluationsLoading(true);
+    try {
+      const [casePayload, policyPayload, evaluationPayload] = await Promise.all([
+        fetchPatientCase(caseId),
+        fetchPatientPolicyOptions(caseId),
+        fetchCaseEvaluations(caseId)
+      ]);
+      setSelectedCase(casePayload.case);
+      setPatientPolicyOptions(policyPayload.policies);
+      setPatientEvaluations(evaluationPayload.evaluations);
+    } finally {
+      setIsPatientPolicyOptionsLoading(false);
+      setIsPatientEvaluationsLoading(false);
+    }
   }
 
   useEffect(() => {
@@ -241,13 +270,51 @@ export default function App() {
   useEffect(() => {
     if (!selectedCaseId) {
       setSelectedCase(null);
+      setPatientPolicyOptions([]);
+      setPatientEvaluations([]);
+      setSelectedEvaluationPolicyId('');
+      setSelectedEvaluationPolicyVersion('');
       return;
     }
 
-    void fetchPatientCase(selectedCaseId)
-      .then((payload) => setSelectedCase(payload.case))
-      .catch(() => setSelectedCase(null));
+    void refreshPatientCaseWorkspace(selectedCaseId).catch(() => {
+      setSelectedCase(null);
+      setPatientPolicyOptions([]);
+      setPatientEvaluations([]);
+    });
   }, [selectedCaseId]);
+
+  useEffect(() => {
+    if (patientPolicyOptions.length === 0) {
+      setSelectedEvaluationPolicyId('');
+      return;
+    }
+
+    setSelectedEvaluationPolicyId((current) =>
+      patientPolicyOptions.some((option) => option.policyId === current)
+        ? current
+        : patientPolicyOptions[0].policyId
+    );
+  }, [patientPolicyOptions]);
+
+  useEffect(() => {
+    if (!selectedEvaluationPolicyId) {
+      setSelectedEvaluationPolicyVersion('');
+      return;
+    }
+
+    const selectedOption = patientPolicyOptions.find((option) => option.policyId === selectedEvaluationPolicyId);
+    if (!selectedOption) {
+      setSelectedEvaluationPolicyVersion('');
+      return;
+    }
+
+    setSelectedEvaluationPolicyVersion((current) =>
+      current !== '' && selectedOption.versions.includes(current)
+        ? current
+        : selectedOption.currentVersion
+    );
+  }, [patientPolicyOptions, selectedEvaluationPolicyId]);
 
   useEffect(() => {
     if (!compareDrugFamily || comparePayers.length < 2 || activePage !== 'compare') {
@@ -395,6 +462,7 @@ export default function App() {
   }) {
     const created = await createStoredPatientCase(input);
     await refreshPatientCases(created.case.caseId);
+    await refreshPatientCaseWorkspace(created.case.caseId);
   }
 
   async function handleUploadPatientDocument(input: {
@@ -407,6 +475,17 @@ export default function App() {
     const payload = await uploadPatientDocument(input);
     setSelectedCase(payload.case);
     await refreshPatientCases(payload.case.caseId);
+    await refreshPatientCaseWorkspace(payload.case.caseId);
+  }
+
+  async function handleRunPatientEvaluation(input: {
+    caseId: string;
+    policyId: string;
+    policyVersion: number;
+  }) {
+    await createCaseEvaluation(input);
+    await refreshPatientCases(input.caseId);
+    await refreshPatientCaseWorkspace(input.caseId);
   }
 
   function renderPhaseSidebar(
@@ -703,7 +782,19 @@ export default function App() {
       }
       detailPane={
         activePage === 'patients' ? (
-          <PatientCaseDetailView patientCase={selectedCase} onUploadDocument={handleUploadPatientDocument} />
+          <PatientCaseDetailView
+            patientCase={selectedCase}
+            policyOptions={patientPolicyOptions}
+            evaluations={patientEvaluations}
+            selectedPolicyId={selectedEvaluationPolicyId}
+            selectedPolicyVersion={selectedEvaluationPolicyVersion}
+            policyOptionsLoading={isPatientPolicyOptionsLoading}
+            evaluationsLoading={isPatientEvaluationsLoading}
+            onPolicyChange={setSelectedEvaluationPolicyId}
+            onPolicyVersionChange={setSelectedEvaluationPolicyVersion}
+            onRunEvaluation={handleRunPatientEvaluation}
+            onUploadDocument={handleUploadPatientDocument}
+          />
         ) : activePage === 'data' ? (
           <DataOverviewView
             ingestedSources={ingestedSources}

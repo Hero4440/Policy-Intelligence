@@ -56,3 +56,7 @@ export function listEvaluations(filter?: {
     .filter((entry) => (filter?.policyId ? entry.policyId === filter.policyId : true))
     .sort((a, b) => b.evaluatedAt.localeCompare(a.evaluatedAt));
 }
+
+export function hasEvaluationsForCase(caseId: string): boolean {
+  return listEvaluations({ caseId }).length > 0;
+}
