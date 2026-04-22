@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git -C /Users/tanmaybhuskute/Documents/Policy-Intelligence log --oneline)",
+      "Skill(gsd:new-project)",
+      "Skill(gsd:new-project:*)",
+      "Skill(gsd:new-milestone)",
+      "Skill(gsd:new-milestone:*)",
+      "Read(//Users/tanmaybhuskute/.claude/agents/**)"
+    ]
+  }
+}
