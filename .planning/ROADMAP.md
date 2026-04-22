@@ -48,7 +48,14 @@ See: `.planning/milestones/v1.0-ROADMAP.md`
 4. Structured Rules Editor displays each policy field with its extracted value, the evidence snippet it came from, and an ambiguity flag — user can edit a field, mark it ambiguous, and save a new version
 5. Version history tab shows every saved version with date and who changed it — user can select any past version to view its content
 
-**Plans**: TBD
+**Plans:** 5 plans
+
+Plans:
+- [ ] 06-01-PLAN.md — PDF ingestion API: parsePdfToPolicy + POST /api/policies/upload + GET /api/policies
+- [ ] 06-02-PLAN.md — Policy Rules page with payer/drug family filters + policies API client
+- [ ] 06-03-PLAN.md — Policy Detail page with 6 tabs (Overview, Products, Indications, Criteria, Evidence, Versions)
+- [ ] 06-04-PLAN.md — Structured Rules Editor UI + POST /api/policies/:id/versions endpoint
+- [ ] 06-05-PLAN.md — PDF upload UI panel + App.tsx nav wiring + end-to-end human verification
 
 ---
 
@@ -181,7 +188,7 @@ See: `.planning/milestones/v1.0-ROADMAP.md`
 | 3. Hybrid Q&A Engine | v1.0 | 2/2 | Complete | 2026-04-17 |
 | 4. Deployment + Integration | v1.0 | 2/2 | Complete | 2026-04-18 |
 | 5. File-Based Storage Foundation | v1.0 | 4/4 | Complete | 2026-04-22 |
-| 6. Policy Management + Ingestion | v2.0 | 0/TBD | Not started | - |
+| 6. Policy Management + Ingestion | v2.0 | 0/5 | Planned | - |
 | 7. Policy Compare + Insights | v2.0 | 0/TBD | Not started | - |
 | 8. Policy Changes + Versioning | v2.0 | 0/TBD | Not started | - |
 | 9. Patient Cases + Coverage Evaluation | v2.0 | 0/TBD | Not started | - |
