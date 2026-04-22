@@ -1,161 +1,36 @@
-# Roadmap: PolicyLens MCP
+# Roadmap: PolicyPilot
 
-## Overview
+## Milestones
 
-PolicyLens MCP transforms medical-benefit drug policy PDFs into an intelligent MCP server that answers coverage questions with source-backed evidence. The journey starts with normalizing two policy documents (BCBS NC and Cigna) into structured data with evidence mappings, then builds four MCP tools on that foundation (list, summarize, compare, Q&A), and deploys via ngrok for Prompt Opinion integration. Each phase delivers a complete, verifiable capability that builds toward the core value: every policy question answered includes evidence from loaded policy documents.
-
-v2.0 builds on the POC foundation (phases 1-4) to deliver a full portal: persistent file-based storage, real policy management, patient case workflows, coverage evaluation, insights, versioning, and expanded MCP tools — all deployed on Vercel + Railway.
+- ✅ **v1.0 POC** — Phases 1-5 (shipped 2026-04-22)
+- 🚧 **v2.0 Full Product** — Phases 6-12 (in progress)
 
 ## Phases
 
-**Phase Numbering:**
-- Integer phases (1, 2, 3): Planned milestone work
-- Decimal phases (2.1, 2.2): Urgent insertions (marked with INSERTED)
+<details>
+<summary>✅ v1.0 POC (Phases 1-5) — SHIPPED 2026-04-22</summary>
 
-Decimal phases appear between their surrounding integers in numeric order.
+- [x] Phase 1: Policy Data Foundation (2/2 plans) — completed 2026-04-12
+- [x] Phase 2: Core MCP Tools (2/2 plans) — completed 2026-04-15
+- [x] Phase 3: Hybrid Q&A Engine (2/2 plans) — completed 2026-04-17
+- [x] Phase 4: Deployment + Integration (2/2 plans) — completed 2026-04-18
+- [x] Phase 5: File-Based Storage Foundation (4/4 plans) — completed 2026-04-22
 
-### v1.0 POC (Completed)
+See: `.planning/milestones/v1.0-ROADMAP.md`
 
-- [ ] **Phase 1: Policy Data Foundation** - Normalize BCBS NC and Cigna policies with evidence mappings and drug aliases
-- [x] **Phase 2: Core MCP Tools** - Build deterministic tools (list, summary, compare) with evidence grounding (completed 2026-04-15)
-- [x] **Phase 3: Hybrid Q&A Engine** - Build natural language Q&A tool with LLM fallback and validation (completed 2026-04-17)
-- [x] **Phase 4: Deployment + Integration** - Deploy via ngrok and validate Prompt Opinion integration (completed 2026-04-18)
+</details>
 
-### v2.0 Full Product
+### 🚧 v2.0 Full Product (Phases 6-12)
 
-- [ ] **Phase 5: File-Based Storage Foundation** - Establish the persistent file storage schema, index registry, and diff/versioning engine that all v2.0 features depend on
-- [ ] **Phase 6: Policy Management + Ingestion** - Build the policy upload pipeline, structured rules editor, and Policy Rules / Detail pages
-- [ ] **Phase 7: Policy Compare + Insights** - Deliver side-by-side comparison table with auto-diff highlights and the heat map / knowledge graph Insights page
-- [ ] **Phase 8: Policy Changes + Versioning** - Ship the Changes timeline, Version Diff page, and materiality classification engine
-- [ ] **Phase 9: Patient Cases + Coverage Evaluation** - Enable case creation, document upload, fact extraction, and coverage evaluation with evidence-backed checklist
-- [ ] **Phase 10: Next Steps + Evidence Explorer + Chat** - Complete the clinic workflow with next-step guidance, evidence search, and evidence-backed chat
-- [ ] **Phase 11: Expanded MCP Tools** - Implement 10 new MCP tools backed by the data layer and engines built in phases 5-10
-- [ ] **Phase 12: Portal UI + Dashboard + Deployment** - Ship the dashboard, role switcher, global nav, and deploy to Vercel + Railway
+- [ ] **Phase 6: Policy Management + Ingestion** — Build the policy upload pipeline, structured rules editor, and Policy Rules / Detail pages
+- [ ] **Phase 7: Policy Compare + Insights** — Deliver side-by-side comparison table with auto-diff highlights and the heat map / knowledge graph Insights page
+- [ ] **Phase 8: Policy Changes + Versioning** — Ship the Changes timeline, Version Diff page, and materiality classification engine
+- [ ] **Phase 9: Patient Cases + Coverage Evaluation** — Enable case creation, document upload, fact extraction, and coverage evaluation with evidence-backed checklist
+- [ ] **Phase 10: Next Steps + Evidence Explorer + Chat** — Complete the clinic workflow with next-step guidance, evidence search, and evidence-backed chat
+- [ ] **Phase 11: Expanded MCP Tools** — Implement 10 new MCP tools backed by the data layer and engines built in phases 6-10
+- [ ] **Phase 12: Portal UI + Dashboard + Deployment** — Ship the dashboard, role switcher, global nav, and deploy to Vercel + Railway
 
 ## Phase Details
-
-### Phase 1: Policy Data Foundation
-
-**Goal**: BCBS NC and Cigna policies normalized into structured, evidence-backed data that enables all downstream tools
-
-**Depends on**: Nothing (first phase)
-
-**Requirements**: DATA-01, DATA-02, DATA-03, DATA-04, DATA-05, DATA-06
-
-**Success Criteria** (what must be TRUE):
-
-1. BCBS NC Preferred Injectable Oncology Program loaded with normalized fields (payer, title, date, drug family, preferred/non-preferred products, prior auth, step therapy, indications, restrictions)
-2. Cigna Rituximab IV Non-Oncology policy loaded with same normalized schema
-3. Every extracted field has mapped evidence snippets (1-3 sentences) from source policy text
-4. Drug alias lookup resolves bevacizumab family (Avastin, bevacizumab-awwb/Mvasi, bevacizumab-bvzr/Zirabev) and rituximab family (Rituxan, rituximab-abbs/Truxima, rituximab-pvvr/Ruxience) to canonical names
-5. Normalized data validates against Zod schema without errors
-
-**Plans:** 2 plans
-
-Plans:
-
-- [ ] 01-01-PLAN.md — Extend schema with oncology fields + add drug alias families + migrate RA policies
-- [ ] 01-02-PLAN.md — Extract BCBS NC + Cigna policies into structured JSON with evidence + update index
-
-### Phase 2: Core MCP Tools
-
-**Goal**: Deterministic MCP tools deliver policy intelligence with evidence grounding and structured responses
-
-**Depends on**: Phase 1
-
-**Requirements**: TOOL-01, TOOL-02, TOOL-03, RESP-01, RESP-02, RESP-03, RESP-04, RESP-05, DIFF-01, DIFF-02, DIFF-03
-
-**Success Criteria** (what must be TRUE):
-
-1. list_policies tool returns all loaded policies with metadata (payer, title, effective date, drug families)
-2. get_policy_summary tool returns structured summary for one policy with all normalized fields plus evidence
-3. compare_drug_across_payers tool accepts drug_family input and returns side-by-side comparison showing preferred/non-preferred splits and criteria differences
-4. All three tools return responses with: human-readable answer + structured_result object + evidence array + confidence level (HIGH for deterministic lookups)
-5. Bevacizumab comparison identifies BCBS NC preferred vs non-preferred product split
-6. Rituximab summary extracts Cigna step therapy and prior auth requirements
-
-**Plans**: 2 plans
-
-Plans:
-
-- [x] 02-01-PLAN.md — Shared response/evidence infrastructure + list_policies tool
-- [x] 02-02-PLAN.md — get_policy_summary + compare_drug_across_payers tools + MCP registration
-
-### Phase 3: Hybrid Q&A Engine
-
-**Goal**: Natural language policy questions answered with evidence grounding via hybrid deterministic + LLM routing
-
-**Depends on**: Phase 2
-
-**Requirements**: TOOL-04, RESP-06
-
-**Success Criteria** (what must be TRUE):
-
-1. ask_policy_question tool accepts natural language questions about loaded policies
-2. Query router tries deterministic lookup first (from Phase 2 patterns), falls back to LLM only for complex questions
-3. LLM responses validated against evidence index (every claim must map to policy text)
-4. Tool returns "insufficient evidence" for questions that can't be grounded in loaded policy data
-5. Question "What prior authorization criteria does Cigna require for rituximab?" returns grounded answer with evidence snippets
-
-**Plans**: 2 plans
-
-Plans:
-
-- [x] 03-01-PLAN.md — Entity extraction, query routing, and evidence retrieval utilities
-- [x] 03-02-PLAN.md — LLM client, claim validator, ask_policy_question tool, and MCP registration
-
-### Phase 4: Deployment + Integration
-
-**Goal**: MCP server publicly accessible via ngrok and fully integrated with Prompt Opinion
-
-**Depends on**: Phase 3
-
-**Requirements**: DEPL-01, DEPL-02, DEPL-03, DEPL-04, DEPL-05, DEMO-01, DEMO-02, DEMO-03
-
-**Success Criteria** (what must be TRUE):
-
-1. MCP server running with ngrok tunnel providing public HTTPS URL
-2. Prompt Opinion connects to server and discovers all 7 tools
-3. All 7 tools callable from Prompt Opinion with correct StreamableHTTP transport and CORS headers
-4. Health endpoint accessible and returns accurate policy/payer/drug counts
-5. Demo scenario works: bevacizumab cross-payer comparison shows BCBS NC preferred/non-preferred distinction
-6. Demo scenario works: rituximab Q&A from Prompt Opinion returns evidence-backed answer about Cigna prior auth criteria
-
-**Plans**: 2 plans
-
-Plans:
-
-- [x] 04-01-PLAN.md — Update smoke test for all 7 tools + create ngrok deployment script
-- [x] 04-02-PLAN.md — Update deployment/integration docs + verify end-to-end Prompt Opinion integration
-
----
-
-### Phase 5: File-Based Storage Foundation
-
-**Goal**: All v2.0 features have a reliable, versioned file storage layer — policies, patients, and evaluations persist across server restarts with diff tracking
-
-**Depends on**: Phase 4
-
-**Requirements**: STOR-01, STOR-02, STOR-03, STOR-04, STOR-05, STOR-06
-
-**Success Criteria** (what must be TRUE):
-
-1. A normalized policy JSON file saved to `data/policies/structured/` survives a server restart and is reloaded on startup
-2. `data/policies/index.json` lists every loaded policy with payer, title, drug family, version list, and current version pointer — and updates automatically when a policy is added or changed
-3. Uploading a modified version of an existing policy creates a new versioned JSON file and a diff record capturing what fields changed
-4. A patient case folder exists at `data/patients/{case-id}/` with its documents and extracted facts readable as JSON
-5. A saved coverage evaluation is retrievable by ID from `data/evaluations/{eval-id}.json`
-
-**Plans**: 4 plans
-
-Plans:
-
-- [ ] 05-01-PLAN.md — Storage types + directory scaffold (src/storage/types.ts, paths.ts, .gitignore)
-- [ ] 05-02-PLAN.md — Policy file store + diff engine (src/storage/policy-store.ts)
-- [ ] 05-03-PLAN.md — Patient case + evaluation stores (src/storage/patient-store.ts, evaluation-store.ts)
-- [ ] 05-04-PLAN.md — Startup disk scan + index rebuild wired into server
-
----
 
 ### Phase 6: Policy Management + Ingestion
 
@@ -261,7 +136,7 @@ Plans:
 
 ### Phase 11: Expanded MCP Tools
 
-**Goal**: All 10 new MCP tools are operational and expose every portal capability — upload, parse, version, diff, evidence search, fact extraction, evaluation, next steps, and case summary — to Prompt Opinion
+**Goal**: All 10 new MCP tools are operational and expose every portal capability to Prompt Opinion
 
 **Depends on**: Phase 10
 
@@ -299,21 +174,17 @@ Plans:
 
 ## Progress
 
-**Execution Order:**
-v1.0: Phases 1 → 2 → 3 → 4
-v2.0: Phases 5 → 6 → 7 → 8 → 9 → 10 → 11 → 12
-
-| Phase | Plans Complete | Status | Completed |
-|-------|----------------|--------|-----------|
-| 1. Policy Data Foundation | 0/2 | Planned | - |
-| 2. Core MCP Tools | 2/2 | Complete | 2026-04-15 |
-| 3. Hybrid Q&A Engine | 2/2 | Complete | 2026-04-17 |
-| 4. Deployment + Integration | 2/2 | Complete | 2026-04-18 |
-| 5. File-Based Storage Foundation | 0/4 | Not started | - |
-| 6. Policy Management + Ingestion | 0/TBD | Not started | - |
-| 7. Policy Compare + Insights | 0/TBD | Not started | - |
-| 8. Policy Changes + Versioning | 0/TBD | Not started | - |
-| 9. Patient Cases + Coverage Evaluation | 0/TBD | Not started | - |
-| 10. Next Steps + Evidence Explorer + Chat | 0/TBD | Not started | - |
-| 11. Expanded MCP Tools | 0/TBD | Not started | - |
-| 12. Portal UI + Dashboard + Deployment | 0/TBD | Not started | - |
+| Phase | Milestone | Plans Complete | Status | Completed |
+|-------|-----------|----------------|--------|-----------|
+| 1. Policy Data Foundation | v1.0 | 2/2 | Complete | 2026-04-12 |
+| 2. Core MCP Tools | v1.0 | 2/2 | Complete | 2026-04-15 |
+| 3. Hybrid Q&A Engine | v1.0 | 2/2 | Complete | 2026-04-17 |
+| 4. Deployment + Integration | v1.0 | 2/2 | Complete | 2026-04-18 |
+| 5. File-Based Storage Foundation | v1.0 | 4/4 | Complete | 2026-04-22 |
+| 6. Policy Management + Ingestion | v2.0 | 0/TBD | Not started | - |
+| 7. Policy Compare + Insights | v2.0 | 0/TBD | Not started | - |
+| 8. Policy Changes + Versioning | v2.0 | 0/TBD | Not started | - |
+| 9. Patient Cases + Coverage Evaluation | v2.0 | 0/TBD | Not started | - |
+| 10. Next Steps + Evidence Explorer + Chat | v2.0 | 0/TBD | Not started | - |
+| 11. Expanded MCP Tools | v2.0 | 0/TBD | Not started | - |
+| 12. Portal UI + Dashboard + Deployment | v2.0 | 0/TBD | Not started | - |
