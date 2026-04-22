@@ -1106,6 +1106,140 @@ select {
   margin-top: 16px;
 }
 
+.changes-timeline {
+  display: grid;
+  gap: 18px;
+}
+
+.changes-event-card {
+  padding: 18px;
+  border: 1px solid rgba(132, 181, 206, 0.16);
+  border-radius: 24px;
+  background: rgba(7, 21, 31, 0.76);
+}
+
+.changes-summary-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 12px 0 16px;
+}
+
+.changes-summary-row p {
+  margin: 0;
+  color: #d7eef8;
+}
+
+.changes-severity-chip-list {
+  display: inline-flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.changes-severity-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.change-severity-cosmetic {
+  background: rgba(113, 135, 149, 0.18);
+  color: #d4e2ea;
+}
+
+.change-severity-operational {
+  background: rgba(191, 145, 61, 0.18);
+  color: #ffd58a;
+}
+
+.change-severity-clinical {
+  background: rgba(171, 72, 72, 0.2);
+  color: #ffb0b0;
+}
+
+.changes-table-wrapper {
+  overflow: auto;
+  border: 1px solid rgba(132, 181, 206, 0.12);
+  border-radius: 20px;
+}
+
+.changes-table {
+  width: 100%;
+  min-width: 920px;
+  border-collapse: collapse;
+  background: rgba(5, 18, 27, 0.86);
+}
+
+.changes-table th,
+.changes-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(132, 181, 206, 0.12);
+  text-align: left;
+  vertical-align: top;
+}
+
+.changes-table th {
+  color: #bfe0ef;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.changes-table td {
+  color: #e6f4fb;
+  font-size: 0.92rem;
+}
+
+.changes-table pre {
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font: inherit;
+  color: inherit;
+}
+
+.changes-field-cell {
+  min-width: 200px;
+  color: #9fd1e7;
+}
+
+.version-diff-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.version-diff-panel {
+  border: 1px solid rgba(132, 181, 206, 0.16);
+  border-radius: 22px;
+  background: rgba(7, 21, 31, 0.8);
+  overflow: hidden;
+}
+
+.version-diff-header {
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(132, 181, 206, 0.14);
+  background: rgba(11, 31, 44, 0.82);
+  color: #dff3fc;
+}
+
+.version-diff-text {
+  margin: 0;
+  max-height: 520px;
+  overflow: auto;
+  padding: 16px;
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: #d7edf7;
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
 /* ── Change dashboard ── */
 .change-dashboard {
   display: grid;

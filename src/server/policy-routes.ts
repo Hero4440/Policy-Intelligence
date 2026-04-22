@@ -1,5 +1,6 @@
 import type { Express, Request, Response } from 'express';
 import { buildPolicyComparison, getPolicyCompareOptions } from './policy-compare.js';
+import { buildPolicyVersionDiff, listPolicyChangeEvents } from './policy-changes.js';
 import { buildPolicyInsights } from './policy-insights.js';
 
 function parseCsvQuery(value: unknown): string[] {
@@ -18,6 +19,13 @@ function parseVersionQuery(value: unknown): number | undefined {
   }
   const version = Number(value);
   return Number.isFinite(version) ? version : undefined;
+}
+
+function parseSeverityQuery(value: unknown): 'cosmetic' | 'operational' | 'clinical' | undefined {
+  if (value === 'cosmetic' || value === 'operational' || value === 'clinical') {
+    return value;
+  }
+  return undefined;
 }
 
 export function registerPolicyRoutes(app: Express) {
@@ -56,6 +64,54 @@ export function registerPolicyRoutes(app: Express) {
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Failed to build policy insights';
       res.status(400).json({ error: message });
+    }
+  });
+
+  app.get('/api/policies/changes', (req: Request, res: Response) => {
+    try {
+      res.json(
+        listPolicyChangeEvents({
+          policyId: typeof req.query.policyId === 'string' ? req.query.policyId : undefined,
+          payer: typeof req.query.payer === 'string' ? req.query.payer : undefined,
+          drugFamily: typeof req.query.drugFamily === 'string' ? req.query.drugFamily : undefined,
+          severity: parseSeverityQuery(req.query.severity)
+        })
+      );
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Failed to load policy changes';
+      res.status(400).json({ error: message });
+    }
+  });
+
+  app.get('/api/policies/:policyId/changes', (req: Request, res: Response) => {
+    const policyId = typeof req.params.policyId === 'string' ? req.params.policyId : undefined;
+    if (!policyId) {
+      res.status(400).json({ error: 'policyId route param is required.' });
+      return;
+    }
+    try {
+      res.json(listPolicyChangeEvents({ policyId }));
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Failed to load policy changes';
+      res.status(400).json({ error: message });
+    }
+  });
+
+  app.get('/api/policies/:policyId/diff', (req: Request, res: Response) => {
+    const policyId = typeof req.params.policyId === 'string' ? req.params.policyId : undefined;
+    const fromVersion = parseVersionQuery(req.query.fromVersion);
+    const toVersion = parseVersionQuery(req.query.toVersion);
+    if (!policyId || !fromVersion || !toVersion) {
+      res.status(400).json({ error: 'policyId, fromVersion, and toVersion are required.' });
+      return;
+    }
+
+    try {
+      res.json(buildPolicyVersionDiff(policyId, fromVersion, toVersion));
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Failed to build policy version diff';
+      const statusCode = /not found|unavailable/i.test(message) ? 404 : 400;
+      res.status(statusCode).json({ error: message });
     }
   });
 }

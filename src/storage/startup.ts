@@ -2,6 +2,7 @@ import { existsSync, readFileSync, readdirSync, renameSync, writeFileSync } from
 import { join } from 'path';
 import {
   derivePolicyId,
+  ensurePolicyTextSnapshot,
   getCurrentPolicyCache,
   getCurrentPolicyFromCache,
   replaceCurrentPolicyCache
@@ -68,6 +69,9 @@ export function loadStorageOnStartup(): void {
     cacheEntries.push([policyId, record]);
 
     const versionNumbers = [...(versionsByPolicyId.get(policyId) ?? [])].sort((a, b) => a - b);
+    for (const versionNumber of versionNumbers) {
+      ensurePolicyTextSnapshot(policyId, versionNumber);
+    }
 
     indexEntries.push({
       policyId: derivePolicyId(record),

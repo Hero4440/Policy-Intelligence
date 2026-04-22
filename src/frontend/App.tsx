@@ -16,7 +16,9 @@ import { PatientCasesView } from './components/patient-cases-view.js';
 import { PatientCaseDetailView } from './components/patient-case-detail-view.js';
 import { PolicyCompareBuilder } from './components/policy-compare-builder.js';
 import { PolicyCompareView } from './components/policy-compare-view.js';
+import { PolicyChangesFilters, PolicyChangesView } from './components/policy-changes-view.js';
 import { PolicyInsightsBuilder, PolicyInsightsView } from './components/policy-insights-view.js';
+import { PolicyVersionDiffView } from './components/policy-version-diff-view.js';
 import type { TabId } from './components/detail-tabs.js';
 import {
   fetchAntonRxChanges,
@@ -43,15 +45,20 @@ import {
 import {
   fetchPolicyCompareOptions,
   fetchPolicyComparison,
+  fetchPolicyChanges,
   fetchPolicyInsights,
+  fetchPolicyVersionDiff,
+  type ChangeSeverity,
+  type PolicyChangesResponse,
   type PolicyCompareOptions,
   type PolicyComparePayload,
   type PolicyEvidenceRef,
-  type PolicyInsightsPayload
+  type PolicyInsightsPayload,
+  type PolicyVersionDiffPayload
 } from './data/policies.js';
 
 export default function App() {
-  const [activePage, setActivePage] = useState<'workspace' | 'compare' | 'insights' | 'data' | 'patients'>('workspace');
+  const [activePage, setActivePage] = useState<'workspace' | 'compare' | 'insights' | 'changes' | 'data' | 'patients'>('workspace');
   const [drugQuery, setDrugQuery] = useState('adalimumab');
   const [selectedIssuer, setSelectedIssuer] = useState('');
   const [activeTab, setActiveTab] = useState<TabId>('coverage');
@@ -87,6 +94,16 @@ export default function App() {
   const [policyInsightsError, setPolicyInsightsError] = useState<string | null>(null);
   const [isPolicyInsightsLoading, setIsPolicyInsightsLoading] = useState(false);
   const [selectedInsightsEvidence, setSelectedInsightsEvidence] = useState<{ title: string; evidence: PolicyEvidenceRef[] } | null>(null);
+  const [policyChanges, setPolicyChanges] = useState<PolicyChangesResponse | null>(null);
+  const [policyChangesError, setPolicyChangesError] = useState<string | null>(null);
+  const [isPolicyChangesLoading, setIsPolicyChangesLoading] = useState(false);
+  const [changesPayer, setChangesPayer] = useState('');
+  const [changesDrugFamily, setChangesDrugFamily] = useState('');
+  const [changesSeverity, setChangesSeverity] = useState('');
+  const [selectedVersionDiff, setSelectedVersionDiff] = useState<{ policyId: string; fromVersion: number; toVersion: number } | null>(null);
+  const [policyVersionDiff, setPolicyVersionDiff] = useState<PolicyVersionDiffPayload | null>(null);
+  const [policyVersionDiffError, setPolicyVersionDiffError] = useState<string | null>(null);
+  const [isPolicyVersionDiffLoading, setIsPolicyVersionDiffLoading] = useState(false);
   const comparePayerOptions = useMemo(
     () => policyCompareOptions?.drugFamilies.find((entry) => entry.key === compareDrugFamily)?.payers ?? [],
     [policyCompareOptions, compareDrugFamily]
@@ -275,6 +292,48 @@ export default function App() {
       .finally(() => setIsPolicyInsightsLoading(false));
   }, [activePage, insightsDrugFamily, insightsPayers, insightsRuleType, insightsVersion]);
 
+  useEffect(() => {
+    if (activePage !== 'changes') {
+      return;
+    }
+
+    setIsPolicyChangesLoading(true);
+    setPolicyChangesError(null);
+
+    void fetchPolicyChanges({
+      payer: changesPayer || undefined,
+      drugFamily: changesDrugFamily || undefined,
+      severity: changesSeverity ? changesSeverity as ChangeSeverity : undefined
+    })
+      .then((payload) => setPolicyChanges(payload))
+      .catch((loadError) => {
+        setPolicyChanges(null);
+        setPolicyChangesError(loadError instanceof Error ? loadError.message : 'Failed to load policy changes');
+      })
+      .finally(() => setIsPolicyChangesLoading(false));
+  }, [activePage, changesPayer, changesDrugFamily, changesSeverity]);
+
+  useEffect(() => {
+    if (activePage !== 'changes' || !selectedVersionDiff) {
+      return;
+    }
+
+    setIsPolicyVersionDiffLoading(true);
+    setPolicyVersionDiffError(null);
+
+    void fetchPolicyVersionDiff(
+      selectedVersionDiff.policyId,
+      selectedVersionDiff.fromVersion,
+      selectedVersionDiff.toVersion
+    )
+      .then((payload) => setPolicyVersionDiff(payload))
+      .catch((loadError) => {
+        setPolicyVersionDiff(null);
+        setPolicyVersionDiffError(loadError instanceof Error ? loadError.message : 'Failed to load policy version diff');
+      })
+      .finally(() => setIsPolicyVersionDiffLoading(false));
+  }, [activePage, selectedVersionDiff]);
+
   async function handleIngestionComplete(result: IngestionUploadResult) {
     setIngestionSummary(result.summary);
     setIngestedSources((current) => {
@@ -350,7 +409,12 @@ export default function App() {
     await refreshPatientCases(payload.case.caseId);
   }
 
-  function renderPhaseSidebar(title: string, copy: string) {
+  function renderPhaseSidebar(
+    title: string,
+    copy: string,
+    noteBadge = 'Phase 7',
+    noteText = 'Every compare cell and insight cell is wired to evidence. The graph is intentionally simple and static.'
+  ) {
     return (
       <aside className="sidebar">
         <div className="sidebar-section">
@@ -360,8 +424,8 @@ export default function App() {
         </div>
 
         <div className="sidebar-section sidebar-note">
-          <span className="note-badge">Phase 7</span>
-          <p>Every compare cell and insight cell is wired to evidence. The graph is intentionally simple and static.</p>
+          <span className="note-badge">{noteBadge}</span>
+          <p>{noteText}</p>
         </div>
       </aside>
     );
@@ -512,6 +576,13 @@ export default function App() {
           </button>
           <button
             type="button"
+            className={`page-nav-btn${activePage === 'changes' ? ' page-nav-btn-active' : ''}`}
+            onClick={() => setActivePage('changes')}
+          >
+            Changes
+          </button>
+          <button
+            type="button"
             className={`page-nav-btn${activePage === 'data' ? ' page-nav-btn-active' : ''}`}
             onClick={() => setActivePage('data')}
           >
@@ -538,6 +609,13 @@ export default function App() {
           renderPhaseSidebar(
             'Heat map and graph',
             'Filter the current policy corpus and drill into payer-by-rule patterns through a heat map and relationship graph.'
+          )
+        ) : activePage === 'changes' ? (
+          renderPhaseSidebar(
+            'Change history and diff',
+            'Track policy updates over time, inspect materiality labels, and open side-by-side version diffs.',
+            'Phase 8',
+            'Policy changes are classified deterministically as cosmetic, operational, or clinical.'
           )
         ) : (
           <Sidebar
@@ -587,6 +665,16 @@ export default function App() {
             onTogglePayer={(payer) => setInsightsPayers((current) => toggleStringValue(current, payer))}
             onRuleTypeChange={setInsightsRuleType}
             onVersionChange={setInsightsVersion}
+          />
+        ) : activePage === 'changes' ? (
+          <PolicyChangesFilters
+            options={policyChanges?.filters ?? null}
+            selectedPayer={changesPayer}
+            selectedDrugFamily={changesDrugFamily}
+            selectedSeverity={changesSeverity}
+            onPayerChange={setChangesPayer}
+            onDrugFamilyChange={setChangesDrugFamily}
+            onSeverityChange={setChangesSeverity}
           />
         ) : (
           <>
@@ -640,6 +728,30 @@ export default function App() {
             onOpenEvidence={(title, evidence) => setSelectedInsightsEvidence({ title, evidence })}
             onClearEvidence={() => setSelectedInsightsEvidence(null)}
           />
+        ) : activePage === 'changes' ? (
+          selectedVersionDiff ? (
+            <PolicyVersionDiffView
+              diff={policyVersionDiff}
+              loading={isPolicyVersionDiffLoading}
+              error={policyVersionDiffError}
+              onBack={() => {
+                setSelectedVersionDiff(null);
+                setPolicyVersionDiff(null);
+                setPolicyVersionDiffError(null);
+              }}
+            />
+          ) : (
+            <PolicyChangesView
+              response={policyChanges}
+              loading={isPolicyChangesLoading}
+              error={policyChangesError}
+              onOpenDiff={(input) => {
+                setSelectedVersionDiff(input);
+                setPolicyVersionDiff(null);
+                setPolicyVersionDiffError(null);
+              }}
+            />
+          )
         ) : (
           <>
             {selectedMatch && (

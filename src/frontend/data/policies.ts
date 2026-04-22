@@ -113,6 +113,58 @@ export interface PolicyInsightsPayload {
   };
 }
 
+export type ChangeSeverity = 'cosmetic' | 'operational' | 'clinical';
+
+export type ChangeType = 'added' | 'removed' | 'updated';
+
+export interface ClassifiedDiffField {
+  field: string;
+  oldValue: string;
+  newValue: string;
+  severity: ChangeSeverity;
+  rationale: string;
+  changeType: ChangeType;
+}
+
+export interface PolicyChangeEvent {
+  policyId: string;
+  policyTitle: string;
+  payer: string;
+  drugFamily: string;
+  fromVersion: number;
+  toVersion: number;
+  timestamp: string;
+  summary: string;
+  severityCounts: Record<ChangeSeverity, number>;
+  changes: ClassifiedDiffField[];
+  warning?: string;
+}
+
+export interface PolicyChangesResponse {
+  events: PolicyChangeEvent[];
+  filters: {
+    payerOptions: string[];
+    drugFamilyOptions: string[];
+    severityOptions: ChangeSeverity[];
+  };
+}
+
+export interface PolicyVersionDiffPayload {
+  policyId: string;
+  policyTitle: string;
+  payer: string;
+  drugFamily: string;
+  fromVersion: number;
+  toVersion: number;
+  structuredChanges: ClassifiedDiffField[];
+  textSnapshot: {
+    leftLabel: string;
+    rightLabel: string;
+    leftText: string;
+    rightText: string;
+  };
+}
+
 async function fetchJson<T>(input: string): Promise<T> {
   const response = await fetch(input);
   if (!response.ok) {
@@ -170,6 +222,41 @@ export function fetchPolicyInsights(input: {
   return fetchJson<PolicyInsightsPayload>(`/api/policies/insights?${params.toString()}`);
 }
 
+export function fetchPolicyChanges(filters?: {
+  policyId?: string;
+  payer?: string;
+  drugFamily?: string;
+  severity?: ChangeSeverity;
+}) {
+  const params = new URLSearchParams();
+  if (filters?.policyId) {
+    params.set('policyId', filters.policyId);
+  }
+  if (filters?.payer) {
+    params.set('payer', filters.payer);
+  }
+  if (filters?.drugFamily) {
+    params.set('drugFamily', filters.drugFamily);
+  }
+  if (filters?.severity) {
+    params.set('severity', filters.severity);
+  }
+  const suffix = params.size > 0 ? `?${params.toString()}` : '';
+  return fetchJson<PolicyChangesResponse>(`/api/policies/changes${suffix}`);
+}
+
+export function fetchPolicyChangesForPolicy(policyId: string) {
+  return fetchJson<PolicyChangesResponse>(`/api/policies/${policyId}/changes`);
+}
+
+export function fetchPolicyVersionDiff(policyId: string, fromVersion: number, toVersion: number) {
+  const params = new URLSearchParams({
+    fromVersion: String(fromVersion),
+    toVersion: String(toVersion)
+  });
+  return fetchJson<PolicyVersionDiffPayload>(`/api/policies/${policyId}/diff?${params.toString()}`);
+}
+
 export function summarizePolicyStatus(status: PolicyStatusTone): string {
   switch (status) {
     case 'favorable':
@@ -180,5 +267,16 @@ export function summarizePolicyStatus(status: PolicyStatusTone): string {
       return 'Restrictive';
     case 'unknown':
       return 'Unknown';
+  }
+}
+
+export function summarizeChangeSeverity(severity: ChangeSeverity): string {
+  switch (severity) {
+    case 'cosmetic':
+      return 'Cosmetic';
+    case 'operational':
+      return 'Operational';
+    case 'clinical':
+      return 'Clinical';
   }
 }

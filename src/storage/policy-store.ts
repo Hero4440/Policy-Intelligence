@@ -29,6 +29,10 @@ function diffPath(policyId: string, fromVersion: number, toVersion: number): str
   return join(POLICIES_STRUCTURED_DIR, `${policyId}_diff_v${fromVersion}_to_v${toVersion}.json`);
 }
 
+function textSnapshotPath(policyId: string, version: number): string {
+  return join(POLICIES_STRUCTURED_DIR, `${policyId}_text_v${version}.txt`);
+}
+
 function safeReadJson<T>(filePath: string, logPrefix: string): T | null {
   if (!existsSync(filePath)) {
     return null;
@@ -85,6 +89,66 @@ function computeDiff(oldRecord: PolicyRecord, newRecord: PolicyRecord): DiffFiel
   ];
 }
 
+function renderPolicyTextSnapshot(record: PolicyRecord): string {
+  const preferredProducts = (record.drug.products ?? [])
+    .filter((product) => product.tier === 'preferred')
+    .map((product) => product.name);
+  const nonPreferredProducts = (record.drug.products ?? [])
+    .filter((product) => product.tier === 'non-preferred')
+    .map((product) => product.name);
+
+  const sections = [
+    `Policy Title: ${record.policyTitle ?? record.indication}`,
+    `Payer: ${record.payer}`,
+    `Plan: ${record.plan}`,
+    `Drug Family: ${record.drug.brandName} (${record.drug.genericName})`,
+    `Coverage Status: ${record.coverageStatus}`,
+    `Prior Auth Required: ${record.paRequired ? 'Yes' : 'No'}`,
+    `Indication: ${record.indication}`,
+    `Effective Date: ${record.sourceDocument.effectiveDate ?? 'Not specified'}`,
+    `Source File: ${record.sourceDocument.filename}`,
+    '',
+    'Preferred Products:',
+    preferredProducts.length > 0 ? preferredProducts.map((product) => `- ${product}`).join('\n') : '- None listed',
+    '',
+    'Non-Preferred Products:',
+    nonPreferredProducts.length > 0 ? nonPreferredProducts.map((product) => `- ${product}`).join('\n') : '- None listed',
+    '',
+    'Covered Indications:',
+    (record.indications ?? []).length > 0
+      ? (record.indications ?? []).map((item) => `- ${item}`).join('\n')
+      : `- ${record.indication}`,
+    '',
+    'Diagnosis Requirements:',
+    record.diagnosisRequirements.length > 0
+      ? record.diagnosisRequirements
+        .map((requirement) => {
+          const codes = requirement.icd10Codes.length > 0 ? ` (${requirement.icd10Codes.join(', ')})` : '';
+          return `- ${requirement.description}${codes}`;
+        })
+        .join('\n')
+      : '- None listed',
+    '',
+    'Step Therapy:',
+    record.stepTherapy.length > 0
+      ? record.stepTherapy
+        .map((entry) =>
+          `- ${entry.drugName}: ${entry.failureCriteria}; duration ${entry.duration}${entry.dosage ? `; dosage ${entry.dosage}` : ''}`
+        )
+        .join('\n')
+      : '- None listed',
+    '',
+    'Other Requirements:',
+    record.otherRequirements.length > 0
+      ? record.otherRequirements
+        .map((entry) => `- ${entry.category}: ${entry.requirement}`)
+        .join('\n')
+      : '- None listed'
+  ];
+
+  return sections.join('\n').trim();
+}
+
 function buildIndexEntry(
   policyId: string,
   record: PolicyRecord,
@@ -138,6 +202,55 @@ export function readPolicyVersion(policyId: string, version: number): PolicyVers
   return safeReadJson<PolicyVersion>(filePath, '[policy-store]');
 }
 
+export function readPolicyTextSnapshot(policyId: string, version: number): string | null {
+  const filePath = textSnapshotPath(policyId, version);
+  if (!existsSync(filePath)) {
+    return null;
+  }
+
+  try {
+    return readFileSync(filePath, 'utf-8');
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    console.error('[policy-store] failed to read text snapshot:', filePath, message);
+    return null;
+  }
+}
+
+export function ensurePolicyTextSnapshot(policyId: string, version: number): string | null {
+  ensureDataDirectories();
+
+  const existing = readPolicyTextSnapshot(policyId, version);
+  if (existing) {
+    return existing;
+  }
+
+  const policyVersion = readPolicyVersion(policyId, version);
+  if (!policyVersion) {
+    return null;
+  }
+
+  const snapshot = renderPolicyTextSnapshot(policyVersion.record);
+  writeFileSync(textSnapshotPath(policyId, version), snapshot, 'utf-8');
+  return snapshot;
+}
+
+export function listPolicyVersionPairs(policyId: string): Array<{ fromVersion: number; toVersion: number }> {
+  const entry = loadIndex().policies.find((item) => item.policyId === policyId);
+  if (!entry || entry.versions.length < 2) {
+    return [];
+  }
+
+  const pairs: Array<{ fromVersion: number; toVersion: number }> = [];
+  for (let index = 1; index < entry.versions.length; index += 1) {
+    pairs.push({
+      fromVersion: entry.versions[index - 1],
+      toVersion: entry.versions[index]
+    });
+  }
+  return pairs;
+}
+
 export function writePolicyVersion(record: PolicyRecord): {
   version: number;
   filePath: string;
@@ -162,6 +275,7 @@ export function writePolicyVersion(record: PolicyRecord): {
   };
 
   writeFileSync(filePath, JSON.stringify(policyVersion, null, 2), 'utf-8');
+  writeFileSync(textSnapshotPath(policyId, version), renderPolicyTextSnapshot(record), 'utf-8');
 
   let diffRecord: DiffRecord | null = null;
   if (version > 1) {

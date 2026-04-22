@@ -6,20 +6,20 @@ See: .planning/PROJECT.md (updated 2026-04-22)
 
 **Core value:** Every policy question answered must include source-backed evidence from loaded policy documents — and every coverage evaluation must show exactly which criteria are met, missing, or ambiguous.
 
-**Current focus:** v2.0 Full Product — Phase 7 implementation is done; manual browser UAT is next
+**Current focus:** v2.0 Full Product — Phase 8 planning is complete; implementation should start at 08-01
 
 ## Current Position
 
-Phase: 7 — Policy Compare + Insights
-Plan: 07-05
-Status: Awaiting human verification
-Last activity: 2026-04-22 — Phase 7 implementation completed; browser UAT checklist prepared
+Phase: 8 — Policy Changes + Versioning
+Plan: 08-01
+Status: Ready to implement
+Last activity: 2026-04-22 — Phase 8 planning, status, and UAT docs prepared
 
 ```text
 v2.0 Progress: [          ] 0/7 phases
 Phase 6:  [x] Policy Management + Ingestion
 Phase 7:  [~] Policy Compare + Insights
-Phase 8:  [ ] Policy Changes + Versioning
+Phase 8:  [~] Policy Changes + Versioning
 Phase 9:  [ ] Patient Cases + Coverage Evaluation
 Phase 10: [ ] Next Steps + Evidence Explorer + Chat
 Phase 11: [ ] Expanded MCP Tools
@@ -56,7 +56,7 @@ Phase 12: [ ] Portal UI + Dashboard + Deployment
 
 ## Session Continuity
 
-Last session: 2026-04-22 (Phase 7 implementation)
-Stopped at: Compare and Insights are implemented; blocking manual browser UAT remains before sign-off
-Resume file: .planning/phases/07-policy-compare-insights/07-UAT.md
-Next action: Run the browser checklist in `07-UAT.md`, then create `07-05-SUMMARY.md` and advance to Phase 8
+Last session: 2026-04-22 (Phase 8 planning)
+Stopped at: Phase 8 planning is complete and implementation is queued
+Resume file: .planning/phases/08-policy-changes-versioning/08-01-PLAN.md
+Next action: Execute `08-01-PLAN.md`, then continue through `08-04` and verify against `08-UAT.md`

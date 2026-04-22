@@ -40,6 +40,33 @@ export interface DiffRecord {
   changes: DiffField[];
 }
 
+export type ChangeSeverity = 'cosmetic' | 'operational' | 'clinical';
+
+export type ChangeType = 'added' | 'removed' | 'updated';
+
+export interface ClassifiedDiffField {
+  field: string;
+  oldValue: unknown;
+  newValue: unknown;
+  severity: ChangeSeverity;
+  rationale: string;
+  changeType: ChangeType;
+}
+
+export interface PolicyChangeEvent {
+  policyId: string;
+  policyTitle: string;
+  payer: string;
+  drugFamily: string;
+  fromVersion: number;
+  toVersion: number;
+  timestamp: string;
+  summary: string;
+  severityCounts: Record<ChangeSeverity, number>;
+  changes: ClassifiedDiffField[];
+  warning?: string;
+}
+
 export interface PatientCase {
   caseId: string;
   payer: string;
