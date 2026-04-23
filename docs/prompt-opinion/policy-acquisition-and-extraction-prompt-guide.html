@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Policy Acquisition And Extraction Prompt Guide</title>
+  <style>
+    :root {
+      --bg: #0b1220;
+      --panel: #101a2f;
+      --panel-2: #16233d;
+      --text: #e8eefc;
+      --muted: #a6b4d4;
+      --accent: #7dd3fc;
+      --accent-2: #38bdf8;
+      --border: rgba(148, 163, 184, 0.24);
+      --success: #34d399;
+      --shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(56, 189, 248, 0.16), transparent 30%),
+        radial-gradient(circle at top right, rgba(125, 211, 252, 0.1), transparent 28%),
+        linear-gradient(180deg, #08101c 0%, #0b1220 100%);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .page {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 40px 20px 80px;
+    }
+
+    .hero {
+      padding: 32px;
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      background: linear-gradient(180deg, rgba(16, 26, 47, 0.96), rgba(9, 18, 32, 0.96));
+      box-shadow: var(--shadow);
+    }
+
+    .eyebrow {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.14);
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 14px 0 8px;
+      font-size: clamp(2rem, 4vw, 3.4rem);
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+    }
+
+    .hero p {
+      max-width: 840px;
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+
+    .section {
+      margin-top: 28px;
+      padding: 28px;
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      background: rgba(16, 26, 47, 0.84);
+      box-shadow: var(--shadow);
+    }
+
+    h2 {
+      margin: 0 0 14px;
+      font-size: 1.5rem;
+      line-height: 1.2;
+    }
+
+    h3 {
+      margin: 26px 0 10px;
+      font-size: 1.06rem;
+      color: var(--accent);
+      letter-spacing: 0.01em;
+    }
+
+    p {
+      margin: 10px 0;
+    }
+
+    ul, ol {
+      margin: 12px 0 12px 22px;
+      padding: 0;
+    }
+
+    li + li {
+      margin-top: 6px;
+    }
+
+    code.inline {
+      padding: 0.15rem 0.4rem;
+      border-radius: 8px;
+      background: rgba(148, 163, 184, 0.12);
+      color: #dbeafe;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size: 0.95em;
+    }
+
+    .prompt-card {
+      margin-top: 16px;
+      border: 1px solid rgba(125, 211, 252, 0.24);
+      border-radius: 20px;
+      overflow: hidden;
+      background: linear-gradient(180deg, rgba(22, 35, 61, 0.96), rgba(11, 18, 32, 0.96));
+    }
+
+    .prompt-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(125, 211, 252, 0.16);
+      background: rgba(56, 189, 248, 0.06);
+    }
+
+    .prompt-title {
+      font-size: 0.96rem;
+      font-weight: 700;
+      color: #d9f3ff;
+    }
+
+    .copy-btn {
+      border: 1px solid rgba(125, 211, 252, 0.25);
+      background: rgba(8, 16, 28, 0.95);
+      color: var(--text);
+      padding: 9px 12px;
+      border-radius: 12px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 120ms ease, border-color 120ms ease, background 120ms ease;
+    }
+
+    .copy-btn:hover {
+      transform: translateY(-1px);
+      border-color: rgba(125, 211, 252, 0.5);
+      background: rgba(16, 26, 47, 1);
+    }
+
+    .copy-btn.copied {
+      color: #03140c;
+      background: var(--success);
+      border-color: transparent;
+    }
+
+    pre {
+      margin: 0;
+      padding: 18px;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+      color: #dbeafe;
+      font-size: 0.94rem;
+      line-height: 1.55;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    }
+
+    .example-box {
+      margin-top: 16px;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: rgba(7, 14, 26, 0.9);
+      overflow: hidden;
+    }
+
+    .note {
+      margin-top: 16px;
+      padding: 14px 16px;
+      border-left: 4px solid var(--accent-2);
+      border-radius: 14px;
+      background: rgba(56, 189, 248, 0.08);
+      color: #d6e9fb;
+    }
+
+    .footer {
+      margin-top: 28px;
+      color: var(--muted);
+      font-size: 0.95rem;
+      text-align: center;
+    }
+
+    @media (max-width: 720px) {
+      .hero,
+      .section {
+        padding: 22px;
+        border-radius: 20px;
+      }
+
+      .prompt-head {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .copy-btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <span class="eyebrow">Prompt Guide</span>
+      <h1>Policy Acquisition And Extraction Prompt Guide</h1>
+      <p>
+        This page preserves the full guidance for scraping, downloading, searching, extracting, and validating
+        payer policy documents so they match this project’s actual schema and stored policy examples.
+      </p>
+    </section>
+
+    <section class="section">
+      <h2>Recommended Workflow</h2>
+      <p>Yes. For this project, the best workflow is not “ask ChatGPT to invent policy JSON.” It should be:</p>
+      <ol>
+        <li>find/download the payer PDF</li>
+        <li>extract clean text from the PDF</li>
+        <li>ask Claude/ChatGPT to convert that text into your project’s schema</li>
+        <li>validate and lightly review before saving</li>
+      </ol>
+      <p>
+        What your policies need to look like is defined by
+        <span class="inline-wrap"><code class="inline">data/schemas/policy.schema.ts</code></span>,
+        and good examples are in
+        <span class="inline-wrap"><code class="inline">data/policies/structured/aetna-upadacitinib-ra.json</code></span>
+        and
+        <span class="inline-wrap"><code class="inline">data/policies/structured/uhc-adalimumab-ra.json</code></span>.
+      </p>
+    </section>
+
+    <section class="section">
+      <h2>What To Specify So Extracted Policies Match This Project</h2>
+      <ul>
+        <li><code class="inline">id</code>: stable slug like <code class="inline">uhc-adalimumab-ra</code></li>
+        <li><code class="inline">payer</code>: must currently be one of <code class="inline">UHC</code>, <code class="inline">Aetna</code>, <code class="inline">Cigna</code>, <code class="inline">BCBS-NC</code></li>
+        <li><code class="inline">plan</code>: usually <code class="inline">Commercial</code></li>
+        <li><code class="inline">policyTitle</code></li>
+        <li><code class="inline">drug.brandName</code></li>
+        <li><code class="inline">drug.genericName</code></li>
+        <li><code class="inline">drug.aliases</code></li>
+        <li><code class="inline">indication</code></li>
+        <li>optional <code class="inline">indications</code></li>
+        <li><code class="inline">coverageStatus</code>: <code class="inline">covered</code>, <code class="inline">covered-with-pa</code>, or <code class="inline">excluded</code></li>
+        <li><code class="inline">paRequired</code>: boolean</li>
+        <li><code class="inline">diagnosisRequirements[]</code></li>
+        <li><code class="inline">stepTherapy[]</code></li>
+        <li><code class="inline">otherRequirements[]</code></li>
+        <li>every requirement needs:
+          <ul>
+            <li><code class="inline">evidenceText</code></li>
+            <li><code class="inline">source.document</code></li>
+            <li><code class="inline">source.page</code></li>
+            <li><code class="inline">source.section</code></li>
+          </ul>
+        </li>
+        <li><code class="inline">sourceDocument.filename</code></li>
+        <li>optional <code class="inline">sourceDocument.url</code></li>
+        <li><code class="inline">sourceDocument.retrievalDate</code></li>
+        <li>optional <code class="inline">sourceDocument.effectiveDate</code></li>
+      </ul>
+
+      <h3>Two Important Constraints</h3>
+      <ul>
+        <li>Your schema currently only accepts 4 payers. If you want more payers, update the schema first.</li>
+        <li>Evidence should be lightly summarized, but still traceable to the exact source section/page.</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2>Recommended Prompt For Policy Discovery</h2>
+      <p>Use this when you want Claude/ChatGPT to help you find candidate public policy PDFs:</p>
+
+      <div class="prompt-card">
+        <div class="prompt-head">
+          <div class="prompt-title">Policy Discovery Prompt</div>
+          <button class="copy-btn" data-copy-target="prompt-discovery">Copy Prompt</button>
+        </div>
+        <pre id="prompt-discovery">I am collecting public US payer medical benefit drug policy PDFs for normalization into a structured policy database.
+
+Find official public payer policy documents for:
+- payer: [PAYER NAME]
+- drug or generic: [DRUG]
+- indication: [INDICATION if known]
+
+Return only likely official source links, prioritizing payer/provider domains and PDF policy documents.
+For each result, give:
+1. title
+2. URL
+3. whether it looks like an official policy PDF
+4. likely payer
+5. likely drug/generic
+6. why it matches
+
+Do not invent links. If unsure, say unsure.</pre>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Recommended Prompt For Structured Extraction</h2>
+      <p>Use this after you already have the PDF text:</p>
+
+      <div class="prompt-card">
+        <div class="prompt-head">
+          <div class="prompt-title">Structured Extraction Prompt</div>
+          <button class="copy-btn" data-copy-target="prompt-extraction">Copy Prompt</button>
+        </div>
+        <pre id="prompt-extraction">Convert the following payer medical drug policy text into STRICT JSON matching this schema.
+
+Requirements:
+- Output valid JSON only. No markdown.
+- Do not invent facts not supported by the text.
+- If something is unclear, leave arrays empty or mark ambiguous true where appropriate.
+- Preserve evidence grounding.
+- Every diagnosis requirement, step therapy requirement, and other requirement must include:
+  - evidenceText
+  - source.document
+  - source.page
+  - source.section
+- Keep evidenceText short and faithful to the policy.
+- Use these enums exactly:
+  - payer: UHC | Aetna | Cigna | BCBS-NC
+  - coverageStatus: covered | covered-with-pa | excluded
+  - tier: preferred | non-preferred
+- If multiple indications are present, put the primary one in indication and the full list in indications.
+
+Schema shape:
+{
+  "id": "string",
+  "payer": "UHC | Aetna | Cigna | BCBS-NC",
+  "plan": "string",
+  "policyTitle": "string",
+  "drug": {
+    "brandName": "string",
+    "genericName": "string",
+    "aliases": ["string"],
+    "products": [
+      {
+        "name": "string",
+        "tier": "preferred | non-preferred",
+        "aliases": ["string"]
+      }
+    ]
+  },
+  "indication": "string",
+  "indications": ["string"],
+  "coverageStatus": "covered | covered-with-pa | excluded",
+  "paRequired": true,
+  "diagnosisRequirements": [
+    {
+      "icd10Codes": ["string"],
+      "description": "string",
+      "evidenceText": "string",
+      "source": {
+        "document": "string",
+        "page": 0,
+        "section": "string"
+      }
+    }
+  ],
+  "stepTherapy": [
+    {
+      "drugName": "string",
+      "dosage": "string",
+      "duration": "string",
+      "failureCriteria": "string",
+      "evidenceText": "string",
+      "source": {
+        "document": "string",
+        "page": 0,
+        "section": "string"
+      }
+    }
+  ],
+  "otherRequirements": [
+    {
+      "category": "string",
+      "requirement": "string",
+      "evidenceText": "string",
+      "source": {
+        "document": "string",
+        "page": 0,
+        "section": "string"
+      },
+      "ambiguous": false
+    }
+  ],
+  "sourceDocument": {
+    "filename": "string",
+    "url": "string",
+    "retrievalDate": "YYYY-MM-DD",
+    "effectiveDate": "YYYY-MM-DD"
+  }
+}
+
+Additional extraction rules:
+- If the policy says prior authorization is required, set paRequired true.
+- If any PA criteria exist, coverageStatus should usually be covered-with-pa unless the policy clearly says excluded.
+- Put physician specialty rules, age rules, labs, site-of-care, combination restrictions, safety checks, dosing rules, and state-specific exceptions in otherRequirements.
+- If step therapy is implied but not explicit, only include it if clearly supported by text.
+- If ICD-10 codes are not present, use an empty array.
+- Use a stable id like [payer]-[generic]-[short-indication-slug].
+
+Here is the policy text:
+[PASTE CLEAN PDF TEXT HERE]</pre>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Recommended Second-Pass Review Prompt</h2>
+      <p>Use this after the first extraction:</p>
+
+      <div class="prompt-card">
+        <div class="prompt-head">
+          <div class="prompt-title">Second-Pass Review Prompt</div>
+          <button class="copy-btn" data-copy-target="prompt-review">Copy Prompt</button>
+        </div>
+        <pre id="prompt-review">Review this extracted policy JSON against the source text.
+
+Check for:
+1. invented facts
+2. missing major requirements
+3. wrong coverageStatus
+4. wrong paRequired value
+5. unsupported step therapy entries
+6. missing evidence/source.page/source.section
+7. bad indication normalization
+8. weak or inconsistent id naming
+
+Return:
+- corrected JSON only if fixes are needed
+- otherwise return EXACTLY: VALID</pre>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Best Practice For This Repo</h2>
+      <p>Your target output should resemble this shape:</p>
+
+      <div class="example-box">
+        <pre>{
+  "id": "uhc-adalimumab-ra",
+  "payer": "UHC",
+  "plan": "Commercial",
+  "policyTitle": "UHC Adalimumab Prior Authorization Policy",
+  "drug": {
+    "brandName": "Humira",
+    "genericName": "adalimumab",
+    "aliases": ["Amjevita", "Cyltezo"]
+  },
+  "indication": "Rheumatoid Arthritis",
+  "coverageStatus": "covered-with-pa",
+  "paRequired": true,
+  "diagnosisRequirements": [],
+  "stepTherapy": [],
+  "otherRequirements": [],
+  "sourceDocument": {
+    "filename": "uhc-adalimumab-pa-policy.pdf",
+    "url": "https://...",
+    "retrievalDate": "2026-04-22",
+    "effectiveDate": "2026-01-01"
+  }
+}</pre>
+      </div>
+
+      <div class="note">
+        <strong>Recommendation:</strong>
+        <ul>
+          <li>Use Claude/ChatGPT for extraction and normalization</li>
+          <li>Do not use it as the primary scraper</li>
+          <li>Keep the model on a “JSON only, no invention, evidence required” prompt</li>
+          <li>Validate every output against your schema before saving</li>
+        </ul>
+      </div>
+
+      <p>If you want, I can next create:</p>
+      <ol>
+        <li>a ready-to-use “policy extraction prompt pack” in <code class="inline">docs/prompt-opinion/</code>, or</li>
+        <li>a small script/workflow that takes PDF text and produces schema-ready JSON for this repo.</li>
+      </ol>
+    </section>
+
+    <p class="footer">Stored in <code class="inline">docs/prompt-opinion/</code> for local project reference.</p>
+  </main>
+
+  <script>
+    const buttons = document.querySelectorAll('[data-copy-target]');
+
+    async function copyPrompt(button) {
+      const targetId = button.getAttribute('data-copy-target');
+      const node = document.getElementById(targetId);
+      if (!node) return;
+
+      const text = node.textContent ?? '';
+      try {
+        await navigator.clipboard.writeText(text);
+        const original = button.textContent;
+        button.textContent = 'Copied';
+        button.classList.add('copied');
+        setTimeout(() => {
+          button.textContent = original;
+          button.classList.remove('copied');
+        }, 1800);
+      } catch (error) {
+        button.textContent = 'Copy failed';
+        setTimeout(() => {
+          button.textContent = 'Copy Prompt';
+        }, 1800);
+      }
+    }
+
+    buttons.forEach((button) => {
+      button.addEventListener('click', () => copyPrompt(button));
+    });
+  </script>
+</body>
+</html>
