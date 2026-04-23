@@ -6,14 +6,14 @@ See: .planning/PROJECT.md (updated 2026-04-22)
 
 **Core value:** Every policy question answered must include source-backed evidence from loaded policy documents — and every coverage evaluation must show exactly which criteria are met, missing, or ambiguous.
 
-**Current focus:** v2.0 Full Product — Phase 10 implementation is complete; browser UAT is next
+**Current focus:** v2.0 Full Product — Phase 11 MCP tool expansion is complete; Phase 12 is next
 
 ## Current Position
 
-Phase: 10 — Next Steps + Evidence Explorer + Chat
-Plan: 10-05
-Status: Implementation complete; awaiting human verification
-Last activity: 2026-04-22 — Phase 10 code completed; TypeScript and frontend build verification passed
+Phase: 11 — Expanded MCP Tools
+Plan: 11-05
+Status: Complete
+Last activity: 2026-04-22 — Phase 11 completed; all 10 new MCP tools implemented and registered
 
 ```text
 v2.0 Progress: [          ] 0/7 phases
@@ -22,7 +22,7 @@ Phase 7:  [~] Policy Compare + Insights
 Phase 8:  [~] Policy Changes + Versioning
 Phase 9:  [x] Patient Cases + Coverage Evaluation
 Phase 10: [x] Next Steps + Evidence Explorer + Chat
-Phase 11: [ ] Expanded MCP Tools
+Phase 11: [x] Expanded MCP Tools
 Phase 12: [ ] Portal UI + Dashboard + Deployment
 ```
 
@@ -54,9 +54,13 @@ Phase 12: [ ] Portal UI + Dashboard + Deployment
 
 - Local Ollama was used for v1.0 LLM answers — v2.0 should use Claude API or configurable LLM backend
 
+### Deferred Follow-Up
+
+- Add per-source ingestion metadata files under `data/ingestion/sources/{source_id}.json`, with `db.json` retained as the aggregate index or migrated deliberately. Current Phase 11.01 uses `data/ingestion/db.json` as the source-of-truth lookup because that is the storage model implemented today.
+
 ## Session Continuity
 
-Last session: 2026-04-22 (Phase 10 implementation)
-Stopped at: Phase 10 code is implemented; browser UAT still remains before sign-off
-Resume file: .planning/phases/10-next-steps-evidence-explorer-chat
-Next action: run manual browser verification for the Patients Next Steps tab, Evidence Explorer, and Chat pages, then advance to Phase 11
+Last session: 2026-04-22 (Phase 11 completion)
+Stopped at: Phase 11 implementation is complete
+Resume file: .planning/phases/11-expanded-mcp-tools
+Next action: begin Phase 12 dashboard, role-switcher, navigation, and deployment work

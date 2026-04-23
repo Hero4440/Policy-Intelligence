@@ -27,7 +27,7 @@ See: `.planning/milestones/v1.0-ROADMAP.md`
 - [ ] **Phase 8: Policy Changes + Versioning** — Ship the Changes timeline, Version Diff page, and materiality classification engine
 - [ ] **Phase 9: Patient Cases + Coverage Evaluation** — Enable case creation, document upload, fact extraction, and coverage evaluation with evidence-backed checklist
 - [ ] **Phase 10: Next Steps + Evidence Explorer + Chat** — Complete the clinic workflow with next-step guidance, evidence search, and evidence-backed chat
-- [ ] **Phase 11: Expanded MCP Tools** — Implement 10 new MCP tools backed by the data layer and engines built in phases 6-10
+- [x] **Phase 11: Expanded MCP Tools** — Implement 10 new MCP tools backed by the data layer and engines built in phases 6-10
 - [ ] **Phase 12: Portal UI + Dashboard + Deployment** — Ship the dashboard, role switcher, global nav, and deploy to Vercel + Railway
 
 ## Phase Details
@@ -188,11 +188,11 @@ Plans:
 **Plans:** 5 plans
 
 Plans:
-- [ ] 11-01-PLAN.md — upload_policy_document + parse_policy_document tools (MCP-01, MCP-02)
-- [ ] 11-02-PLAN.md — list_policy_versions + diff_policy_versions tools (MCP-03, MCP-04)
-- [ ] 11-03-PLAN.md — get_policy_evidence + search_policy_rules tools (MCP-05, MCP-06)
-- [ ] 11-04-PLAN.md — extract_patient_facts + evaluate_patient_against_policy tools (MCP-07, MCP-08)
-- [ ] 11-05-PLAN.md — generate_next_steps + get_case_summary tools + full MCP index wiring (MCP-09, MCP-10)
+- [x] 11-01-PLAN.md — upload_policy_document + parse_policy_document tools (MCP-01, MCP-02)
+- [x] 11-02-PLAN.md — list_policy_versions + diff_policy_versions tools (MCP-03, MCP-04)
+- [x] 11-03-PLAN.md — get_policy_evidence + search_policy_rules tools (MCP-05, MCP-06)
+- [x] 11-04-PLAN.md — extract_patient_facts + evaluate_patient_against_policy tools (MCP-07, MCP-08)
+- [x] 11-05-PLAN.md — generate_next_steps + get_case_summary tools + full MCP index wiring (MCP-09, MCP-10)
 
 ---
 
@@ -227,5 +227,5 @@ Plans:
 | 8. Policy Changes + Versioning | v2.0 | 0/4 | Not started | - |
 | 9. Patient Cases + Coverage Evaluation | v2.0 | 0/5 | Not started | - |
 | 10. Next Steps + Evidence Explorer + Chat | v2.0 | 0/5 | Planned | - |
-| 11. Expanded MCP Tools | v2.0 | 0/5 | Planned | - |
+| 11. Expanded MCP Tools | v2.0 | 5/5 | Complete | 2026-04-22 |
 | 12. Portal UI + Dashboard + Deployment | v2.0 | 0/TBD | Not started | - |

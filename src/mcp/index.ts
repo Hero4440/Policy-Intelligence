@@ -9,6 +9,16 @@ import { registerListPolicies } from './tools/list_policies.js';
 import { registerGetPolicySummary } from './tools/get_policy_summary.js';
 import { registerCompareDrug } from './tools/compare_drug_across_payers.js';
 import { registerAskPolicyQuestion } from './tools/ask_policy_question.js';
+import { registerUploadPolicyDocument } from './tools/upload_policy_document.js';
+import { registerParsePolicyDocument } from './tools/parse_policy_document.js';
+import { registerListPolicyVersions } from './tools/list_policy_versions.js';
+import { registerDiffPolicyVersions } from './tools/diff_policy_versions.js';
+import { registerGetPolicyEvidence } from './tools/get_policy_evidence.js';
+import { registerSearchPolicyRules } from './tools/search_policy_rules.js';
+import { registerExtractPatientFacts } from './tools/extract_patient_facts.js';
+import { registerEvaluatePatientAgainstPolicy } from './tools/evaluate_patient_against_policy.js';
+import { registerGenerateNextSteps } from './tools/generate_next_steps.js';
+import { registerGetCaseSummary } from './tools/get_case_summary.js';
 import { getAllPolicies } from './policy_store/loader.js';
 import { fileURLToPath } from 'url';
 
@@ -30,7 +40,7 @@ export function createMcpApp() {
     const policies = getAllPolicies();
     res.json({
       status: 'ok',
-      tools: 7,
+      tools: 17,
       policies: policies.length,
       payers: [...new Set(policies.map(p => p.payer))],
       drugs: [...new Set(policies.map(p => p.drug.genericName))],
@@ -62,6 +72,16 @@ export function createMcpApp() {
     registerGetPolicySummary(server);
     registerCompareDrug(server);
     registerAskPolicyQuestion(server);
+    registerUploadPolicyDocument(server);
+    registerParsePolicyDocument(server);
+    registerListPolicyVersions(server);
+    registerDiffPolicyVersions(server);
+    registerGetPolicyEvidence(server);
+    registerSearchPolicyRules(server);
+    registerExtractPatientFacts(server);
+    registerEvaluatePatientAgainstPolicy(server);
+    registerGenerateNextSteps(server);
+    registerGetCaseSummary(server);
 
     const transport = new StreamableHTTPServerTransport({
       sessionIdGenerator: undefined
