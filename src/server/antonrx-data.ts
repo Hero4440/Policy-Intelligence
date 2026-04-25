@@ -161,7 +161,7 @@ interface CatalogData {
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const projectRoot = join(__dirname, '../..');
-const packageDir = join(projectRoot, 'docs/hackaathon2/insurance_hackathon_final_data_package');
+const packageDir = join(projectRoot, 'docs/hackaathon/insurance_hackathon_final_data_package');
 
 let cache: CatalogData | null = null;
 
