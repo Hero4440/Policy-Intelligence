@@ -8,7 +8,7 @@ import {
   getPlanDrugDetail,
   listIssuers,
   searchDrugs
-} from './antonrx-data.js';
+} from './policy-data.js';
 import {
   appendSessionMessage,
   getOrCreateSession,
@@ -275,7 +275,7 @@ async function planToolUse(
 ): Promise<PlannerResult> {
   const session = getOrCreateSession(sessionId);
   const plannerPrompt = [
-    'You route Anton Rx analyst questions to deterministic tools.',
+    'You route Policy Intelligence analyst questions to deterministic tools.',
     'Return JSON only with this shape:',
     '{"assistant":"optional note","tool_calls":[{"tool":"which_plans_cover_drug","arguments":{"drug":"adalimumab"}}]}',
     'Available tools:',
@@ -612,7 +612,7 @@ async function streamFinalAnswer(
     {
       role: 'system',
       content: [
-        'You are Anton Rx Policy Intelligence.',
+        'You are Policy Intelligence.',
         'Answer using only the provided structured tool results.',
         'Be concise, useful to a market access analyst, and explicit about uncertainty or source limits.',
         'Prefer bullets when comparing multiple plans.',

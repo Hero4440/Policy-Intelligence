@@ -1,0 +1,1455 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Visual Regression - Card Components > renders WorkspaceShell with collapsed right sidebar 1`] = `
+<div
+  class="workspace-frame"
+>
+  <div
+    class="workspace-topbar"
+  >
+    <div>
+      <p
+        class="eyebrow"
+      >
+        PolicyPilot
+      </p>
+      <h1>
+        Policy Intelligence
+      </h1>
+    </div>
+    <div
+      class="topbar-actions"
+    >
+      <nav
+        class="page-nav"
+      >
+        <button
+          class="page-nav-btn page-nav-btn-active"
+        >
+          Workspace
+        </button>
+      </nav>
+    </div>
+  </div>
+  <div
+    class="workspace-grid-four-collapsed"
+  >
+    <div
+      class="sidebar"
+    >
+      Sidebar Content
+    </div>
+    <section
+      class="workspace-column workspace-column-list"
+    >
+      <div
+        class="workspace-column"
+      >
+        List Content
+      </div>
+    </section>
+    <section
+      class="workspace-column workspace-column-detail"
+    >
+      <div
+        class="workspace-column"
+      >
+        Detail Content
+      </div>
+    </section>
+    <aside
+      class="workspace-column workspace-column-right workspace-column-right-collapsed"
+    >
+      <div
+        class="right-sidebar"
+      >
+        Right Sidebar Content
+      </div>
+    </aside>
+  </div>
+</div>
+`;
+
+exports[`Visual Regression - Card Components > renders WorkspaceShell with four-column layout 1`] = `
+<div
+  class="workspace-frame"
+>
+  <div
+    class="workspace-topbar"
+  >
+    <div>
+      <p
+        class="eyebrow"
+      >
+        PolicyPilot
+      </p>
+      <h1>
+        Policy Intelligence
+      </h1>
+    </div>
+    <div
+      class="topbar-actions"
+    >
+      <nav
+        class="page-nav"
+      >
+        <button
+          class="page-nav-btn page-nav-btn-active"
+        >
+          Workspace
+        </button>
+      </nav>
+    </div>
+  </div>
+  <div
+    class="workspace-grid-four"
+  >
+    <div
+      class="sidebar"
+    >
+      Sidebar Content
+    </div>
+    <section
+      class="workspace-column workspace-column-list"
+    >
+      <div
+        class="workspace-column"
+      >
+        List Content
+      </div>
+    </section>
+    <section
+      class="workspace-column workspace-column-detail"
+    >
+      <div
+        class="workspace-column"
+      >
+        Detail Content
+      </div>
+    </section>
+    <aside
+      class="workspace-column workspace-column-right "
+    >
+      <div
+        class="right-sidebar"
+      >
+        Right Sidebar Content
+      </div>
+    </aside>
+  </div>
+</div>
+`;
+
+exports[`Visual Regression - Card Components > renders WorkspaceShell with three-column layout 1`] = `
+<div
+  class="workspace-frame"
+>
+  <div
+    class="workspace-topbar"
+  >
+    <div>
+      <p
+        class="eyebrow"
+      >
+        PolicyPilot
+      </p>
+      <h1>
+        Policy Intelligence
+      </h1>
+    </div>
+    <div
+      class="topbar-actions"
+    >
+      <nav
+        class="page-nav"
+      >
+        <button
+          class="page-nav-btn page-nav-btn-active"
+        >
+          Workspace
+        </button>
+      </nav>
+    </div>
+  </div>
+  <div
+    class="workspace-grid"
+  >
+    <div
+      class="sidebar"
+    >
+      Sidebar Content
+    </div>
+    <section
+      class="workspace-column workspace-column-list"
+    >
+      <div
+        class="workspace-column"
+      >
+        List Content
+      </div>
+    </section>
+    <section
+      class="workspace-column workspace-column-detail"
+    >
+      <div
+        class="workspace-column"
+      >
+        Detail Content
+      </div>
+    </section>
+  </div>
+</div>
+`;
+
+exports[`Visual Regression - Card Components > renders compare highlight card 1`] = `
+<div
+  class="compare-highlight-card"
+>
+  <h3>
+    Comparison Highlight
+  </h3>
+  <p>
+    Key differences between policies
+  </p>
+</div>
+`;
+
+exports[`Visual Regression - Card Components > renders detail card with standard styling 1`] = `
+<div
+  class="detail-card"
+>
+  <h3>
+    Card Title
+  </h3>
+  <p>
+    Card content with standard styling
+  </p>
+</div>
+`;
+
+exports[`Visual Regression - Form Components > renders Sidebar with all form elements 1`] = `
+<aside
+  class="sidebar"
+>
+  <div
+    class="sidebar-section"
+  >
+    <p
+      class="eyebrow"
+    >
+      Anton Rx Track
+    </p>
+    <h2
+      class="sidebar-title"
+    >
+      Medical Benefit Drug Policy Intelligence
+    </h2>
+    <p
+      class="sidebar-copy"
+    >
+      Search a drug, compare how plans handle it, and drill into coverage signals, prior auth rules, and source provenance.
+    </p>
+  </div>
+  <div
+    class="sidebar-section"
+  >
+    <label
+      class="field-label"
+      for="drug-query"
+    >
+      Drug Query
+    </label>
+    <input
+      autocomplete="off"
+      class="field-input"
+      id="drug-query"
+      placeholder="adalimumab, Humira, Rituxan..."
+      value=""
+    />
+  </div>
+  <div
+    class="sidebar-section"
+  >
+    <label
+      class="field-label"
+      for="issuer-filter"
+    >
+      Issuer
+    </label>
+    <select
+      class="field-input"
+      id="issuer-filter"
+    >
+      <option
+        value=""
+      >
+        All issuers
+      </option>
+      <option
+        value="Blue Cross"
+      >
+        Blue Cross
+      </option>
+      <option
+        value="Aetna"
+      >
+        Aetna
+      </option>
+      <option
+        value="UnitedHealth"
+      >
+        UnitedHealth
+      </option>
+    </select>
+  </div>
+  <div
+    class="sidebar-section sidebar-note"
+  >
+    <span
+      class="note-badge"
+    >
+      Data
+    </span>
+    <p>
+      Final insurance data package drives plan breadth. Upload and source visualization now live in the main center pane.
+    </p>
+  </div>
+</aside>
+`;
+
+exports[`Visual Regression - Form Components > renders Sidebar with drug query 1`] = `
+<aside
+  class="sidebar"
+>
+  <div
+    class="sidebar-section"
+  >
+    <p
+      class="eyebrow"
+    >
+      Anton Rx Track
+    </p>
+    <h2
+      class="sidebar-title"
+    >
+      Medical Benefit Drug Policy Intelligence
+    </h2>
+    <p
+      class="sidebar-copy"
+    >
+      Search a drug, compare how plans handle it, and drill into coverage signals, prior auth rules, and source provenance.
+    </p>
+  </div>
+  <div
+    class="sidebar-section"
+  >
+    <label
+      class="field-label"
+      for="drug-query"
+    >
+      Drug Query
+    </label>
+    <input
+      autocomplete="off"
+      class="field-input"
+      id="drug-query"
+      placeholder="adalimumab, Humira, Rituxan..."
+      value="Humira"
+    />
+  </div>
+  <div
+    class="sidebar-section"
+  >
+    <label
+      class="field-label"
+      for="issuer-filter"
+    >
+      Issuer
+    </label>
+    <select
+      class="field-input"
+      id="issuer-filter"
+    >
+      <option
+        value=""
+      >
+        All issuers
+      </option>
+      <option
+        value="Blue Cross"
+      >
+        Blue Cross
+      </option>
+      <option
+        value="Aetna"
+      >
+        Aetna
+      </option>
+      <option
+        value="UnitedHealth"
+      >
+        UnitedHealth
+      </option>
+    </select>
+  </div>
+  <div
+    class="sidebar-section sidebar-note"
+  >
+    <span
+      class="note-badge"
+    >
+      Data
+    </span>
+    <p>
+      Final insurance data package drives plan breadth. Upload and source visualization now live in the main center pane.
+    </p>
+  </div>
+</aside>
+`;
+
+exports[`Visual Regression - Form Components > renders Sidebar with selected issuer 1`] = `
+<aside
+  class="sidebar"
+>
+  <div
+    class="sidebar-section"
+  >
+    <p
+      class="eyebrow"
+    >
+      Anton Rx Track
+    </p>
+    <h2
+      class="sidebar-title"
+    >
+      Medical Benefit Drug Policy Intelligence
+    </h2>
+    <p
+      class="sidebar-copy"
+    >
+      Search a drug, compare how plans handle it, and drill into coverage signals, prior auth rules, and source provenance.
+    </p>
+  </div>
+  <div
+    class="sidebar-section"
+  >
+    <label
+      class="field-label"
+      for="drug-query"
+    >
+      Drug Query
+    </label>
+    <input
+      autocomplete="off"
+      class="field-input"
+      id="drug-query"
+      placeholder="adalimumab, Humira, Rituxan..."
+      value=""
+    />
+  </div>
+  <div
+    class="sidebar-section"
+  >
+    <label
+      class="field-label"
+      for="issuer-filter"
+    >
+      Issuer
+    </label>
+    <select
+      class="field-input"
+      id="issuer-filter"
+    >
+      <option
+        value=""
+      >
+        All issuers
+      </option>
+      <option
+        value="Blue Cross"
+      >
+        Blue Cross
+      </option>
+      <option
+        value="Aetna"
+      >
+        Aetna
+      </option>
+      <option
+        value="UnitedHealth"
+      >
+        UnitedHealth
+      </option>
+    </select>
+  </div>
+  <div
+    class="sidebar-section sidebar-note"
+  >
+    <span
+      class="note-badge"
+    >
+      Data
+    </span>
+    <p>
+      Final insurance data package drives plan breadth. Upload and source visualization now live in the main center pane.
+    </p>
+  </div>
+</aside>
+`;
+
+exports[`Visual Regression - Form Components > renders search input with rounded corners 1`] = `
+<div>
+  <label
+    class="field-label"
+    for="search-input"
+  >
+    Search
+  </label>
+  <input
+    class="field-input"
+    id="search-input"
+    placeholder="Search..."
+    type="search"
+  />
+</div>
+`;
+
+exports[`Visual Regression - Form Components > renders select input with standard styling 1`] = `
+<div>
+  <label
+    class="field-label"
+    for="test-select"
+  >
+    Test Select
+  </label>
+  <select
+    class="field-input"
+    id="test-select"
+  >
+    <option
+      value=""
+    >
+      Select an option
+    </option>
+    <option
+      value="option1"
+    >
+      Option 1
+    </option>
+    <option
+      value="option2"
+    >
+      Option 2
+    </option>
+  </select>
+</div>
+`;
+
+exports[`Visual Regression - Form Components > renders text input with standard styling 1`] = `
+<div>
+  <label
+    class="field-label"
+    for="test-input"
+  >
+    Test Input
+  </label>
+  <input
+    class="field-input"
+    id="test-input"
+    placeholder="Enter text..."
+    type="text"
+  />
+</div>
+`;
+
+exports[`Visual Regression - Navigation Components > renders DetailTabs with ask tab active 1`] = `
+<nav
+  class="tab-bar"
+>
+  <button
+    class="tab-btn"
+  >
+    Coverage
+  </button>
+  <button
+    class="tab-btn"
+  >
+    Readiness
+  </button>
+  <button
+    class="tab-btn"
+  >
+    Changes
+  </button>
+  <button
+    class="tab-btn"
+  >
+    Compare
+  </button>
+  <button
+    class="tab-btn tab-btn-active"
+  >
+    Ask
+  </button>
+</nav>
+`;
+
+exports[`Visual Regression - Navigation Components > renders DetailTabs with changes tab active 1`] = `
+<nav
+  class="tab-bar"
+>
+  <button
+    class="tab-btn"
+  >
+    Coverage
+  </button>
+  <button
+    class="tab-btn"
+  >
+    Readiness
+  </button>
+  <button
+    class="tab-btn tab-btn-active"
+  >
+    Changes
+  </button>
+  <button
+    class="tab-btn"
+  >
+    Compare
+  </button>
+  <button
+    class="tab-btn"
+  >
+    Ask
+  </button>
+</nav>
+`;
+
+exports[`Visual Regression - Navigation Components > renders DetailTabs with compare tab active 1`] = `
+<nav
+  class="tab-bar"
+>
+  <button
+    class="tab-btn"
+  >
+    Coverage
+  </button>
+  <button
+    class="tab-btn"
+  >
+    Readiness
+  </button>
+  <button
+    class="tab-btn"
+  >
+    Changes
+  </button>
+  <button
+    class="tab-btn tab-btn-active"
+  >
+    Compare
+  </button>
+  <button
+    class="tab-btn"
+  >
+    Ask
+  </button>
+</nav>
+`;
+
+exports[`Visual Regression - Navigation Components > renders DetailTabs with coverage tab active 1`] = `
+<nav
+  class="tab-bar"
+>
+  <button
+    class="tab-btn tab-btn-active"
+  >
+    Coverage
+  </button>
+  <button
+    class="tab-btn"
+  >
+    Readiness
+  </button>
+  <button
+    class="tab-btn"
+  >
+    Changes
+  </button>
+  <button
+    class="tab-btn"
+  >
+    Compare
+  </button>
+  <button
+    class="tab-btn"
+  >
+    Ask
+  </button>
+</nav>
+`;
+
+exports[`Visual Regression - Navigation Components > renders DetailTabs with readiness tab active 1`] = `
+<nav
+  class="tab-bar"
+>
+  <button
+    class="tab-btn"
+  >
+    Coverage
+  </button>
+  <button
+    class="tab-btn tab-btn-active"
+  >
+    Readiness
+  </button>
+  <button
+    class="tab-btn"
+  >
+    Changes
+  </button>
+  <button
+    class="tab-btn"
+  >
+    Compare
+  </button>
+  <button
+    class="tab-btn"
+  >
+    Ask
+  </button>
+</nav>
+`;
+
+exports[`Visual Regression - Navigation Components > renders page navigation with all tabs 1`] = `
+<nav
+  class="page-nav"
+>
+  <button
+    class="page-nav-btn page-nav-btn-active"
+  >
+    Workspace
+  </button>
+  <button
+    class="page-nav-btn"
+  >
+    Compare
+  </button>
+  <button
+    class="page-nav-btn"
+  >
+    Insights
+  </button>
+  <button
+    class="page-nav-btn"
+  >
+    Changes
+  </button>
+  <button
+    class="page-nav-btn"
+  >
+    Data
+  </button>
+  <button
+    class="page-nav-btn"
+  >
+    Evidence Explorer
+  </button>
+  <button
+    class="page-nav-btn"
+  >
+    Chat
+  </button>
+</nav>
+`;
+
+exports[`Visual Regression - Navigation Components > renders page navigation with different active tab 1`] = `
+<nav
+  class="page-nav"
+>
+  <button
+    class="page-nav-btn"
+  >
+    Workspace
+  </button>
+  <button
+    class="page-nav-btn page-nav-btn-active"
+  >
+    Compare
+  </button>
+  <button
+    class="page-nav-btn"
+  >
+    Insights
+  </button>
+  <button
+    class="page-nav-btn"
+  >
+    Changes
+  </button>
+  <button
+    class="page-nav-btn"
+  >
+    Data
+  </button>
+  <button
+    class="page-nav-btn"
+  >
+    Evidence Explorer
+  </button>
+  <button
+    class="page-nav-btn"
+  >
+    Chat
+  </button>
+</nav>
+`;
+
+exports[`Visual Regression - PolicyCard Component > renders PolicyCard in selected state 1`] = `
+<div
+  class="policy-list"
+>
+  <button
+    class="policy-card policy-card-selected"
+    type="button"
+  >
+    <div
+      class="policy-card-header"
+    >
+      <span
+        class="policy-pill"
+      >
+        Blue Cross
+      </span>
+      <span
+        class="coverage-chip coverage-covered"
+      >
+        Covered
+      </span>
+    </div>
+    <h3>
+      Blue Cross Gold Plan
+      <span>
+        Humira (adalimumab)
+      </span>
+    </h3>
+    <p>
+      Commercial
+    </p>
+    <div
+      class="policy-card-meta"
+    >
+      <span>
+        Gold
+      </span>
+      <span>
+        No PA
+      </span>
+    </div>
+    <div
+      class="policy-card-meta"
+    >
+      <span>
+        Deep policy evidence
+      </span>
+      <span>
+        Confidence: 
+        High
+      </span>
+    </div>
+  </button>
+</div>
+`;
+
+exports[`Visual Regression - PolicyCard Component > renders PolicyCard with PA required status 1`] = `
+<div
+  class="policy-list"
+>
+  <button
+    class="policy-card"
+    type="button"
+  >
+    <div
+      class="policy-card-header"
+    >
+      <span
+        class="policy-pill"
+      >
+        Aetna
+      </span>
+      <span
+        class="coverage-chip coverage-covered-with-pa"
+      >
+        PA Required
+      </span>
+    </div>
+    <h3>
+      Aetna Silver Plan
+      <span>
+        Humira (adalimumab)
+      </span>
+    </h3>
+    <p>
+      Commercial
+    </p>
+    <div
+      class="policy-card-meta"
+    >
+      <span>
+        Silver
+      </span>
+      <span>
+        PA
+         · ST
+      </span>
+    </div>
+    <div
+      class="policy-card-meta"
+    >
+      <span>
+        Uploaded normalized source
+      </span>
+      <span>
+        Confidence: 
+        Medium
+      </span>
+    </div>
+  </button>
+</div>
+`;
+
+exports[`Visual Regression - PolicyCard Component > renders PolicyCard with covered status 1`] = `
+<div
+  class="policy-list"
+>
+  <button
+    class="policy-card"
+    type="button"
+  >
+    <div
+      class="policy-card-header"
+    >
+      <span
+        class="policy-pill"
+      >
+        Blue Cross
+      </span>
+      <span
+        class="coverage-chip coverage-covered"
+      >
+        Covered
+      </span>
+    </div>
+    <h3>
+      Blue Cross Gold Plan
+      <span>
+        Humira (adalimumab)
+      </span>
+    </h3>
+    <p>
+      Commercial
+    </p>
+    <div
+      class="policy-card-meta"
+    >
+      <span>
+        Gold
+      </span>
+      <span>
+        No PA
+      </span>
+    </div>
+    <div
+      class="policy-card-meta"
+    >
+      <span>
+        Deep policy evidence
+      </span>
+      <span>
+        Confidence: 
+        High
+      </span>
+    </div>
+  </button>
+</div>
+`;
+
+exports[`Visual Regression - PolicyCard Component > renders PolicyCard with different source postures 1`] = `
+<div
+  class="policy-list"
+>
+  <button
+    class="policy-card"
+    type="button"
+  >
+    <div
+      class="policy-card-header"
+    >
+      <span
+        class="policy-pill"
+      >
+        Blue Cross
+      </span>
+      <span
+        class="coverage-chip coverage-covered"
+      >
+        Covered
+      </span>
+    </div>
+    <h3>
+      Blue Cross Gold Plan
+      <span>
+        Humira (adalimumab)
+      </span>
+    </h3>
+    <p>
+      Commercial
+    </p>
+    <div
+      class="policy-card-meta"
+    >
+      <span>
+        Gold
+      </span>
+      <span>
+        No PA
+      </span>
+    </div>
+    <div
+      class="policy-card-meta"
+    >
+      <span>
+        Deep policy evidence
+      </span>
+      <span>
+        Confidence: 
+        High
+      </span>
+    </div>
+  </button>
+  <button
+    class="policy-card"
+    type="button"
+  >
+    <div
+      class="policy-card-header"
+    >
+      <span
+        class="policy-pill"
+      >
+        Aetna
+      </span>
+      <span
+        class="coverage-chip coverage-covered-with-pa"
+      >
+        PA Required
+      </span>
+    </div>
+    <h3>
+      Aetna Silver Plan
+      <span>
+        Humira (adalimumab)
+      </span>
+    </h3>
+    <p>
+      Commercial
+    </p>
+    <div
+      class="policy-card-meta"
+    >
+      <span>
+        Silver
+      </span>
+      <span>
+        PA
+         · ST
+      </span>
+    </div>
+    <div
+      class="policy-card-meta"
+    >
+      <span>
+        Uploaded normalized source
+      </span>
+      <span>
+        Confidence: 
+        Medium
+      </span>
+    </div>
+  </button>
+  <button
+    class="policy-card"
+    type="button"
+  >
+    <div
+      class="policy-card-header"
+    >
+      <span
+        class="policy-pill"
+      >
+        UnitedHealth
+      </span>
+      <span
+        class="coverage-chip coverage-not-covered"
+      >
+        Not Covered
+      </span>
+    </div>
+    <h3>
+      UnitedHealth Bronze Plan
+      <span>
+        Humira (adalimumab)
+      </span>
+    </h3>
+    <p>
+      Commercial
+    </p>
+    <div
+      class="policy-card-meta"
+    >
+      <span>
+        Bronze
+      </span>
+      <span>
+        No PA
+      </span>
+    </div>
+    <div
+      class="policy-card-meta"
+    >
+      <span>
+        Formulary breadth
+      </span>
+      <span>
+        Confidence: 
+        High
+      </span>
+    </div>
+  </button>
+</div>
+`;
+
+exports[`Visual Regression - PolicyCard Component > renders PolicyCard with not covered status 1`] = `
+<div
+  class="policy-list"
+>
+  <button
+    class="policy-card"
+    type="button"
+  >
+    <div
+      class="policy-card-header"
+    >
+      <span
+        class="policy-pill"
+      >
+        UnitedHealth
+      </span>
+      <span
+        class="coverage-chip coverage-not-covered"
+      >
+        Not Covered
+      </span>
+    </div>
+    <h3>
+      UnitedHealth Bronze Plan
+      <span>
+        Humira (adalimumab)
+      </span>
+    </h3>
+    <p>
+      Commercial
+    </p>
+    <div
+      class="policy-card-meta"
+    >
+      <span>
+        Bronze
+      </span>
+      <span>
+        No PA
+      </span>
+    </div>
+    <div
+      class="policy-card-meta"
+    >
+      <span>
+        Formulary breadth
+      </span>
+      <span>
+        Confidence: 
+        High
+      </span>
+    </div>
+  </button>
+</div>
+`;
+
+exports[`Visual Regression - PolicyCard Component > renders PolicyCard with step therapy indicator 1`] = `
+<div
+  class="policy-list"
+>
+  <button
+    class="policy-card"
+    type="button"
+  >
+    <div
+      class="policy-card-header"
+    >
+      <span
+        class="policy-pill"
+      >
+        Aetna
+      </span>
+      <span
+        class="coverage-chip coverage-covered-with-pa"
+      >
+        PA Required
+      </span>
+    </div>
+    <h3>
+      Aetna Silver Plan
+      <span>
+        Humira (adalimumab)
+      </span>
+    </h3>
+    <p>
+      Commercial
+    </p>
+    <div
+      class="policy-card-meta"
+    >
+      <span>
+        Silver
+      </span>
+      <span>
+        PA
+         · ST
+      </span>
+    </div>
+    <div
+      class="policy-card-meta"
+    >
+      <span>
+        Uploaded normalized source
+      </span>
+      <span>
+        Confidence: 
+        Medium
+      </span>
+    </div>
+  </button>
+</div>
+`;
+
+exports[`Visual Regression - PolicyCard Component > renders multiple PolicyCards in a list 1`] = `
+<div
+  class="policy-list"
+>
+  <button
+    class="policy-card"
+    type="button"
+  >
+    <div
+      class="policy-card-header"
+    >
+      <span
+        class="policy-pill"
+      >
+        Blue Cross
+      </span>
+      <span
+        class="coverage-chip coverage-covered"
+      >
+        Covered
+      </span>
+    </div>
+    <h3>
+      Blue Cross Gold Plan
+      <span>
+        Humira (adalimumab)
+      </span>
+    </h3>
+    <p>
+      Commercial
+    </p>
+    <div
+      class="policy-card-meta"
+    >
+      <span>
+        Gold
+      </span>
+      <span>
+        No PA
+      </span>
+    </div>
+    <div
+      class="policy-card-meta"
+    >
+      <span>
+        Deep policy evidence
+      </span>
+      <span>
+        Confidence: 
+        High
+      </span>
+    </div>
+  </button>
+  <button
+    class="policy-card policy-card-selected"
+    type="button"
+  >
+    <div
+      class="policy-card-header"
+    >
+      <span
+        class="policy-pill"
+      >
+        Aetna
+      </span>
+      <span
+        class="coverage-chip coverage-covered-with-pa"
+      >
+        PA Required
+      </span>
+    </div>
+    <h3>
+      Aetna Silver Plan
+      <span>
+        Humira (adalimumab)
+      </span>
+    </h3>
+    <p>
+      Commercial
+    </p>
+    <div
+      class="policy-card-meta"
+    >
+      <span>
+        Silver
+      </span>
+      <span>
+        PA
+         · ST
+      </span>
+    </div>
+    <div
+      class="policy-card-meta"
+    >
+      <span>
+        Uploaded normalized source
+      </span>
+      <span>
+        Confidence: 
+        Medium
+      </span>
+    </div>
+  </button>
+  <button
+    class="policy-card"
+    type="button"
+  >
+    <div
+      class="policy-card-header"
+    >
+      <span
+        class="policy-pill"
+      >
+        UnitedHealth
+      </span>
+      <span
+        class="coverage-chip coverage-not-covered"
+      >
+        Not Covered
+      </span>
+    </div>
+    <h3>
+      UnitedHealth Bronze Plan
+      <span>
+        Humira (adalimumab)
+      </span>
+    </h3>
+    <p>
+      Commercial
+    </p>
+    <div
+      class="policy-card-meta"
+    >
+      <span>
+        Bronze
+      </span>
+      <span>
+        No PA
+      </span>
+    </div>
+    <div
+      class="policy-card-meta"
+    >
+      <span>
+        Formulary breadth
+      </span>
+      <span>
+        Confidence: 
+        High
+      </span>
+    </div>
+  </button>
+</div>
+`;
+
+exports[`Visual Regression - Status Badges > renders coverage chip with PA required status 1`] = `
+<span
+  class="coverage-chip coverage-covered-with-pa"
+>
+  PA Required
+</span>
+`;
+
+exports[`Visual Regression - Status Badges > renders coverage chip with covered status 1`] = `
+<span
+  class="coverage-chip coverage-covered"
+>
+  Covered
+</span>
+`;
+
+exports[`Visual Regression - Status Badges > renders coverage chip with not covered status 1`] = `
+<span
+  class="coverage-chip coverage-not-covered"
+>
+  Not Covered
+</span>
+`;
+
+exports[`Visual Regression - Status Badges > renders ingestion status badge - error 1`] = `
+<span
+  class="ingestion-status ingestion-status-error"
+>
+  Failed
+</span>
+`;
+
+exports[`Visual Regression - Status Badges > renders ingestion status badge - pending 1`] = `
+<span
+  class="ingestion-status ingestion-status-pending"
+>
+  Processing
+</span>
+`;
+
+exports[`Visual Regression - Status Badges > renders ingestion status badge - success 1`] = `
+<span
+  class="ingestion-status ingestion-status-success"
+>
+  Completed
+</span>
+`;
+
+exports[`Visual Regression - Status Badges > renders policy pill badge 1`] = `
+<span
+  class="policy-pill"
+>
+  Blue Cross
+</span>
+`;

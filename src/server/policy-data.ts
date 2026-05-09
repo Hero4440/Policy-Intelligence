@@ -20,7 +20,7 @@ import aetnaUpadacitinib from '../../data/policies/structured/aetna-upadacitinib
 
 type CsvRow = Record<string, string>;
 
-export interface AntonRxPlan {
+export interface PolicyPlan {
   planId: string;
   issuerName: string;
   issuerKey: string;
@@ -37,7 +37,7 @@ export interface AntonRxPlan {
   notes: string;
 }
 
-export interface AntonRxCoverageMatch {
+export interface PolicyCoverageMatch {
   planId: string;
   issuerName: string;
   issuerKey: string;
@@ -73,8 +73,8 @@ export interface AntonRxCoverageMatch {
   normalizedRuleFacets: NormalizedRuleFacet[];
 }
 
-export interface AntonRxPlanDrugDetail extends AntonRxCoverageMatch {
-  planRules: AntonRxRule[];
+export interface PolicyPlanDrugDetail extends PolicyCoverageMatch {
+  planRules: PolicyRule[];
   matchedRows: Array<{
     drugNameDisplay: string;
     tier: string;
@@ -92,7 +92,7 @@ export interface AntonRxPlanDrugDetail extends AntonRxCoverageMatch {
   structuredPolicy?: StructuredPolicyRecord;
 }
 
-export interface AntonRxRule {
+export interface PolicyRule {
   planId: string;
   issuerName: string;
   appliesTo: string;
@@ -104,7 +104,7 @@ export interface AntonRxRule {
   sourcePage: string;
 }
 
-export interface AntonRxChangeWatch {
+export interface PolicyChangeWatch {
   drugQuery: string;
   sourceDates: Array<{ issuerName: string; sourceFile: string; sourceEffectiveDate: string; note: string }>;
   notableSignals: string[];
@@ -150,10 +150,10 @@ interface FormularyRow {
 }
 
 interface CatalogData {
-  plans: AntonRxPlan[];
+  plans: PolicyPlan[];
   formularyRows: FormularyRow[];
-  rulesByPlan: Map<string, AntonRxRule[]>;
-  plansById: Map<string, AntonRxPlan>;
+  rulesByPlan: Map<string, PolicyRule[]>;
+  plansById: Map<string, PolicyPlan>;
   structuredPolicies: StructuredPolicyRecord[];
   ingestedSnapshots: IngestedCoverageSnapshot[];
 }
@@ -313,7 +313,7 @@ function loadCatalog(): CatalogData {
   const formularyRows = readCsv('query_ready_formulary.csv');
   const rulesRows = readCsv('coverage_rules_by_plan.csv');
 
-  const plans = plansRows.map<AntonRxPlan>((row) => ({
+  const plans = plansRows.map<PolicyPlan>((row) => ({
     planId: row.plan_id,
     issuerName: preferredIssuerLabel(row.issuer_name),
     issuerKey: canonicalIssuerKey(row.issuer_name),
@@ -378,7 +378,7 @@ function loadCatalog(): CatalogData {
     };
   });
 
-  const rulesByPlan = new Map<string, AntonRxRule[]>();
+  const rulesByPlan = new Map<string, PolicyRule[]>();
   for (const row of rulesRows) {
     const existing = rulesByPlan.get(row.plan_id) ?? [];
     if (row.rule_name || row.rule_text) {
@@ -418,7 +418,7 @@ function loadCatalog(): CatalogData {
   return cache;
 }
 
-function aggregateFormularyMatches(rows: FormularyRow[], plansById: Map<string, AntonRxPlan>, drugQuery: string): AntonRxCoverageMatch[] {
+function aggregateFormularyMatches(rows: FormularyRow[], plansById: Map<string, PolicyPlan>, drugQuery: string): PolicyCoverageMatch[] {
   const grouped = new Map<string, FormularyRow[]>();
   for (const row of rows) {
     const group = grouped.get(row.planId) ?? [];
@@ -476,7 +476,7 @@ function aggregateFormularyMatches(rows: FormularyRow[], plansById: Map<string, 
   });
 }
 
-function aggregateStructuredMatches(policies: StructuredPolicyRecord[], drugQuery: string): AntonRxCoverageMatch[] {
+function aggregateStructuredMatches(policies: StructuredPolicyRecord[], drugQuery: string): PolicyCoverageMatch[] {
   return policies.map((policy) => ({
     planId: structuredPlanId(policy),
     issuerName: policy.payer,
@@ -592,7 +592,7 @@ export function listIssuers(): string[] {
   return [...new Set(byKey.values())].sort();
 }
 
-export function compareDrugAcrossPlans(drugQuery: string, issuerFilter?: string): AntonRxCoverageMatch[] {
+export function compareDrugAcrossPlans(drugQuery: string, issuerFilter?: string): PolicyCoverageMatch[] {
   const { formularyRows, plansById, structuredPolicies, ingestedSnapshots } = loadCatalog();
   const normalizedFilter = issuerFilter?.trim().toLowerCase();
 
@@ -641,7 +641,7 @@ function findStructuredPolicy(planId: string, drugQuery: string): StructuredPoli
   );
 }
 
-export function getPlanDrugDetail(planId: string, drugQuery: string): AntonRxPlanDrugDetail | null {
+export function getPlanDrugDetail(planId: string, drugQuery: string): PolicyPlanDrugDetail | null {
   const { formularyRows, rulesByPlan, plansById, ingestedSnapshots } = loadCatalog();
   const matches = formularyRows.filter((row) =>
     row.planId === planId
@@ -735,7 +735,7 @@ export function getPlanDrugDetail(planId: string, drugQuery: string): AntonRxPla
   };
 }
 
-export function getChangeWatch(drugQuery: string, issuerFilter?: string): AntonRxChangeWatch {
+export function getChangeWatch(drugQuery: string, issuerFilter?: string): PolicyChangeWatch {
   const matches = compareDrugAcrossPlans(drugQuery, issuerFilter);
   const sourceDates = matches.map((match) => ({
     issuerName: match.issuerName,
@@ -788,6 +788,6 @@ export function getCatalogSummary() {
   };
 }
 
-export function invalidateAntonRxCatalog() {
+export function invalidatePolicyCatalog() {
   cache = null;
 }

@@ -27,7 +27,7 @@ export function PolicyCompareBuilder({
 
   return (
     <div className="compare-builder">
-      <div className="panel-header">
+      <div className="panel-header sidebar-section-header">
         <div>
           <p className="eyebrow">Policy Compare</p>
           <h2>Select drug family and payers</h2>
@@ -38,63 +38,70 @@ export function PolicyCompareBuilder({
         <span className="panel-count">{selectedPayers.length} selected</span>
       </div>
 
-      <div className="detail-card">
-        <label className="field-label" htmlFor="compare-drug-family">
-          Drug Family
-        </label>
-        <select
-          id="compare-drug-family"
-          className="field-input"
-          value={selectedDrugFamily}
-          onChange={(event) => onDrugFamilyChange(event.target.value)}
-        >
-          {options.drugFamilies.map((family) => (
-            <option key={family.key} value={family.key}>
-              {family.label}
-            </option>
-          ))}
-        </select>
+      <div className="filter-row">
+        <div className="filter-field">
+          <label className="field-label" htmlFor="compare-drug-family">
+            Drug Query
+          </label>
+          <select
+            id="compare-drug-family"
+            className="field-input"
+            value={selectedDrugFamily}
+            onChange={(event) => onDrugFamilyChange(event.target.value)}
+          >
+            {options.drugFamilies.map((family) => (
+              <option key={family.key} value={family.key}>
+                {family.label}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="filter-field">
+          <label className="field-label" htmlFor="compare-version">
+            Version
+          </label>
+          <select
+            id="compare-version"
+            className="field-input"
+            value={selectedVersion}
+            onChange={(event) => onVersionChange(event.target.value)}
+          >
+            <option value="">Current version</option>
+            {options.versions.map((version) => (
+              <option key={version} value={String(version)}>
+                Version {version}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
 
-      <div className="detail-card">
-        <label className="field-label" htmlFor="compare-version">
-          Version
-        </label>
-        <select
-          id="compare-version"
-          className="field-input"
-          value={selectedVersion}
-          onChange={(event) => onVersionChange(event.target.value)}
-        >
-          <option value="">Current version</option>
-          {options.versions.map((version) => (
-            <option key={version} value={String(version)}>
-              Version {version}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <div className="compare-builder-list">
-        {payerOptions.map((payer) => {
-          const selected = selectedPayers.includes(payer);
-          return (
-            <label
-              key={payer}
-              className={`compare-builder-card${selected ? ' compare-builder-card-selected' : ''}`}
-            >
-              <input
-                type="checkbox"
-                checked={selected}
-                onChange={() => onTogglePayer(payer)}
-              />
-              <div>
-                <strong>{payer}</strong>
-                <p>{selected ? 'Included in compare' : 'Click to include in compare'}</p>
-              </div>
-            </label>
-          );
-        })}
+      <div className="filter-field" style={{ marginTop: '16px' }}>
+        <label className="field-label">Issuer</label>
+        <div className="compare-builder-list">
+          {payerOptions.map((payer) => {
+            const selected = selectedPayers.includes(payer);
+            return (
+              <label
+                key={payer}
+                className={`compare-builder-card${selected ? ' compare-builder-card-selected' : ''}`}
+              >
+                <input
+                  type="checkbox"
+                  checked={selected}
+                  onChange={() => onTogglePayer(payer)}
+                />
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <strong>{payer}</strong>
+                  <p style={{ fontSize: '0.875rem', color: 'var(--color-gray-600)' }}>
+                    {selected ? 'Included in compare' : 'Click to include in compare'}
+                  </p>
+                </div>
+              </label>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

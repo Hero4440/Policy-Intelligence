@@ -38,7 +38,7 @@ export function PolicyCompareView({
     return <div className="chat-error">{error}</div>;
   }
 
-  if (!comparison) {
+  if (!comparison || !comparison.columns) {
     return <div className="empty-state">Select a drug family and at least two payers to compare policies.</div>;
   }
 

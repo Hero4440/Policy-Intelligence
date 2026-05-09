@@ -6,7 +6,7 @@ type PatientSidebarProps = {
 export function PatientSidebar({ caseCount, selectedCaseName }: PatientSidebarProps) {
   return (
     <aside className="sidebar">
-      <div className="sidebar-section">
+      <div className="sidebar-section sidebar-section-header">
         <p className="eyebrow">Phase 9</p>
         <h2 className="sidebar-title">Patient cases and coverage evaluation</h2>
         <p className="sidebar-copy">

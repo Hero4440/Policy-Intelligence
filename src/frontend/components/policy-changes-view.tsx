@@ -20,6 +20,14 @@ type PolicyChangesViewProps = {
   loading: boolean;
   error: string | null;
   onOpenDiff: (input: { policyId: string; fromVersion: number; toVersion: number }) => void;
+  // Filter props
+  options: PolicyChangesResponse['filters'] | null;
+  selectedPayer: string;
+  selectedDrugFamily: string;
+  selectedSeverity: string;
+  onPayerChange: (value: string) => void;
+  onDrugFamilyChange: (value: string) => void;
+  onSeverityChange: (value: string) => void;
 };
 
 function formatDate(value: string): string {
@@ -56,7 +64,7 @@ export function PolicyChangesFilters({
 
   return (
     <div className="compare-builder">
-      <div className="panel-header">
+      <div className="panel-header sidebar-section-header">
         <div>
           <p className="eyebrow">Policy Changes</p>
           <h2>Timeline filters</h2>
@@ -66,42 +74,44 @@ export function PolicyChangesFilters({
         </div>
       </div>
 
-      <div className="detail-card">
-        <label className="field-label" htmlFor="changes-payer">
-          Payer
-        </label>
-        <select
-          id="changes-payer"
-          className="field-input"
-          value={selectedPayer}
-          onChange={(event) => onPayerChange(event.target.value)}
-        >
-          <option value="">All payers</option>
-          {options.payerOptions.map((payer) => (
-            <option key={payer} value={payer}>
-              {payer}
-            </option>
-          ))}
-        </select>
-      </div>
+      <div className="filter-row">
+        <div className="filter-field">
+          <label className="field-label" htmlFor="changes-payer">
+            Payer
+          </label>
+          <select
+            id="changes-payer"
+            className="field-input"
+            value={selectedPayer}
+            onChange={(event) => onPayerChange(event.target.value)}
+          >
+            <option value="">All payers</option>
+            {options.payerOptions.map((payer) => (
+              <option key={payer} value={payer}>
+                {payer}
+              </option>
+            ))}
+          </select>
+        </div>
 
-      <div className="detail-card">
-        <label className="field-label" htmlFor="changes-drug-family">
-          Drug Family
-        </label>
-        <select
-          id="changes-drug-family"
-          className="field-input"
-          value={selectedDrugFamily}
-          onChange={(event) => onDrugFamilyChange(event.target.value)}
-        >
-          <option value="">All drug families</option>
-          {options.drugFamilyOptions.map((family) => (
-            <option key={family} value={family}>
-              {family}
-            </option>
-          ))}
-        </select>
+        <div className="filter-field">
+          <label className="field-label" htmlFor="changes-drug-family">
+            Drug Family
+          </label>
+          <select
+            id="changes-drug-family"
+            className="field-input"
+            value={selectedDrugFamily}
+            onChange={(event) => onDrugFamilyChange(event.target.value)}
+          >
+            <option value="">All drug families</option>
+            {options.drugFamilyOptions.map((family) => (
+              <option key={family} value={family}>
+                {family}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
 
       <div className="detail-card">
@@ -130,7 +140,14 @@ export function PolicyChangesView({
   response,
   loading,
   error,
-  onOpenDiff
+  onOpenDiff,
+  options,
+  selectedPayer,
+  selectedDrugFamily,
+  selectedSeverity,
+  onPayerChange,
+  onDrugFamilyChange,
+  onSeverityChange
 }: PolicyChangesViewProps) {
   if (loading) {
     return <div className="empty-state">Loading policy changes…</div>;
@@ -146,16 +163,79 @@ export function PolicyChangesView({
 
   return (
     <div className="compare-view">
-      <div className="panel-header">
+      <div className="panel-header sidebar-section-header">
         <div>
           <p className="eyebrow">Policy Changes</p>
-          <h2>Version Timeline</h2>
-          <p className="compare-subtitle">
-            Audit version events with deterministic cosmetic, operational, and clinical labels.
+          <h2>Timeline filters</h2>
+          <p className="sidebar-copy">
+            Narrow the version timeline by payer, drug family, and severity.
           </p>
         </div>
         <span className="panel-count">{response.events.length} events</span>
       </div>
+
+      {options && (
+        <div className="workspace-top-filters">
+          <div className="filter-row">
+            <div className="filter-field">
+              <label className="field-label" htmlFor="changes-payer">
+                Payer
+              </label>
+              <select
+                id="changes-payer"
+                className="field-input"
+                value={selectedPayer}
+                onChange={(event) => onPayerChange(event.target.value)}
+              >
+                <option value="">All payers</option>
+                {options.payerOptions.map((payer) => (
+                  <option key={payer} value={payer}>
+                    {payer}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="filter-field">
+              <label className="field-label" htmlFor="changes-drug-family">
+                Drug Family
+              </label>
+              <select
+                id="changes-drug-family"
+                className="field-input"
+                value={selectedDrugFamily}
+                onChange={(event) => onDrugFamilyChange(event.target.value)}
+              >
+                <option value="">All drug families</option>
+                {options.drugFamilyOptions.map((family) => (
+                  <option key={family} value={family}>
+                    {family}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="filter-field">
+              <label className="field-label" htmlFor="changes-severity">
+                Severity
+              </label>
+              <select
+                id="changes-severity"
+                className="field-input"
+                value={selectedSeverity}
+                onChange={(event) => onSeverityChange(event.target.value)}
+              >
+                <option value="">All severities</option>
+                {options.severityOptions.map((severity) => (
+                  <option key={severity} value={severity}>
+                    {summarizeChangeSeverity(severity)}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="compare-legend">
         <InfoChip label="Clinical" description="Coverage-impacting changes such as PA, step therapy, restrictions, product positioning, or status shifts." />

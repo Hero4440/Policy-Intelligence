@@ -1,4 +1,4 @@
-import type { AntonRxCatalogSummary, IngestedSourceRecord, IngestionSummary } from '../data/antonrx.js';
+import type { AntonRxCatalogSummary, IngestedSourceRecord, IngestionSummary } from '../data/policy-types.js';
 import { InfoChip, InfoLabel } from './info-chip.js';
 
 type DataOverviewViewProps = {
@@ -49,7 +49,7 @@ export function DataOverviewView({
 
       <div className="detail-summary-card">
         <div>
-          <InfoLabel label="Seeded Plans" description="Plans loaded from the packaged Anton Rx dataset that give the app baseline plan coverage breadth." />
+          <InfoLabel label="Seeded Plans" description="Plans loaded from the packaged dataset that give the app baseline plan coverage breadth." />
           <strong>{catalogSummary?.planCount ?? '—'}</strong>
         </div>
         <div>

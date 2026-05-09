@@ -12,3 +12,6 @@ dist/
 docs/hackaathon/
 docs/hackaathon2/
 data/ingestion/db.json
+
+.claude/
+.kiro/

@@ -1,3 +1,4 @@
+import { WorkspaceSearchBuilder } from './components/workspace-search-builder.js';
 import { useEffect, useMemo, useState } from 'react';
 import { WorkspaceShell } from './components/workspace-shell.js';
 import { Sidebar } from './components/sidebar.js';
@@ -11,9 +12,6 @@ import { IngestionPanel } from './components/ingestion-panel.js';
 import { DataOverviewView } from './components/data-overview-view.js';
 import { InfoChip } from './components/info-chip.js';
 import { CompareBuilderView } from './components/compare-builder-view.js';
-import { PatientSidebar } from './components/patient-sidebar.js';
-import { PatientCasesView } from './components/patient-cases-view.js';
-import { PatientCaseDetailView } from './components/patient-case-detail-view.js';
 import { EvidenceExplorerView } from './components/evidence-explorer-view.js';
 import { ChatView } from './components/chat-view.js';
 import { PolicyCompareBuilder } from './components/policy-compare-builder.js';
@@ -21,34 +19,22 @@ import { PolicyCompareView } from './components/policy-compare-view.js';
 import { PolicyChangesFilters, PolicyChangesView } from './components/policy-changes-view.js';
 import { PolicyInsightsBuilder, PolicyInsightsView } from './components/policy-insights-view.js';
 import { PolicyVersionDiffView } from './components/policy-version-diff-view.js';
+import { RightSidebar, type RightSidebarPage } from './components/right-sidebar.js';
 import type { TabId } from './components/detail-tabs.js';
 import {
-  fetchAntonRxChanges,
-  fetchAntonRxCompare,
-  fetchAntonRxDetail,
-  fetchAntonRxIssuers,
-  fetchAntonRxSummary,
+  fetchPolicyCompare,
+  fetchPolicyDetail,
+  fetchPolicyIssuers,
+  fetchPolicySummary,
   fetchIngestionSources,
-  type AntonRxCatalogSummary,
-  type AntonRxChangeWatch,
-  type AntonRxCoverageMatch,
+  type PolicyCatalogSummary,
+  type PolicyChangeWatch,
+  type PolicyCoverageMatch,
   type IngestedSourceRecord,
   type IngestionSummary,
   type IngestionUploadResult,
-  type AntonRxPlanDrugDetail
-} from './data/antonrx.js';
-import {
-  createCaseEvaluation,
-  createStoredPatientCase,
-  fetchCaseEvaluations,
-  fetchPatientCase,
-  fetchPatientCases,
-  fetchPatientPolicyOptions,
-  type PatientPolicyOption,
-  type StoredCoverageEvaluation,
-  type StoredPatientCase,
-  uploadPatientDocument
-} from './data/patients.js';
+  type PolicyPlanDrugDetail
+} from './data/policy-types.js';
 import {
   fetchPolicyCompareOptions,
   fetchPolicyComparison,
@@ -66,30 +52,58 @@ import {
 } from './data/policies.js';
 
 export default function App() {
-  const [activePage, setActivePage] = useState<'workspace' | 'compare' | 'insights' | 'changes' | 'data' | 'patients' | 'evidence-explorer' | 'chat'>('workspace');
+  // Initialize activePage, redirecting /patients to workspace
+  const getInitialPage = (): 'workspace' | 'compare' | 'insights' | 'changes' | 'data' | 'evidence-explorer' | 'chat' => {
+    const path = window.location.pathname;
+    if (path === '/patients' || path.startsWith('/patients/')) {
+      // Redirect /patients to workspace
+      window.history.replaceState(null, '', '/workspace');
+      return 'workspace';
+    }
+    // Map other paths to pages
+    if (path === '/workspace') return 'workspace';
+    if (path === '/compare') return 'compare';
+    if (path === '/insights') return 'insights';
+    if (path === '/changes') return 'changes';
+    if (path === '/data') return 'data';
+    if (path === '/evidence-explorer') return 'evidence-explorer';
+    if (path === '/chat') return 'chat';
+    // Default to chat page for root path
+    return 'chat';
+  };
+
+  const [activePage, setActivePage] = useState<'workspace' | 'compare' | 'insights' | 'changes' | 'data' | 'evidence-explorer' | 'chat'>(getInitialPage());
+  
+  // Update URL when page changes
+  const navigateToPage = (page: typeof activePage) => {
+    setActivePage(page);
+    const path = page === 'chat' ? '/' : `/${page}`;
+    window.history.pushState(null, '', path);
+  };
+
+  // Handle browser back/forward buttons
+  useEffect(() => {
+    const handlePopState = () => {
+      const page = getInitialPage();
+      setActivePage(page);
+    };
+    
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+  const [rightSidebarCollapsed, setRightSidebarCollapsed] = useState(false);
   const [drugQuery, setDrugQuery] = useState('adalimumab');
   const [selectedIssuer, setSelectedIssuer] = useState('');
   const [activeTab, setActiveTab] = useState<TabId>('coverage');
   const [issuers, setIssuers] = useState<string[]>([]);
-  const [matches, setMatches] = useState<AntonRxCoverageMatch[]>([]);
+  const [matches, setMatches] = useState<PolicyCoverageMatch[]>([]);
   const [comparePlanIds, setComparePlanIds] = useState<string[]>([]);
   const [selectedPlanId, setSelectedPlanId] = useState('');
-  const [detail, setDetail] = useState<AntonRxPlanDrugDetail | null>(null);
-  const [changeWatch, setChangeWatch] = useState<AntonRxChangeWatch | null>(null);
+  const [detail, setDetail] = useState<PolicyPlanDrugDetail | null>(null);
   const [ingestedSources, setIngestedSources] = useState<IngestedSourceRecord[]>([]);
   const [ingestionSummary, setIngestionSummary] = useState<IngestionSummary | null>(null);
-  const [catalogSummary, setCatalogSummary] = useState<AntonRxCatalogSummary | null>(null);
+  const [catalogSummary, setCatalogSummary] = useState<PolicyCatalogSummary | null>(null);
   const [refreshToken, setRefreshToken] = useState(0);
-  const [selectedPatientId, setSelectedPatientId] = useState('');
-  const [patientCases, setPatientCases] = useState<StoredPatientCase[]>([]);
-  const [selectedCaseId, setSelectedCaseId] = useState('');
-  const [selectedCase, setSelectedCase] = useState<StoredPatientCase | null>(null);
-  const [patientPolicyOptions, setPatientPolicyOptions] = useState<PatientPolicyOption[]>([]);
-  const [patientEvaluations, setPatientEvaluations] = useState<StoredCoverageEvaluation[]>([]);
-  const [selectedEvaluationPolicyId, setSelectedEvaluationPolicyId] = useState('');
-  const [selectedEvaluationPolicyVersion, setSelectedEvaluationPolicyVersion] = useState<number | ''>('');
-  const [isPatientPolicyOptionsLoading, setIsPatientPolicyOptionsLoading] = useState(false);
-  const [isPatientEvaluationsLoading, setIsPatientEvaluationsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [policyCompareOptions, setPolicyCompareOptions] = useState<PolicyCompareOptions | null>(null);
@@ -129,9 +143,9 @@ export default function App() {
 
   async function refreshDataViews() {
     const [summaryPayload, sourcePayload, issuerPayload] = await Promise.all([
-      fetchAntonRxSummary().catch(() => ({ summary: null as AntonRxCatalogSummary | null })),
+      fetchPolicySummary().catch(() => ({ summary: null as PolicyCatalogSummary | null })),
       fetchIngestionSources().catch(() => ({ sources: [] as IngestedSourceRecord[], summary: null as IngestionSummary | null })),
-      fetchAntonRxIssuers().catch(() => ({ issuers: [] as string[] }))
+      fetchPolicyIssuers().catch(() => ({ issuers: [] as string[] }))
     ]);
 
     setCatalogSummary(summaryPayload.summary);
@@ -140,42 +154,9 @@ export default function App() {
     setIssuers(issuerPayload.issuers);
   }
 
-  async function refreshPatientCases(preferredCaseId?: string) {
-    const payload = await fetchPatientCases();
-    setPatientCases(payload.cases);
-    const nextSelectedCaseId = preferredCaseId && payload.cases.some((entry) => entry.caseId === preferredCaseId)
-      ? preferredCaseId
-      : payload.cases.some((entry) => entry.caseId === selectedCaseId)
-        ? selectedCaseId
-        : payload.cases[0]?.caseId ?? '';
-    setSelectedCaseId(nextSelectedCaseId);
-  }
-
-  async function refreshPatientCaseWorkspace(caseId: string) {
-    setIsPatientPolicyOptionsLoading(true);
-    setIsPatientEvaluationsLoading(true);
-    try {
-      const [casePayload, policyPayload, evaluationPayload] = await Promise.all([
-        fetchPatientCase(caseId),
-        fetchPatientPolicyOptions(caseId),
-        fetchCaseEvaluations(caseId)
-      ]);
-      setSelectedCase(casePayload.case);
-      setPatientPolicyOptions(policyPayload.policies);
-      setPatientEvaluations(evaluationPayload.evaluations);
-    } finally {
-      setIsPatientPolicyOptionsLoading(false);
-      setIsPatientEvaluationsLoading(false);
-    }
-  }
-
   useEffect(() => {
     void refreshDataViews();
   }, [refreshToken]);
-
-  useEffect(() => {
-    void refreshPatientCases();
-  }, []);
 
   useEffect(() => {
     void fetchPolicyCompareOptions()
@@ -223,7 +204,6 @@ export default function App() {
     if (!drugQuery.trim()) {
       setMatches([]);
       setDetail(null);
-      setChangeWatch(null);
       setSelectedPlanId('');
       return;
     }
@@ -232,12 +212,11 @@ export default function App() {
     setError(null);
 
     void Promise.all([
-      fetchAntonRxCompare(drugQuery, selectedIssuer || undefined),
-      fetchAntonRxChanges(drugQuery, selectedIssuer || undefined)
+      fetchPolicyCompare(drugQuery, selectedIssuer || undefined),
+      fetchPolicyChanges({ payer: selectedIssuer || undefined })
     ])
       .then(([comparePayload, changePayload]) => {
         setMatches(comparePayload.matches);
-        setChangeWatch(changePayload.changeWatch);
         setComparePlanIds((current) => {
           const stillValid = current.filter((planId) => comparePayload.matches.some((match) => match.planId === planId));
           if (stillValid.length > 0) {
@@ -252,9 +231,8 @@ export default function App() {
         );
       })
       .catch((loadError) => {
-        setError(loadError instanceof Error ? loadError.message : 'Failed to load Anton Rx data');
+        setError(loadError instanceof Error ? loadError.message : 'Failed to load policy data');
         setMatches([]);
-        setChangeWatch(null);
       })
       .finally(() => setIsLoading(false));
   }, [drugQuery, selectedIssuer, refreshToken]);
@@ -265,59 +243,10 @@ export default function App() {
       return;
     }
 
-    void fetchAntonRxDetail(selectedPlanId, drugQuery)
+    void fetchPolicyDetail(selectedPlanId, drugQuery)
       .then((payload) => setDetail(payload.detail))
       .catch(() => setDetail(null));
   }, [selectedPlanId, drugQuery]);
-
-  useEffect(() => {
-    if (!selectedCaseId) {
-      setSelectedCase(null);
-      setPatientPolicyOptions([]);
-      setPatientEvaluations([]);
-      setSelectedEvaluationPolicyId('');
-      setSelectedEvaluationPolicyVersion('');
-      return;
-    }
-
-    void refreshPatientCaseWorkspace(selectedCaseId).catch(() => {
-      setSelectedCase(null);
-      setPatientPolicyOptions([]);
-      setPatientEvaluations([]);
-    });
-  }, [selectedCaseId]);
-
-  useEffect(() => {
-    if (patientPolicyOptions.length === 0) {
-      setSelectedEvaluationPolicyId('');
-      return;
-    }
-
-    setSelectedEvaluationPolicyId((current) =>
-      patientPolicyOptions.some((option) => option.policyId === current)
-        ? current
-        : patientPolicyOptions[0].policyId
-    );
-  }, [patientPolicyOptions]);
-
-  useEffect(() => {
-    if (!selectedEvaluationPolicyId) {
-      setSelectedEvaluationPolicyVersion('');
-      return;
-    }
-
-    const selectedOption = patientPolicyOptions.find((option) => option.policyId === selectedEvaluationPolicyId);
-    if (!selectedOption) {
-      setSelectedEvaluationPolicyVersion('');
-      return;
-    }
-
-    setSelectedEvaluationPolicyVersion((current) =>
-      current !== '' && selectedOption.versions.includes(current)
-        ? current
-        : selectedOption.currentVersion
-    );
-  }, [patientPolicyOptions, selectedEvaluationPolicyId]);
 
   useEffect(() => {
     if (!compareDrugFamily || comparePayers.length < 2 || activePage !== 'compare') {
@@ -363,7 +292,7 @@ export default function App() {
   }, [activePage, insightsDrugFamily, insightsPayers, insightsRuleType, insightsVersion]);
 
   useEffect(() => {
-    if (activePage !== 'changes') {
+    if (activePage !== 'changes' && activePage !== 'dashboard') {
       return;
     }
 
@@ -457,40 +386,6 @@ export default function App() {
     return [...current, nextValue];
   }
 
-  async function handleCreatePatientCase(input: {
-    patientName: string;
-    payer: string;
-    requestedDrug: string;
-    diagnosis: string;
-  }) {
-    const created = await createStoredPatientCase(input);
-    await refreshPatientCases(created.case.caseId);
-    await refreshPatientCaseWorkspace(created.case.caseId);
-  }
-
-  async function handleUploadPatientDocument(input: {
-    caseId: string;
-    fileName: string;
-    content: string;
-    contentType?: string;
-    documentType?: string;
-  }) {
-    const payload = await uploadPatientDocument(input);
-    setSelectedCase(payload.case);
-    await refreshPatientCases(payload.case.caseId);
-    await refreshPatientCaseWorkspace(payload.case.caseId);
-  }
-
-  async function handleRunPatientEvaluation(input: {
-    caseId: string;
-    policyId: string;
-    policyVersion: number;
-  }) {
-    await createCaseEvaluation(input);
-    await refreshPatientCases(input.caseId);
-    await refreshPatientCaseWorkspace(input.caseId);
-  }
-
   function renderPhaseSidebar(
     title: string,
     copy: string,
@@ -499,7 +394,7 @@ export default function App() {
   ) {
     return (
       <aside className="sidebar">
-        <div className="sidebar-section">
+        <div className="sidebar-section sidebar-section-header">
           <p className="eyebrow">PolicyPilot</p>
           <h2 className="sidebar-title">{title}</h2>
           <p className="sidebar-copy">{copy}</p>
@@ -516,7 +411,7 @@ export default function App() {
   function handleEvidenceExplorerSelectPolicy(_policyId: string, result: EvidenceSearchResult) {
     setDrugQuery(result.drugFamily);
     setSelectedIssuer(result.payer);
-    setActivePage('workspace');
+    navigateToPage('workspace');
   }
 
   function renderCoverageDetail() {
@@ -618,22 +513,45 @@ export default function App() {
         return detail?.structuredPolicy ? (
           <ReadinessView
             policy={detail.structuredPolicy}
-            selectedPatientId={selectedPatientId}
-            onPatientChange={setSelectedPatientId}
           />
         ) : (
           <div className="empty-state">
             Select a plan with deep medical policy evidence to check patient readiness.
             <br />
-            <small style={{ color: '#7a9fb4' }}>Readiness checking requires a structured policy with diagnosis and step therapy criteria.</small>
+            <small style={{ color: 'var(--color-gray-600)' }}>Readiness checking requires a structured policy with diagnosis and step therapy criteria.</small>
           </div>
         );
-      case 'changes':
-        return <ChangesView changeWatch={changeWatch} />;
+    }
+  }
+
+  // Determine if right sidebar should be shown for current page
+  const shouldShowRightSidebar = ['workspace', 'compare', 'changes'].includes(activePage);
+  
+  // Build right sidebar context based on active page
+  function getRightSidebarContext(): Record<string, unknown> {
+    switch (activePage) {
+      case 'workspace':
+        return {
+          selectedPlanId,
+          matches,
+          drugQuery,
+          selectedIssuer
+        };
       case 'compare':
-        return <CompareView drugQuery={drugQuery} matches={detailCompareMatches} selectedPlanId={selectedPlanId} />;
-      case 'ask':
-        return <AskView selectedDrug={drugQuery} selectedPayer={selectedIssuer} selectedPlanId={selectedPlanId} />;
+        return {
+          compareDrugFamily,
+          comparePayers,
+          policyComparison
+        };
+      case 'changes':
+        return {
+          changesPayer,
+          changesDrugFamily,
+          changesSeverity,
+          policyChanges
+        };
+      default:
+        return {};
     }
   }
 
@@ -641,165 +559,86 @@ export default function App() {
     <WorkspaceShell
       pageNav={
         <nav className="page-nav">
-          <button
-            type="button"
-            className={`page-nav-btn${activePage === 'workspace' ? ' page-nav-btn-active' : ''}`}
-            onClick={() => setActivePage('workspace')}
-          >
-            Workspace
-          </button>
-          <button
-            type="button"
-            className={`page-nav-btn${activePage === 'compare' ? ' page-nav-btn-active' : ''}`}
-            onClick={() => setActivePage('compare')}
-          >
-            Compare
-          </button>
-          <button
-            type="button"
-            className={`page-nav-btn${activePage === 'insights' ? ' page-nav-btn-active' : ''}`}
-            onClick={() => setActivePage('insights')}
-          >
-            Insights
-          </button>
-          <button
-            type="button"
-            className={`page-nav-btn${activePage === 'changes' ? ' page-nav-btn-active' : ''}`}
-            onClick={() => setActivePage('changes')}
-          >
-            Changes
-          </button>
-          <button
-            type="button"
-            className={`page-nav-btn${activePage === 'data' ? ' page-nav-btn-active' : ''}`}
-            onClick={() => setActivePage('data')}
-          >
-            Data
-          </button>
-          <button
-            type="button"
-            className={`page-nav-btn${activePage === 'patients' ? ' page-nav-btn-active' : ''}`}
-            onClick={() => setActivePage('patients')}
-          >
-            Patients
-          </button>
-          <button
-            type="button"
-            className={`page-nav-btn${activePage === 'evidence-explorer' ? ' page-nav-btn-active' : ''}`}
-            onClick={() => setActivePage('evidence-explorer')}
-          >
-            Evidence Explorer
-          </button>
-          <button
-            type="button"
-            className={`page-nav-btn${activePage === 'chat' ? ' page-nav-btn-active' : ''}`}
-            onClick={() => setActivePage('chat')}
-          >
-            Chat
-          </button>
+          <div className="page-nav-main">
+            <button
+              type="button"
+              className={`page-nav-btn${activePage === 'chat' ? ' page-nav-btn-active' : ''}`}
+              onClick={() => navigateToPage('chat')}
+            >
+              Chat
+            </button>
+            <button
+              type="button"
+              className={`page-nav-btn${activePage === 'workspace' ? ' page-nav-btn-active' : ''}`}
+              onClick={() => navigateToPage('workspace')}
+            >
+              Workspace
+            </button>
+            <button
+              type="button"
+              className={`page-nav-btn${activePage === 'compare' ? ' page-nav-btn-active' : ''}`}
+              onClick={() => navigateToPage('compare')}
+            >
+              Compare
+            </button>
+            <button
+              type="button"
+              className={`page-nav-btn${activePage === 'insights' ? ' page-nav-btn-active' : ''}`}
+              onClick={() => navigateToPage('insights')}
+            >
+              Insights
+            </button>
+            <button
+              type="button"
+              className={`page-nav-btn${activePage === 'changes' ? ' page-nav-btn-active' : ''}`}
+              onClick={() => navigateToPage('changes')}
+            >
+              Changes
+            </button>
+            <button
+              type="button"
+              className={`page-nav-btn${activePage === 'data' ? ' page-nav-btn-active' : ''}`}
+              onClick={() => navigateToPage('data')}
+            >
+              Data
+            </button>
+          </div>
         </nav>
       }
       sidebar={
-        activePage === 'patients' ? (
-          <PatientSidebar caseCount={patientCases.length} selectedCaseName={selectedCase?.patientName} />
+        activePage === 'chat' ? null : activePage === 'compare' ? null : activePage === 'workspace' ? null : activePage === 'dashboard' ? (
+          renderPhaseSidebar(
+            'Dashboard Overview',
+            'Monitor system status, recent changes, and access quick actions for common workflows.',
+            'Phase 7',
+            'The dashboard provides a centralized view of key metrics and system health.'
+          )
         ) : activePage === 'evidence-explorer' ? (
           renderPhaseSidebar(
             'Keyword evidence search',
             'Search all stored policy evidence snippets by rule language, document section, or field label.'
-          )
-        ) : activePage === 'chat' ? (
-          renderPhaseSidebar(
-            'Grounded policy chat',
-            'Ask freeform questions and inspect the cited evidence for each answer.',
-            'Phase 10',
-            'The chat route reuses the Phase 3 evidence retrieval and grounded answer flow.'
           )
         ) : activePage === 'compare' ? (
           renderPhaseSidebar(
             'Cross-payer compare',
             'Choose a drug family and at least two payers to inspect preferred products, prior auth, step therapy, covered indications, and restrictions.'
           )
-        ) : activePage === 'insights' ? (
-          renderPhaseSidebar(
-            'Heat map and graph',
-            'Filter the current policy corpus and drill into payer-by-rule patterns through a heat map and relationship graph.'
-          )
-        ) : activePage === 'changes' ? (
-          renderPhaseSidebar(
-            'Change history and diff',
-            'Track policy updates over time, inspect materiality labels, and open side-by-side version diffs.',
-            'Phase 8',
-            'Policy changes are classified deterministically as cosmetic, operational, or clinical.'
-          )
-        ) : (
-          <Sidebar
-            issuers={issuers}
-            selectedIssuer={selectedIssuer}
-            drugQuery={drugQuery}
-            onIssuerChange={setSelectedIssuer}
-            onDrugQueryChange={setDrugQuery}
-          />
-        )
+        ) : activePage === 'insights' ? null : activePage === 'changes' ? null : null
       }
       listPane={
-        activePage === 'patients' ? (
-          <PatientCasesView
-            cases={patientCases}
-            selectedCaseId={selectedCaseId}
-            onSelectCase={setSelectedCaseId}
-            onCreateCase={handleCreatePatientCase}
-          />
-        ) : activePage === 'evidence-explorer' ? (
+        activePage === 'chat' ? null : activePage === 'compare' ? null : activePage === 'evidence-explorer' ? (
           <div className="workspace-column">
             <div className="empty-state">Search from the detail pane to explore stored policy evidence.</div>
           </div>
-        ) : activePage === 'chat' ? (
-          <div className="workspace-column">
-            <div className="empty-state">Use the detail pane to ask evidence-backed policy questions.</div>
-          </div>
-        ) : activePage === 'data' ? (
+        ) : activePage === 'insights' ? null : activePage === 'changes' ? null : activePage === 'data' ? (
           <IngestionPanel
             ingestedSources={ingestedSources}
             ingestionSummary={ingestionSummary}
             catalogSummary={catalogSummary}
             onIngestionComplete={handleIngestionComplete}
           />
-        ) : activePage === 'compare' ? (
-          <PolicyCompareBuilder
-            options={policyCompareOptions}
-            payerOptions={comparePayerOptions}
-            selectedDrugFamily={compareDrugFamily}
-            selectedPayers={comparePayers}
-            selectedVersion={compareVersion}
-            onDrugFamilyChange={setCompareDrugFamily}
-            onTogglePayer={(payer) => setComparePayers((current) => toggleStringValue(current, payer))}
-            onVersionChange={setCompareVersion}
-          />
-        ) : activePage === 'insights' ? (
-          <PolicyInsightsBuilder
-            options={policyCompareOptions}
-            payerOptions={insightsPayerOptions}
-            selectedDrugFamily={insightsDrugFamily}
-            selectedPayers={insightsPayers}
-            selectedRuleType={insightsRuleType}
-            selectedVersion={insightsVersion}
-            onDrugFamilyChange={setInsightsDrugFamily}
-            onTogglePayer={(payer) => setInsightsPayers((current) => toggleStringValue(current, payer))}
-            onRuleTypeChange={setInsightsRuleType}
-            onVersionChange={setInsightsVersion}
-          />
-        ) : activePage === 'changes' ? (
-          <PolicyChangesFilters
-            options={policyChanges?.filters ?? null}
-            selectedPayer={changesPayer}
-            selectedDrugFamily={changesDrugFamily}
-            selectedSeverity={changesSeverity}
-            onPayerChange={setChangesPayer}
-            onDrugFamilyChange={setChangesDrugFamily}
-            onSeverityChange={setChangesSeverity}
-          />
         ) : (
-          <>
+          <div className="workspace-column">
             <div className="panel-header">
               <div>
                 <p className="eyebrow">Drug Search</p>
@@ -809,7 +648,7 @@ export default function App() {
             </div>
 
             {error && <div className="chat-error">{error}</div>}
-            {isLoading && <div className="empty-state">Loading Anton Rx plan matches…</div>}
+            {isLoading && <div className="empty-state">Loading plan matches…</div>}
             {!isLoading && matches.length === 0 && (
               <div className="empty-state">No plan matches yet. Try a broader brand or generic drug query.</div>
             )}
@@ -820,25 +659,11 @@ export default function App() {
                 onSelectPlan={setSelectedPlanId}
               />
             )}
-          </>
+          </div>
         )
       }
       detailPane={
-        activePage === 'patients' ? (
-          <PatientCaseDetailView
-            patientCase={selectedCase}
-            policyOptions={patientPolicyOptions}
-            evaluations={patientEvaluations}
-            selectedPolicyId={selectedEvaluationPolicyId}
-            selectedPolicyVersion={selectedEvaluationPolicyVersion}
-            policyOptionsLoading={isPatientPolicyOptionsLoading}
-            evaluationsLoading={isPatientEvaluationsLoading}
-            onPolicyChange={setSelectedEvaluationPolicyId}
-            onPolicyVersionChange={setSelectedEvaluationPolicyVersion}
-            onRunEvaluation={handleRunPatientEvaluation}
-            onUploadDocument={handleUploadPatientDocument}
-          />
-        ) : activePage === 'evidence-explorer' ? (
+        activePage === 'evidence-explorer' ? (
           <EvidenceExplorerView onSelectPolicy={handleEvidenceExplorerSelectPolicy} />
         ) : activePage === 'chat' ? (
           <ChatView />
@@ -865,6 +690,16 @@ export default function App() {
             selectedEvidence={selectedInsightsEvidence}
             onOpenEvidence={(title, evidence) => setSelectedInsightsEvidence({ title, evidence })}
             onClearEvidence={() => setSelectedInsightsEvidence(null)}
+            options={policyCompareOptions}
+            payerOptions={insightsPayerOptions}
+            selectedDrugFamily={insightsDrugFamily}
+            selectedPayers={insightsPayers}
+            selectedRuleType={insightsRuleType}
+            selectedVersion={insightsVersion}
+            onDrugFamilyChange={setInsightsDrugFamily}
+            onTogglePayer={(payer) => setInsightsPayers((current) => toggleStringValue(current, payer))}
+            onRuleTypeChange={setInsightsRuleType}
+            onVersionChange={setInsightsVersion}
           />
         ) : activePage === 'changes' ? (
           selectedVersionDiff ? (
@@ -888,10 +723,17 @@ export default function App() {
                 setPolicyVersionDiff(null);
                 setPolicyVersionDiffError(null);
               }}
+              options={policyChanges?.filters ?? null}
+              selectedPayer={changesPayer}
+              selectedDrugFamily={changesDrugFamily}
+              selectedSeverity={changesSeverity}
+              onPayerChange={setChangesPayer}
+              onDrugFamilyChange={setChangesDrugFamily}
+              onSeverityChange={setChangesSeverity}
             />
           )
         ) : (
-          <>
+          <div className="workspace-column">
             {selectedMatch && (
               <div className="panel-header">
                 <div>
@@ -907,8 +749,33 @@ export default function App() {
             )}
             <DetailTabs activeTab={activeTab} onTabChange={setActiveTab} />
             {renderDetailContent()}
-          </>
+          </div>
         )
+      }
+      rightSidebar={undefined}
+      rightSidebarCollapsed={false}
+      onToggleRightSidebar={() => {}}
+      topFilters={
+        activePage === 'workspace' ? (
+          <WorkspaceSearchBuilder
+            issuers={issuers}
+            selectedIssuer={selectedIssuer}
+            drugQuery={drugQuery}
+            onIssuerChange={setSelectedIssuer}
+            onDrugQueryChange={setDrugQuery}
+          />
+        ) : activePage === 'compare' ? (
+          <PolicyCompareBuilder
+            options={policyCompareOptions}
+            payerOptions={comparePayerOptions}
+            selectedDrugFamily={compareDrugFamily}
+            selectedPayers={comparePayers}
+            selectedVersion={compareVersion}
+            onDrugFamilyChange={setCompareDrugFamily}
+            onTogglePayer={(payer) => setComparePayers((current) => toggleStringValue(current, payer))}
+            onVersionChange={setCompareVersion}
+          />
+        ) : undefined
       }
     />
   );

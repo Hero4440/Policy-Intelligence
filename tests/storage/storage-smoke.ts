@@ -93,7 +93,11 @@ function runPatientSmoke(): string {
     patientName: 'Jane Test'
   });
 
-  addCaseDocument(patientCase.caseId, 'clinical note.pdf', Buffer.from('fake note'));
+  addCaseDocument({
+    caseId: patientCase.caseId,
+    fileName: 'clinical note.pdf',
+    content: Buffer.from('fake note')
+  });
   const updated = updateCaseStatus(patientCase.caseId, 'ready-for-eval');
   const found = getPatientCase(patientCase.caseId);
 

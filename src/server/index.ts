@@ -7,8 +7,9 @@ import { createMcpApp } from '../mcp/index.js';
 import { getPoliciesFromMemory, loadStorageOnStartup } from '../storage/startup.js';
 import { ensureSeedPatientCases, listPatientCases } from '../storage/patient-store.js';
 import { listEvaluations } from '../storage/evaluation-store.js';
-import { registerAntonRxRoutes } from './antonrx-routes.js';
+import { registerPolicyDataRoutes } from './policy-data-routes.js';
 import { registerChatRoutes } from './chat.js';
+import { registerPolicyQaChatRoute } from './policy-qa-chat.js';
 import { registerIngestionRoutes } from './ingestion/index.js';
 import { registerPatientRoutes } from './patient-routes.js';
 import { registerPolicyRoutes } from './policy-routes.js';
@@ -30,12 +31,13 @@ app.use(
 app.use(express.json({ limit: '25mb' }));
 
 app.use(createMcpApp());
-registerAntonRxRoutes(app);
+registerPolicyDataRoutes(app);
 registerPolicyRoutes(app);
 registerPatientRoutes(app);
 registerIngestionRoutes(app);
 registerUploadRoutes(app);
 registerChatRoutes(app);
+registerPolicyQaChatRoute(app);
 
 app.get('/api/health', (req, res) => {
   const policies = getPoliciesFromMemory();

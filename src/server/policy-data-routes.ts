@@ -7,29 +7,29 @@ import {
   getPlanDrugDetail,
   listIssuers,
   searchDrugs
-} from './antonrx-data.js';
+} from './policy-data.js';
 
-export function registerAntonRxRoutes(app: Express) {
-  app.get('/api/antonrx/summary', (req: Request, res: Response) => {
+export function registerPolicyDataRoutes(app: Express) {
+  app.get('/api/policy/summary', (req: Request, res: Response) => {
     res.json({
       summary: getCatalogSummary()
     });
   });
 
-  app.get('/api/antonrx/issuers', (req: Request, res: Response) => {
+  app.get('/api/policy/issuers', (req: Request, res: Response) => {
     res.json({
       issuers: listIssuers()
     });
   });
 
-  app.get('/api/antonrx/drugs', (req: Request, res: Response) => {
+  app.get('/api/policy/drugs', (req: Request, res: Response) => {
     const query = typeof req.query.query === 'string' ? req.query.query : '';
     res.json({
       drugs: searchDrugs(query)
     });
   });
 
-  app.get('/api/antonrx/compare', (req: Request, res: Response) => {
+  app.get('/api/policy/compare', (req: Request, res: Response) => {
     const drug = typeof req.query.drug === 'string' ? req.query.drug : '';
     const issuer = typeof req.query.issuer === 'string' ? req.query.issuer : undefined;
 
@@ -45,7 +45,7 @@ export function registerAntonRxRoutes(app: Express) {
     });
   });
 
-  app.get('/api/antonrx/detail', (req: Request, res: Response) => {
+  app.get('/api/policy/detail', (req: Request, res: Response) => {
     const drug = typeof req.query.drug === 'string' ? req.query.drug : '';
     const planId = typeof req.query.planId === 'string' ? req.query.planId : '';
 
@@ -63,7 +63,7 @@ export function registerAntonRxRoutes(app: Express) {
     res.json({ detail });
   });
 
-  app.get('/api/antonrx/changes', (req: Request, res: Response) => {
+  app.get('/api/policy/changes', (req: Request, res: Response) => {
     const drug = typeof req.query.drug === 'string' ? req.query.drug : '';
     const issuer = typeof req.query.issuer === 'string' ? req.query.issuer : undefined;
 

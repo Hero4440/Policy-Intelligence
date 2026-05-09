@@ -37,19 +37,161 @@ function mapEvidence(citations: ChatEvidenceCitation[]): PolicyEvidenceRef[] {
   }));
 }
 
+const SUGGESTED_QUESTIONS = [
+  "What are UHC's rituximab requirements?",
+  "Compare prior auth for adalimumab across payers",
+  "What are the step therapy rules for Humira?"
+];
+
+function getContextualSuggestions(messages: ChatMessage[]): string[] {
+  // If no messages yet, show default suggestions
+  if (messages.length === 0) {
+    return SUGGESTED_QUESTIONS;
+  }
+
+  // Get the last user message to provide context
+  const lastUserMessage = [...messages].reverse().find(m => m.role === 'user');
+  
+  if (!lastUserMessage) {
+    return SUGGESTED_QUESTIONS;
+  }
+
+  const content = lastUserMessage.content.toLowerCase();
+
+  // Contextual suggestions based on conversation
+  if (content.includes('humira') || content.includes('adalimumab')) {
+    return [
+      "What are the step therapy requirements for Humira?",
+      "Compare Humira coverage across different payers",
+      "What diagnosis codes are required for Humira?"
+    ];
+  }
+
+  if (content.includes('prior auth') || content.includes('pa')) {
+    return [
+      "Which biologics require prior authorization?",
+      "Compare PA requirements across payers",
+      "What's the typical PA approval timeline?"
+    ];
+  }
+
+  if (content.includes('step therapy')) {
+    return [
+      "Which drugs have step therapy requirements?",
+      "How does step therapy differ by payer?",
+      "What are alternatives to step therapy drugs?"
+    ];
+  }
+
+  if (content.includes('aetna') || content.includes('uhc') || content.includes('cigna')) {
+    return [
+      "Compare coverage policies across major payers",
+      "What are the key differences in payer requirements?",
+      "Which payer has the most restrictive policies?"
+    ];
+  }
+
+  if (content.includes('coverage') || content.includes('covered')) {
+    return [
+      "What are common coverage exclusions?",
+      "How do medical necessity criteria vary?",
+      "What documentation is needed for coverage?"
+    ];
+  }
+
+  // Default contextual follow-ups
+  return [
+    "Can you provide more details about that?",
+    "How does this compare to other payers?",
+    "What are the specific requirements?"
+  ];
+}
+
 export function ChatView() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [activeEvidence, setActiveEvidence] = useState<{ title: string; evidence: PolicyEvidenceRef[] } | null>(null);
+  const [suggestedQuestions, setSuggestedQuestions] = useState<string[]>(() => getContextualSuggestions([]));
+  const [isDragging, setIsDragging] = useState(false);
+  const [uploadStatus, setUploadStatus] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
   }, [messages, isLoading]);
 
+  useEffect(() => {
+    // Auto-resize textarea
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto';
+      textareaRef.current.style.height = `${Math.min(textareaRef.current.scrollHeight, 200)}px`;
+    }
+  }, [input]);
+
   const hasSidebar = useMemo(() => Boolean(activeEvidence && activeEvidence.evidence.length > 0), [activeEvidence]);
+
+  async function handleFileUpload(files: FileList | null) {
+    if (!files || files.length === 0) return;
+
+    const file = files[0];
+    
+    // Validate file type
+    if (!file.name.endsWith('.json')) {
+      setError('Please upload a JSON file (FHIR patient bundle or policy JSON)');
+      return;
+    }
+
+    setUploadStatus(`Uploading ${file.name}...`);
+    setError(null);
+
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const response = await fetch('/api/upload/json', {
+        method: 'POST',
+        body: formData
+      });
+
+      if (!response.ok) {
+        const payload = await response.json().catch(() => ({ error: `Upload failed: ${response.status}` }));
+        throw new Error(typeof payload.error === 'string' ? payload.error : `Upload failed: ${response.status}`);
+      }
+
+      const result = await response.json();
+      setUploadStatus(`✓ Successfully uploaded ${file.name}`);
+      
+      // Clear status after 3 seconds
+      setTimeout(() => setUploadStatus(null), 3000);
+    } catch (uploadError) {
+      setError(uploadError instanceof Error ? uploadError.message : 'File upload failed');
+      setUploadStatus(null);
+    }
+  }
+
+  function handleDragOver(event: React.DragEvent<HTMLDivElement>) {
+    event.preventDefault();
+    setIsDragging(true);
+  }
+
+  function handleDragLeave(event: React.DragEvent<HTMLDivElement>) {
+    event.preventDefault();
+    setIsDragging(false);
+  }
+
+  function handleDrop(event: React.DragEvent<HTMLDivElement>) {
+    event.preventDefault();
+    setIsDragging(false);
+    handleFileUpload(event.dataTransfer.files);
+  }
+
+  function handleFileInputChange(event: React.ChangeEvent<HTMLInputElement>) {
+    handleFileUpload(event.target.files);
+  }
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -91,7 +233,12 @@ export function ChatView() {
         evidence: payload.evidence
       };
 
-      setMessages((current) => [...current, assistantMessage]);
+      setMessages((current) => {
+        const updatedMessages = [...current, assistantMessage];
+        // Update suggested questions after assistant responds
+        setSuggestedQuestions(getContextualSuggestions(updatedMessages));
+        return updatedMessages;
+      });
       if (payload.evidence.length > 0) {
         setActiveEvidence({
           title: 'Sources',
@@ -105,14 +252,102 @@ export function ChatView() {
     }
   }
 
+  function handleSuggestedQuestion(question: string) {
+    setInput(question);
+    // Trigger form submission programmatically
+    const userMessage: ChatMessage = {
+      id: crypto.randomUUID(),
+      role: 'user',
+      content: question
+    };
+
+    setMessages((current) => [...current, userMessage]);
+    setError(null);
+    setIsLoading(true);
+
+    void fetch('/api/chat/policy-qa', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ question })
+    })
+      .then(async (response) => {
+        if (!response.ok) {
+          const payload = await response.json().catch(() => ({ error: `Request failed: ${response.status}` }));
+          throw new Error(typeof payload.error === 'string' ? payload.error : `Request failed: ${response.status}`);
+        }
+
+        const payload = await response.json() as PolicyQaChatResponse;
+        const assistantMessage: ChatMessage = {
+          id: crypto.randomUUID(),
+          role: 'assistant',
+          content: payload.answer,
+          evidence: payload.evidence
+        };
+
+        setMessages((current) => {
+          const updatedMessages = [...current, assistantMessage];
+          // Update suggested questions after assistant responds
+          setSuggestedQuestions(getContextualSuggestions(updatedMessages));
+          return updatedMessages;
+        });
+        if (payload.evidence.length > 0) {
+          setActiveEvidence({
+            title: 'Sources',
+            evidence: mapEvidence(payload.evidence)
+          });
+        }
+      })
+      .catch((requestError) => {
+        setError(requestError instanceof Error ? requestError.message : 'Chat request failed');
+      })
+      .finally(() => {
+        setIsLoading(false);
+        setInput('');
+      });
+  }
+
   return (
     <div className={`chat-layout${hasSidebar ? ' chat-layout-with-sidebar' : ''}`}>
       <div className="chat-main">
         <div className="panel-header">
           <div>
             <p className="eyebrow">Chat</p>
-            <h2>Ask natural-language questions about loaded policies</h2>
+            <h2>Ask natural-language questions about policies</h2>
           </div>
+        </div>
+
+        {/* File Upload Section */}
+        <div 
+          className={`chat-upload-zone${isDragging ? ' chat-upload-zone-dragging' : ''}`}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
+        >
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept=".json"
+            onChange={handleFileInputChange}
+            style={{ display: 'none' }}
+          />
+          <button
+            type="button"
+            className="chat-upload-btn"
+            onClick={() => fileInputRef.current?.click()}
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M17 8L12 3L7 8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M12 3V15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+            Upload JSON
+          </button>
+          <p className="chat-upload-hint">
+            Drop FHIR patient bundles or policy JSON files here, or click Upload JSON above.
+          </p>
+          {uploadStatus && <p className="chat-upload-status">{uploadStatus}</p>}
         </div>
 
         <div className="chat-messages">
@@ -140,19 +375,59 @@ export function ChatView() {
           <div ref={messagesEndRef} />
         </div>
 
+        <div className="suggested-questions-inline">
+          <p className="suggested-questions-label">Try asking:</p>
+          <div className="suggested-questions-bubbles">
+            {suggestedQuestions.map((question, index) => (
+              <button
+                key={index}
+                type="button"
+                className="suggested-question-bubble"
+                onClick={() => handleSuggestedQuestion(question)}
+              >
+                {question}
+              </button>
+            ))}
+          </div>
+        </div>
+
         <form className="chat-input-form" onSubmit={handleSubmit}>
-          <textarea
-            className="chat-input"
-            value={input}
-            onChange={(event) => setInput(event.target.value)}
-            placeholder="What does UHC require before rituximab approval?"
-            rows={4}
-          />
-          <div className="chat-input-actions">
-            <button type="submit" className="primary-button" disabled={isLoading || !input.trim()}>
-              {isLoading ? 'Sending…' : 'Ask'}
+          <div className="chat-input-wrapper">
+            <textarea
+              ref={textareaRef}
+              className="chat-input"
+              value={input}
+              onChange={(event) => setInput(event.target.value)}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter' && !event.shiftKey) {
+                  event.preventDefault();
+                  handleSubmit(event as unknown as React.FormEvent<HTMLFormElement>);
+                }
+              }}
+              placeholder="Ask about prior authorization, step therapy, or coverage requirements..."
+              rows={1}
+            />
+            <button 
+              type="submit" 
+              className="chat-submit-btn" 
+              disabled={isLoading || !input.trim()}
+              aria-label="Send message"
+            >
+              {isLoading ? (
+                <svg className="chat-loading-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeDasharray="32" strokeDashoffset="32">
+                    <animate attributeName="stroke-dashoffset" values="32;0" dur="1s" repeatCount="indefinite" />
+                  </circle>
+                </svg>
+              ) : (
+                <svg className="chat-send-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M22 2L11 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              )}
             </button>
           </div>
+          <p className="chat-input-hint">Press Enter to send, Shift+Enter for new line</p>
         </form>
       </div>
 

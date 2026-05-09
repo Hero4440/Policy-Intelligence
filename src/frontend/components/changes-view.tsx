@@ -1,4 +1,4 @@
-import type { AntonRxChangeWatch } from '../data/antonrx.js';
+import type { AntonRxChangeWatch } from '../data/policy-types.js';
 import { InfoChip } from './info-chip.js';
 
 type ChangesViewProps = {
@@ -102,7 +102,7 @@ export function ChangesView({ changeWatch }: ChangesViewProps) {
           </article>
         ))}
         {summary.proxySourceMatches > 0 && (
-          <article className="detail-card" style={{ borderColor: 'rgba(255,192,77,0.3)' }}>
+          <article className="detail-card" style={{ borderColor: 'var(--color-warning)' }}>
             <p className="detail-card-title">Source freshness alert</p>
             <p>{summary.proxySourceMatches} of {summary.planMatches} plan snapshots come from proxy-era source files (pre-2025). These should be refreshed for production use.</p>
           </article>

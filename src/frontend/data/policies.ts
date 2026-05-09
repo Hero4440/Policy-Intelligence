@@ -76,9 +76,9 @@ export interface PolicyComparePayload {
 
 export interface PolicyInsightCell {
   payer: string;
-  ruleType: PolicyCompareRowKey;
+  drug: string;
   status: PolicyStatusTone;
-  value: string;
+  score: number;
   evidence: PolicyEvidenceRef[];
 }
 
@@ -100,11 +100,11 @@ export interface PolicyInsightsPayload {
   filters: {
     payerOptions: string[];
     versionOptions: number[];
-    ruleTypeOptions: Array<{ key: PolicyCompareRowKey; label: string }>;
+    drugOptions: string[];
   };
   heatmap: {
-    rows: Array<{ key: PolicyCompareRowKey; label: string }>;
     payers: string[];
+    drugs: string[];
     cells: PolicyInsightCell[];
   };
   graph: {

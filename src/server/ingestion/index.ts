@@ -27,7 +27,7 @@ import {
   type IngestionSourceKind,
   type IngestionStatus
 } from './store.js';
-import { invalidateAntonRxCatalog } from '../antonrx-data.js';
+import { invalidatePolicyCatalog } from '../policy-data.js';
 
 type UploadPayload = {
   name: string;
@@ -315,7 +315,7 @@ function normalizePolicyJson(sourceId: string, fileName: string, payload: unknow
       medicalBenefit: true,
       therapeuticCategory: policy.indication,
       therapeuticSubcategory: '',
-      notes: 'Uploaded structured policy JSON normalized into Anton Rx compare shape.',
+      notes: 'Uploaded structured policy JSON normalized into policy compare shape.',
       confidenceLabel: 'high',
       confidenceRationale: 'Uploaded JSON validated against the structured policy schema.',
       requirementsSummary: [
@@ -411,7 +411,7 @@ function normalizeCsvUpload(sourceId: string, fileName: string, text: string): {
           medicalBenefit: asBool(row.medical_benefit || ''),
           therapeuticCategory: row.therapeutic_category || row.drug_class || '',
           therapeuticSubcategory: row.therapeutic_subcategory || '',
-          notes: `Uploaded CSV (drugs-only schema) normalized into Anton Rx compare shape.`,
+          notes: `Uploaded CSV (drugs-only schema) normalized into policy compare shape.`,
           confidenceLabel: 'medium' as const,
           confidenceRationale: 'Uploaded CSV row matched a recognized drug formulary schema.',
           requirementsSummary: row.requirements_limits ? [row.requirements_limits] : [],
@@ -471,7 +471,7 @@ function buildCsvDrugSnapshot(sourceId: string, fileName: string, row: CsvRow, i
     medicalBenefit: asBool(row.medical_benefit || ''),
     therapeuticCategory: row.therapeutic_category || '',
     therapeuticSubcategory: row.therapeutic_subcategory || '',
-    notes: row.notes || 'Uploaded CSV normalized into Anton Rx compare shape.',
+    notes: row.notes || 'Uploaded CSV normalized into policy compare shape.',
     confidenceLabel: 'medium',
     confidenceRationale: 'Uploaded CSV row matched the expected formulary schema.',
     requirementsSummary: row.requirements_limits ? [row.requirements_limits] : [],
@@ -620,7 +620,7 @@ function normalizeJsonlUpload(sourceId: string, fileName: string, text: string):
           medicalBenefit: asBool(drug.medical_benefit || ''),
           therapeuticCategory: drug.therapeutic_category || drug.drug_class || '',
           therapeuticSubcategory: drug.therapeutic_subcategory || '',
-          notes: 'JSONL record normalized into Anton Rx compare shape.',
+          notes: 'JSONL record normalized into policy compare shape.',
           confidenceLabel: 'medium',
           confidenceRationale: 'Parsed from structured JSONL plan record with formulary drug data.',
           requirementsSummary: drug.requirements_limits ? [drug.requirements_limits] : [],
@@ -668,7 +668,7 @@ function normalizeJsonlUpload(sourceId: string, fileName: string, text: string):
           medicalBenefit: false,
           therapeuticCategory: '',
           therapeuticSubcategory: '',
-          notes: 'Flat JSONL record normalized into Anton Rx compare shape.',
+          notes: 'Flat JSONL record normalized into policy compare shape.',
           confidenceLabel: 'medium',
           confidenceRationale: 'Parsed from flat JSONL record.',
           requirementsSummary: [],
@@ -954,7 +954,7 @@ export async function ingestOneFile(file: UploadPayload) {
 
   saveIngestionResult(source, snapshots);
   if (snapshots.length > 0) {
-    invalidateAntonRxCatalog();
+    invalidatePolicyCatalog();
   }
 
   return {

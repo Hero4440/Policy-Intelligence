@@ -5,7 +5,7 @@ import {
   type IngestedSourceRecord,
   type IngestionSummary,
   type IngestionUploadResult
-} from '../data/antonrx.js';
+} from '../data/policy-types.js';
 
 type IngestionPanelProps = {
   ingestedSources: IngestedSourceRecord[];
@@ -120,7 +120,7 @@ export function IngestionPanel({
       <div className="ingestion-source-list">
         {ingestedSources.length === 0 && (
           <div className="empty-state">
-            No uploaded sources yet. The seeded Anton Rx package is already loaded and searchable.
+            No uploaded sources yet. The seeded policy package is already loaded and searchable.
           </div>
         )}
         {ingestedSources.slice(0, 6).map((source) => (

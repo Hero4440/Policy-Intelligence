@@ -231,7 +231,7 @@ export function AskView({ selectedDrug, selectedPayer, selectedPlanId }: AskView
     <div className="chat-view">
       <div className="chat-toolbar">
         <div>
-          <p className="eyebrow">Ask Anton Rx</p>
+          <p className="eyebrow">Ask PolicyPilot</p>
           <h3 className="chat-title">Natural-language policy intelligence</h3>
           <p className="chat-subtitle">Ask about coverage, PA criteria, patient readiness, cross-plan differences, or change watch.</p>
         </div>

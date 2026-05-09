@@ -1,4 +1,4 @@
-import type { AntonRxCoverageMatch } from '../data/antonrx.js';
+import type { AntonRxCoverageMatch } from '../data/policy-types.js';
 import { InfoChip } from './info-chip.js';
 
 type CompareBuilderViewProps = {

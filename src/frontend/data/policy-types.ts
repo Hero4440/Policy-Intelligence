@@ -1,4 +1,4 @@
-export interface AntonRxCoverageMatch {
+export interface PolicyCoverageMatch {
   planId: string;
   issuerName: string;
   issuerKey: string;
@@ -34,7 +34,7 @@ export interface AntonRxCoverageMatch {
   normalizedRuleFacets: string[];
 }
 
-export interface AntonRxRule {
+export interface PolicyRule {
   planId: string;
   issuerName: string;
   appliesTo: string;
@@ -46,8 +46,8 @@ export interface AntonRxRule {
   sourcePage: string;
 }
 
-export interface AntonRxPlanDrugDetail extends AntonRxCoverageMatch {
-  planRules: AntonRxRule[];
+export interface PolicyPlanDrugDetail extends PolicyCoverageMatch {
+  planRules: PolicyRule[];
   matchedRows: Array<{
     drugNameDisplay: string;
     tier: string;
@@ -70,7 +70,7 @@ export interface AntonRxPlanDrugDetail extends AntonRxCoverageMatch {
   };
 }
 
-export interface AntonRxChangeWatch {
+export interface PolicyChangeWatch {
   drugQuery: string;
   sourceDates: Array<{ issuerName: string; sourceFile: string; sourceEffectiveDate: string; note: string }>;
   notableSignals: string[];
@@ -107,7 +107,7 @@ export interface IngestionSummary {
   snapshotCount: number;
 }
 
-export interface AntonRxCatalogSummary {
+export interface PolicyCatalogSummary {
   planCount: number;
   formularyRowCount: number;
   medicalBenefitRowCount: number;
@@ -135,33 +135,33 @@ async function fetchJson<T>(input: string): Promise<T> {
   return response.json() as Promise<T>;
 }
 
-export function fetchAntonRxIssuers() {
-  return fetchJson<{ issuers: string[] }>('/api/antonrx/issuers');
+export function fetchPolicyIssuers() {
+  return fetchJson<{ issuers: string[] }>('/api/policy/issuers');
 }
 
-export function fetchAntonRxSummary() {
-  return fetchJson<{ summary: AntonRxCatalogSummary }>('/api/antonrx/summary');
+export function fetchPolicySummary() {
+  return fetchJson<{ summary: PolicyCatalogSummary }>('/api/policy/summary');
 }
 
-export function fetchAntonRxCompare(drug: string, issuer?: string) {
+export function fetchPolicyCompare(drug: string, issuer?: string) {
   const params = new URLSearchParams({ drug });
   if (issuer) {
     params.set('issuer', issuer);
   }
-  return fetchJson<{ drug: string; issuer: string | null; matches: AntonRxCoverageMatch[] }>(`/api/antonrx/compare?${params.toString()}`);
+  return fetchJson<{ drug: string; issuer: string | null; matches: PolicyCoverageMatch[] }>(`/api/policy/compare?${params.toString()}`);
 }
 
-export function fetchAntonRxDetail(planId: string, drug: string) {
+export function fetchPolicyDetail(planId: string, drug: string) {
   const params = new URLSearchParams({ planId, drug });
-  return fetchJson<{ detail: AntonRxPlanDrugDetail }>(`/api/antonrx/detail?${params.toString()}`);
+  return fetchJson<{ detail: PolicyPlanDrugDetail }>(`/api/policy/detail?${params.toString()}`);
 }
 
-export function fetchAntonRxChanges(drug: string, issuer?: string) {
+export function fetchPolicyChanges(drug: string, issuer?: string) {
   const params = new URLSearchParams({ drug });
   if (issuer) {
     params.set('issuer', issuer);
   }
-  return fetchJson<{ changeWatch: AntonRxChangeWatch }>(`/api/antonrx/changes?${params.toString()}`);
+  return fetchJson<{ changeWatch: PolicyChangeWatch }>(`/api/policy/changes?${params.toString()}`);
 }
 
 export function fetchIngestionSources() {
@@ -204,6 +204,6 @@ async function toUploadPayload(file: File): Promise<UploadFilePayload> {
   };
 }
 
-export function summarizeCoverage(match: AntonRxCoverageMatch): string {
+export function summarizeCoverage(match: PolicyCoverageMatch): string {
   return match.coverageLabel;
 }

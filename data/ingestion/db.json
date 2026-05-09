@@ -1,6 +1,288 @@
 {
   "sources": [
     {
+      "id": "src-1778304614804-8zryut",
+      "fileName": "uhc-adalimumab-ra.json",
+      "mimeType": "application/json",
+      "sizeBytes": 3629,
+      "sourceKind": "json_policy",
+      "status": "normalized",
+      "uploadedAt": "2026-05-09T05:30:14.804Z",
+      "issuerName": "UHC",
+      "effectiveDate": "2026-01-01",
+      "detectedDrugs": [
+        "Humira (adalimumab)"
+      ],
+      "notes": [
+        "Structured policy JSON validated and normalized."
+      ],
+      "summary": "uhc-adalimumab-ra.json normalized into 1 searchable record.",
+      "rawPath": "/Users/hero4440/Documents/Code/inovationhacks_2/data/ingestion/raw/src-1778304614804-8zryut-uhc-adalimumab-ra.json",
+      "normalizedSnapshotIds": [
+        "src-1778304614804-8zryut-policy"
+      ]
+    },
+    {
+      "id": "src-1778304614802-2dignq",
+      "fileName": "uhc-etanercept-ra.json",
+      "mimeType": "application/json",
+      "sizeBytes": 2846,
+      "sourceKind": "json_policy",
+      "status": "normalized",
+      "uploadedAt": "2026-05-09T05:30:14.802Z",
+      "issuerName": "UHC",
+      "effectiveDate": "2026-01-01",
+      "detectedDrugs": [
+        "Enbrel (etanercept)"
+      ],
+      "notes": [
+        "Structured policy JSON validated and normalized."
+      ],
+      "summary": "uhc-etanercept-ra.json normalized into 1 searchable record.",
+      "rawPath": "/Users/hero4440/Documents/Code/inovationhacks_2/data/ingestion/raw/src-1778304614802-2dignq-uhc-etanercept-ra.json",
+      "normalizedSnapshotIds": [
+        "src-1778304614802-2dignq-policy"
+      ]
+    },
+    {
+      "id": "src-1778304614799-ruh19m",
+      "fileName": "aetna-adalimumab-ra.json",
+      "mimeType": "application/json",
+      "sizeBytes": 4016,
+      "sourceKind": "json_policy",
+      "status": "normalized",
+      "uploadedAt": "2026-05-09T05:30:14.800Z",
+      "issuerName": "Aetna",
+      "effectiveDate": "2026-01-01",
+      "detectedDrugs": [
+        "Humira (adalimumab)"
+      ],
+      "notes": [
+        "Structured policy JSON validated and normalized."
+      ],
+      "summary": "aetna-adalimumab-ra.json normalized into 1 searchable record.",
+      "rawPath": "/Users/hero4440/Documents/Code/inovationhacks_2/data/ingestion/raw/src-1778304614799-ruh19m-aetna-adalimumab-ra.json",
+      "normalizedSnapshotIds": [
+        "src-1778304614799-ruh19m-policy"
+      ]
+    },
+    {
+      "id": "src-1778304614798-izcf3i",
+      "fileName": "cigna-infliximab-ra.json",
+      "mimeType": "application/json",
+      "sizeBytes": 4386,
+      "sourceKind": "json_policy",
+      "status": "normalized",
+      "uploadedAt": "2026-05-09T05:30:14.798Z",
+      "issuerName": "Cigna",
+      "effectiveDate": "2026-01-01",
+      "detectedDrugs": [
+        "Remicade (infliximab)"
+      ],
+      "notes": [
+        "Structured policy JSON validated and normalized."
+      ],
+      "summary": "cigna-infliximab-ra.json normalized into 1 searchable record.",
+      "rawPath": "/Users/hero4440/Documents/Code/inovationhacks_2/data/ingestion/raw/src-1778304614798-izcf3i-cigna-infliximab-ra.json",
+      "normalizedSnapshotIds": [
+        "src-1778304614798-izcf3i-policy"
+      ]
+    },
+    {
+      "id": "src-1778304614795-v87i16",
+      "fileName": "aetna-upadacitinib-ra.json",
+      "mimeType": "application/json",
+      "sizeBytes": 7408,
+      "sourceKind": "json_policy",
+      "status": "normalized",
+      "uploadedAt": "2026-05-09T05:30:14.796Z",
+      "issuerName": "Aetna",
+      "effectiveDate": "2026-01-01",
+      "detectedDrugs": [
+        "Rinvoq (upadacitinib)"
+      ],
+      "notes": [
+        "Structured policy JSON validated and normalized."
+      ],
+      "summary": "aetna-upadacitinib-ra.json normalized into 1 searchable record.",
+      "rawPath": "/Users/hero4440/Documents/Code/inovationhacks_2/data/ingestion/raw/src-1778304614795-v87i16-aetna-upadacitinib-ra.json",
+      "normalizedSnapshotIds": [
+        "src-1778304614795-v87i16-policy"
+      ]
+    },
+    {
+      "id": "src-1778304614792-g5vawd",
+      "fileName": "bcbs-nc-bevacizumab-oncology.json",
+      "mimeType": "application/json",
+      "sizeBytes": 13255,
+      "sourceKind": "json_policy",
+      "status": "normalized",
+      "uploadedAt": "2026-05-09T05:30:14.793Z",
+      "issuerName": "BCBS-NC",
+      "effectiveDate": "2026-01",
+      "detectedDrugs": [
+        "Avastin (bevacizumab)"
+      ],
+      "notes": [
+        "Structured policy JSON validated and normalized."
+      ],
+      "summary": "bcbs-nc-bevacizumab-oncology.json normalized into 1 searchable record.",
+      "rawPath": "/Users/hero4440/Documents/Code/inovationhacks_2/data/ingestion/raw/src-1778304614792-g5vawd-bcbs-nc-bevacizumab-oncology.json",
+      "normalizedSnapshotIds": [
+        "src-1778304614792-g5vawd-policy"
+      ]
+    },
+    {
+      "id": "src-1778304614783-36vx1g",
+      "fileName": "cigna-rituximab-nononcology.json",
+      "mimeType": "application/json",
+      "sizeBytes": 14433,
+      "sourceKind": "json_policy",
+      "status": "normalized",
+      "uploadedAt": "2026-05-09T05:30:14.787Z",
+      "issuerName": "Cigna",
+      "effectiveDate": "2026-02-01",
+      "detectedDrugs": [
+        "Rituxan (rituximab)"
+      ],
+      "notes": [
+        "Structured policy JSON validated and normalized."
+      ],
+      "summary": "cigna-rituximab-nononcology.json normalized into 1 searchable record.",
+      "rawPath": "/Users/hero4440/Documents/Code/inovationhacks_2/data/ingestion/raw/src-1778304614783-36vx1g-cigna-rituximab-nononcology.json",
+      "normalizedSnapshotIds": [
+        "src-1778304614783-36vx1g-policy"
+      ]
+    },
+    {
+      "id": "src-1778304614782-pmkj0r",
+      "fileName": "policies-index.json",
+      "mimeType": "application/json",
+      "sizeBytes": 1162,
+      "sourceKind": "json_policy",
+      "status": "rejected",
+      "uploadedAt": "2026-05-09T05:30:14.782Z",
+      "issuerName": "UHC",
+      "effectiveDate": "2026-04-12",
+      "detectedDrugs": [],
+      "notes": [],
+      "summary": "policies-index.json was rejected during normalization.",
+      "rawPath": "/Users/hero4440/Documents/Code/inovationhacks_2/data/ingestion/raw/src-1778304614782-pmkj0r-policies-index.json",
+      "normalizedSnapshotIds": []
+    },
+    {
+      "id": "src-1778304614780-5uxsid",
+      "fileName": "cigna-herceptin_v1.json",
+      "mimeType": "application/json",
+      "sizeBytes": 610,
+      "sourceKind": "json_policy",
+      "status": "rejected",
+      "uploadedAt": "2026-05-09T05:30:14.781Z",
+      "issuerName": "Cigna",
+      "effectiveDate": "2026-01-01",
+      "detectedDrugs": [],
+      "notes": [],
+      "summary": "cigna-herceptin_v1.json was rejected during normalization.",
+      "rawPath": "/Users/hero4440/Documents/Code/inovationhacks_2/data/ingestion/raw/src-1778304614780-5uxsid-cigna-herceptin_v1.json",
+      "normalizedSnapshotIds": []
+    },
+    {
+      "id": "src-1778304614777-r59j1p",
+      "fileName": "cigna-herceptin_v2.json",
+      "mimeType": "application/json",
+      "sizeBytes": 611,
+      "sourceKind": "json_policy",
+      "status": "rejected",
+      "uploadedAt": "2026-05-09T05:30:14.777Z",
+      "issuerName": "Cigna",
+      "effectiveDate": "2026-01-01",
+      "detectedDrugs": [],
+      "notes": [],
+      "summary": "cigna-herceptin_v2.json was rejected during normalization.",
+      "rawPath": "/Users/hero4440/Documents/Code/inovationhacks_2/data/ingestion/raw/src-1778304614777-r59j1p-cigna-herceptin_v2.json",
+      "normalizedSnapshotIds": []
+    },
+    {
+      "id": "src-1778304614776-14vfhd",
+      "fileName": "cigna-herceptin_diff_v1_to_v2.json",
+      "mimeType": "application/json",
+      "sizeBytes": 225,
+      "sourceKind": "json_policy",
+      "status": "rejected",
+      "uploadedAt": "2026-05-09T05:30:14.776Z",
+      "issuerName": "Cigna",
+      "effectiveDate": "2026",
+      "detectedDrugs": [],
+      "notes": [],
+      "summary": "cigna-herceptin_diff_v1_to_v2.json was rejected during normalization.",
+      "rawPath": "/Users/hero4440/Documents/Code/inovationhacks_2/data/ingestion/raw/src-1778304614776-14vfhd-cigna-herceptin_diff_v1_to_v2.json",
+      "normalizedSnapshotIds": []
+    },
+    {
+      "id": "src-1778304614763-1kyij5",
+      "fileName": "cigna-herceptin_v3.json",
+      "mimeType": "application/json",
+      "sizeBytes": 610,
+      "sourceKind": "json_policy",
+      "status": "rejected",
+      "uploadedAt": "2026-05-09T05:30:14.764Z",
+      "issuerName": "Cigna",
+      "effectiveDate": "2026-01-01",
+      "detectedDrugs": [],
+      "notes": [],
+      "summary": "cigna-herceptin_v3.json was rejected during normalization.",
+      "rawPath": "/Users/hero4440/Documents/Code/inovationhacks_2/data/ingestion/raw/src-1778304614763-1kyij5-cigna-herceptin_v3.json",
+      "normalizedSnapshotIds": []
+    },
+    {
+      "id": "src-1778304614762-p81pdq",
+      "fileName": "cigna-herceptin_diff_v2_to_v3.json",
+      "mimeType": "application/json",
+      "sizeBytes": 225,
+      "sourceKind": "json_policy",
+      "status": "rejected",
+      "uploadedAt": "2026-05-09T05:30:14.762Z",
+      "issuerName": "Cigna",
+      "effectiveDate": "2026",
+      "detectedDrugs": [],
+      "notes": [],
+      "summary": "cigna-herceptin_diff_v2_to_v3.json was rejected during normalization.",
+      "rawPath": "/Users/hero4440/Documents/Code/inovationhacks_2/data/ingestion/raw/src-1778304614762-p81pdq-cigna-herceptin_diff_v2_to_v3.json",
+      "normalizedSnapshotIds": []
+    },
+    {
+      "id": "src-1778304614754-wgjw5b",
+      "fileName": "cigna-herceptin_v4.json",
+      "mimeType": "application/json",
+      "sizeBytes": 611,
+      "sourceKind": "json_policy",
+      "status": "rejected",
+      "uploadedAt": "2026-05-09T05:30:14.760Z",
+      "issuerName": "Cigna",
+      "effectiveDate": "2026-01-01",
+      "detectedDrugs": [],
+      "notes": [],
+      "summary": "cigna-herceptin_v4.json was rejected during normalization.",
+      "rawPath": "/Users/hero4440/Documents/Code/inovationhacks_2/data/ingestion/raw/src-1778304614754-wgjw5b-cigna-herceptin_v4.json",
+      "normalizedSnapshotIds": []
+    },
+    {
+      "id": "src-1778304614723-0rtdtx",
+      "fileName": "cigna-herceptin_diff_v3_to_v4.json",
+      "mimeType": "application/json",
+      "sizeBytes": 225,
+      "sourceKind": "json_policy",
+      "status": "rejected",
+      "uploadedAt": "2026-05-09T05:30:14.750Z",
+      "issuerName": "Cigna",
+      "effectiveDate": "2026",
+      "detectedDrugs": [],
+      "notes": [],
+      "summary": "cigna-herceptin_diff_v3_to_v4.json was rejected during normalization.",
+      "rawPath": "/Users/hero4440/Documents/Code/inovationhacks_2/data/ingestion/raw/src-1778304614723-0rtdtx-cigna-herceptin_diff_v3_to_v4.json",
+      "normalizedSnapshotIds": []
+    },
+    {
       "id": "src-1775423603144-b3r3iv",
       "fileName": "Cigna Rituximab Intravenous Products for Non-Oncology Indications.pdf",
       "mimeType": "application/pdf",
@@ -218,6 +500,1417 @@
     }
   ],
   "snapshots": [
+    {
+      "snapshotId": "src-1778304614804-8zryut-policy",
+      "sourceId": "src-1778304614804-8zryut",
+      "planId": "UPLOADED-UHC-COMMERCIAL",
+      "issuerName": "UHC",
+      "issuerKey": "uhc",
+      "planName": "UHC Commercial",
+      "planKey": "uhc__uhc_commercial",
+      "market": "Commercial",
+      "metalLevel": "",
+      "sourceKind": "uploaded_policy_json",
+      "sourcePosture": "deep_medical_policy",
+      "sourceFile": "uhc-adalimumab-ra.json",
+      "sourceEffectiveDate": "2026-01-01",
+      "primaryDrugLabel": "Humira (adalimumab)",
+      "canonicalDrugKey": "adalimumab",
+      "alternateDrugLabels": [
+        "Amjevita",
+        "Cyltezo",
+        "Hadlima",
+        "Hulio",
+        "Hyrimoz",
+        "Idacio"
+      ],
+      "alternateDrugKeys": [
+        "adalimumab",
+        "adalimumab",
+        "adalimumab",
+        "hulio",
+        "adalimumab",
+        "idacio"
+      ],
+      "coverageLabel": "Covered with PA",
+      "coveredFlag": true,
+      "priorAuth": true,
+      "stepTherapy": true,
+      "quantityLimit": "",
+      "ageLimit": "",
+      "specialtyFlag": false,
+      "nonFormulary": false,
+      "medicalBenefit": true,
+      "therapeuticCategory": "Rheumatoid Arthritis",
+      "therapeuticSubcategory": "",
+      "notes": "Uploaded structured policy JSON normalized into policy compare shape.",
+      "confidenceLabel": "high",
+      "confidenceRationale": "Uploaded JSON validated against the structured policy schema.",
+      "requirementsSummary": [
+        "Diagnosis: Moderately to severely active rheumatoid arthritis",
+        "Step therapy: methotrexate, leflunomide, sulfasalazine, or hydroxychloroquine for 3 months",
+        "prescriber qualification: Prescribed by or in consultation with a rheumatologist",
+        "combination therapy restriction: Patient is not receiving adalimumab in combination with another systemic targeted immunomodulator for treatment of the same indication",
+        "state mandate variation: For Connecticut, Kentucky and Mississippi business: 30-day trial required instead of 3-month trial"
+      ],
+      "normalizedRuleFacets": [
+        "prior_authorization",
+        "step_therapy",
+        "prescriber_specialist"
+      ],
+      "evidenceSummary": [
+        "Diagnosis of moderately to severely active rheumatoid arthritis",
+        "History of failure to a 3 month trial of one non-biologic disease modifying anti-rheumatic drug (DMARD) [e.g., methotrexate, leflunomide, sulfasalazine, hydroxychloroquine] at the maximally indicated doses, unless contraindicated or clinically significant adverse effects are experienced",
+        "Prescribed by or in consultation with a rheumatologist"
+      ],
+      "structuredPolicy": {
+        "id": "uhc-adalimumab-ra",
+        "payer": "UHC",
+        "plan": "Commercial",
+        "policyTitle": "UHC Adalimumab Prior Authorization Policy",
+        "drug": {
+          "brandName": "Humira",
+          "genericName": "adalimumab",
+          "aliases": [
+            "Amjevita",
+            "Cyltezo",
+            "Hadlima",
+            "Hulio",
+            "Hyrimoz",
+            "Idacio",
+            "Abrilada",
+            "Simlandi",
+            "Yuflyma",
+            "Yusimry"
+          ]
+        },
+        "indication": "Rheumatoid Arthritis",
+        "coverageStatus": "covered-with-pa",
+        "paRequired": true,
+        "diagnosisRequirements": [
+          {
+            "icd10Codes": [
+              "M05.*",
+              "M06.*"
+            ],
+            "description": "Moderately to severely active rheumatoid arthritis",
+            "evidenceText": "Diagnosis of moderately to severely active rheumatoid arthritis",
+            "source": {
+              "document": "uhc-adalimumab-pa-policy.pdf",
+              "page": 2,
+              "section": "A. Rheumatoid Arthritis (RA) - 1. Initial Authorization"
+            }
+          }
+        ],
+        "stepTherapy": [
+          {
+            "drugName": "methotrexate, leflunomide, sulfasalazine, or hydroxychloroquine",
+            "dosage": "maximally indicated doses",
+            "duration": "3 months",
+            "failureCriteria": "inadequate response, contraindication, or clinically significant adverse effects",
+            "evidenceText": "History of failure to a 3 month trial of one non-biologic disease modifying anti-rheumatic drug (DMARD) [e.g., methotrexate, leflunomide, sulfasalazine, hydroxychloroquine] at the maximally indicated doses, unless contraindicated or clinically significant adverse effects are experienced",
+            "source": {
+              "document": "uhc-adalimumab-pa-policy.pdf",
+              "page": 2,
+              "section": "A. Rheumatoid Arthritis (RA) - 1. Initial Authorization - (2)(a)"
+            }
+          }
+        ],
+        "otherRequirements": [
+          {
+            "category": "prescriber qualification",
+            "requirement": "Prescribed by or in consultation with a rheumatologist",
+            "evidenceText": "Prescribed by or in consultation with a rheumatologist",
+            "source": {
+              "document": "uhc-adalimumab-pa-policy.pdf",
+              "page": 2,
+              "section": "A. Rheumatoid Arthritis (RA) - 1. Initial Authorization - (4)"
+            },
+            "ambiguous": false
+          },
+          {
+            "category": "combination therapy restriction",
+            "requirement": "Patient is not receiving adalimumab in combination with another systemic targeted immunomodulator for treatment of the same indication",
+            "evidenceText": "Patient is not receiving adalimumab in combination with another systemic targeted immunomodulator. [e.g., Enbrel (etanercept), Cimzia (certolizumab), Simponi (golimumab), Orencia (abatacept), Xeljanz (tofacitinib), Olumiant (baricitinib), Rinvoq (upadacitinib)] for treatment of the same indication.",
+            "source": {
+              "document": "uhc-adalimumab-pa-policy.pdf",
+              "page": 2,
+              "section": "A. Rheumatoid Arthritis (RA) - 1. Initial Authorization - (3)"
+            },
+            "ambiguous": false
+          },
+          {
+            "category": "state mandate variation",
+            "requirement": "For Connecticut, Kentucky and Mississippi business: 30-day trial required instead of 3-month trial",
+            "evidenceText": "For Connecticut, Kentucky and Mississippi business only a 30-day trial will be required.",
+            "source": {
+              "document": "uhc-adalimumab-pa-policy.pdf",
+              "page": 15,
+              "section": "Coverage Criteria footnote b"
+            },
+            "ambiguous": false
+          }
+        ],
+        "sourceDocument": {
+          "filename": "uhc-adalimumab-pa-policy.pdf",
+          "url": "https://www.uhcprovider.com/content/dam/provider/docs/public/prior-auth/drugs-pharmacy/commercial/a-g/PA-Med-Nec-Adalimumab.pdf",
+          "retrievalDate": "2026-04-04",
+          "effectiveDate": "2026-01-01"
+        }
+      }
+    },
+    {
+      "snapshotId": "src-1778304614802-2dignq-policy",
+      "sourceId": "src-1778304614802-2dignq",
+      "planId": "UPLOADED-UHC-COMMERCIAL",
+      "issuerName": "UHC",
+      "issuerKey": "uhc",
+      "planName": "UHC Commercial",
+      "planKey": "uhc__uhc_commercial",
+      "market": "Commercial",
+      "metalLevel": "",
+      "sourceKind": "uploaded_policy_json",
+      "sourcePosture": "deep_medical_policy",
+      "sourceFile": "uhc-etanercept-ra.json",
+      "sourceEffectiveDate": "2026-01-01",
+      "primaryDrugLabel": "Enbrel (etanercept)",
+      "canonicalDrugKey": "etanercept",
+      "alternateDrugLabels": [
+        "Erelzi",
+        "Eticovo"
+      ],
+      "alternateDrugKeys": [
+        "etanercept",
+        "etanercept"
+      ],
+      "coverageLabel": "Covered with PA",
+      "coveredFlag": true,
+      "priorAuth": true,
+      "stepTherapy": true,
+      "quantityLimit": "",
+      "ageLimit": "",
+      "specialtyFlag": false,
+      "nonFormulary": false,
+      "medicalBenefit": true,
+      "therapeuticCategory": "Rheumatoid Arthritis",
+      "therapeuticSubcategory": "",
+      "notes": "Uploaded structured policy JSON normalized into policy compare shape.",
+      "confidenceLabel": "high",
+      "confidenceRationale": "Uploaded JSON validated against the structured policy schema.",
+      "requirementsSummary": [
+        "Diagnosis: Moderately to severely active rheumatoid arthritis",
+        "Step therapy: methotrexate or other conventional DMARD for 3 months",
+        "prescriber qualification: Prescribed by or in consultation with a rheumatologist",
+        "combination therapy restriction: Not used in combination with other biologic DMARDs or JAK inhibitors"
+      ],
+      "normalizedRuleFacets": [
+        "prior_authorization",
+        "step_therapy",
+        "prescriber_specialist"
+      ],
+      "evidenceSummary": [
+        "Diagnosis of moderately to severely active rheumatoid arthritis confirmed by appropriate diagnostic criteria and clinical assessment.",
+        "History of failure, contraindication, or intolerance to a 3-month trial of methotrexate or other conventional disease-modifying antirheumatic drug (DMARD) at maximally indicated doses is required prior to initiating TNF inhibitor therapy.",
+        "Prescription must be written by or in consultation with a rheumatologist with expertise in treating rheumatoid arthritis."
+      ],
+      "structuredPolicy": {
+        "id": "uhc-etanercept-ra",
+        "payer": "UHC",
+        "plan": "Commercial",
+        "policyTitle": "UHC Etanercept Prior Authorization Policy",
+        "drug": {
+          "brandName": "Enbrel",
+          "genericName": "etanercept",
+          "aliases": [
+            "Erelzi",
+            "Eticovo"
+          ]
+        },
+        "indication": "Rheumatoid Arthritis",
+        "coverageStatus": "covered-with-pa",
+        "paRequired": true,
+        "diagnosisRequirements": [
+          {
+            "icd10Codes": [
+              "M05.*",
+              "M06.*"
+            ],
+            "description": "Moderately to severely active rheumatoid arthritis",
+            "evidenceText": "Diagnosis of moderately to severely active rheumatoid arthritis confirmed by appropriate diagnostic criteria and clinical assessment.",
+            "source": {
+              "document": "UHC Commercial Medical Policy - TNF Inhibitors",
+              "page": 1,
+              "section": "Coverage Criteria - Rheumatoid Arthritis"
+            }
+          }
+        ],
+        "stepTherapy": [
+          {
+            "drugName": "methotrexate or other conventional DMARD",
+            "dosage": "maximally indicated doses",
+            "duration": "3 months",
+            "failureCriteria": "inadequate response, contraindication, or documented intolerance",
+            "evidenceText": "History of failure, contraindication, or intolerance to a 3-month trial of methotrexate or other conventional disease-modifying antirheumatic drug (DMARD) at maximally indicated doses is required prior to initiating TNF inhibitor therapy.",
+            "source": {
+              "document": "UHC Commercial Medical Policy - TNF Inhibitors",
+              "page": 2,
+              "section": "Step Therapy Requirements - RA"
+            }
+          }
+        ],
+        "otherRequirements": [
+          {
+            "category": "prescriber qualification",
+            "requirement": "Prescribed by or in consultation with a rheumatologist",
+            "evidenceText": "Prescription must be written by or in consultation with a rheumatologist with expertise in treating rheumatoid arthritis.",
+            "source": {
+              "document": "UHC Commercial Medical Policy - TNF Inhibitors",
+              "page": 2,
+              "section": "Prescriber Requirements"
+            },
+            "ambiguous": false
+          },
+          {
+            "category": "combination therapy restriction",
+            "requirement": "Not used in combination with other biologic DMARDs or JAK inhibitors",
+            "evidenceText": "Etanercept must not be used in combination with other biologic DMARDs or targeted synthetic DMARDs (e.g., JAK inhibitors) for the same indication due to increased infection risk without demonstrated clinical benefit.",
+            "source": {
+              "document": "UHC Commercial Medical Policy - TNF Inhibitors",
+              "page": 3,
+              "section": "Combination Therapy Restrictions"
+            },
+            "ambiguous": false
+          }
+        ],
+        "sourceDocument": {
+          "filename": "UHC Commercial Medical Policy - TNF Inhibitors (Policy not available for direct download)",
+          "retrievalDate": "2026-04-04",
+          "effectiveDate": "2026-01-01"
+        }
+      }
+    },
+    {
+      "snapshotId": "src-1778304614799-ruh19m-policy",
+      "sourceId": "src-1778304614799-ruh19m",
+      "planId": "UPLOADED-AETNA-COMMERCIAL",
+      "issuerName": "Aetna",
+      "issuerKey": "aetna",
+      "planName": "Aetna Commercial",
+      "planKey": "aetna__aetna_commercial",
+      "market": "Commercial",
+      "metalLevel": "",
+      "sourceKind": "uploaded_policy_json",
+      "sourcePosture": "deep_medical_policy",
+      "sourceFile": "aetna-adalimumab-ra.json",
+      "sourceEffectiveDate": "2026-01-01",
+      "primaryDrugLabel": "Humira (adalimumab)",
+      "canonicalDrugKey": "adalimumab",
+      "alternateDrugLabels": [
+        "Amjevita",
+        "Cyltezo",
+        "Hadlima",
+        "Hulio",
+        "Hyrimoz",
+        "Idacio"
+      ],
+      "alternateDrugKeys": [
+        "adalimumab",
+        "adalimumab",
+        "adalimumab",
+        "hulio",
+        "adalimumab",
+        "idacio"
+      ],
+      "coverageLabel": "Covered with PA",
+      "coveredFlag": true,
+      "priorAuth": true,
+      "stepTherapy": true,
+      "quantityLimit": "",
+      "ageLimit": "",
+      "specialtyFlag": false,
+      "nonFormulary": false,
+      "medicalBenefit": true,
+      "therapeuticCategory": "Rheumatoid Arthritis",
+      "therapeuticSubcategory": "",
+      "notes": "Uploaded structured policy JSON normalized into policy compare shape.",
+      "confidenceLabel": "high",
+      "confidenceRationale": "Uploaded JSON validated against the structured policy schema.",
+      "requirementsSummary": [
+        "Diagnosis: Active rheumatoid arthritis with evidence of moderate to severe disease activity",
+        "Step therapy: methotrexate for 3 months",
+        "prescriber qualification: Prescribed by a rheumatologist",
+        "tuberculosis screening: Tuberculosis screening required prior to initiation",
+        "laboratory monitoring: Baseline laboratory tests within 3 months of initiation",
+        "dosing and quantity limits: Dosing must be consistent with FDA-approved labeling"
+      ],
+      "normalizedRuleFacets": [
+        "prior_authorization",
+        "step_therapy",
+        "prescriber_specialist"
+      ],
+      "evidenceSummary": [
+        "Member has active rheumatoid arthritis with documented evidence of moderate to severe disease activity, including elevated inflammatory markers (ESR or CRP) or active joint involvement.",
+        "Member has had an inadequate response to a trial of at least 3 months of methotrexate at a dose of at least 15 mg weekly (unless contraindicated or not tolerated). Inadequate response is defined as persistent moderate to severe disease activity.",
+        "The medication is prescribed by a physician who specializes in rheumatology."
+      ],
+      "structuredPolicy": {
+        "id": "aetna-adalimumab-ra",
+        "payer": "Aetna",
+        "plan": "Commercial",
+        "policyTitle": "Aetna Adalimumab Prior Authorization Policy",
+        "drug": {
+          "brandName": "Humira",
+          "genericName": "adalimumab",
+          "aliases": [
+            "Amjevita",
+            "Cyltezo",
+            "Hadlima",
+            "Hulio",
+            "Hyrimoz",
+            "Idacio",
+            "Abrilada",
+            "Simlandi",
+            "Yuflyma",
+            "Yusimry"
+          ]
+        },
+        "indication": "Rheumatoid Arthritis",
+        "coverageStatus": "covered-with-pa",
+        "paRequired": true,
+        "diagnosisRequirements": [
+          {
+            "icd10Codes": [
+              "M05.*",
+              "M06.*"
+            ],
+            "description": "Active rheumatoid arthritis with evidence of moderate to severe disease activity",
+            "evidenceText": "Member has active rheumatoid arthritis with documented evidence of moderate to severe disease activity, including elevated inflammatory markers (ESR or CRP) or active joint involvement.",
+            "source": {
+              "document": "Aetna Clinical Policy Bulletin 0726 - Biologic Response Modifiers",
+              "page": 12,
+              "section": "Rheumatoid Arthritis - Approval Criteria"
+            }
+          }
+        ],
+        "stepTherapy": [
+          {
+            "drugName": "methotrexate",
+            "dosage": "at least 15 mg weekly",
+            "duration": "3 months",
+            "failureCriteria": "inadequate response despite therapeutic dosing, or documented contraindication or intolerance",
+            "evidenceText": "Member has had an inadequate response to a trial of at least 3 months of methotrexate at a dose of at least 15 mg weekly (unless contraindicated or not tolerated). Inadequate response is defined as persistent moderate to severe disease activity.",
+            "source": {
+              "document": "Aetna Clinical Policy Bulletin 0726 - Biologic Response Modifiers",
+              "page": 13,
+              "section": "Rheumatoid Arthritis - Step Therapy"
+            }
+          }
+        ],
+        "otherRequirements": [
+          {
+            "category": "prescriber qualification",
+            "requirement": "Prescribed by a rheumatologist",
+            "evidenceText": "The medication is prescribed by a physician who specializes in rheumatology.",
+            "source": {
+              "document": "Aetna Clinical Policy Bulletin 0726 - Biologic Response Modifiers",
+              "page": 14,
+              "section": "Prescriber Requirements"
+            },
+            "ambiguous": false
+          },
+          {
+            "category": "tuberculosis screening",
+            "requirement": "Tuberculosis screening required prior to initiation",
+            "evidenceText": "Member has been screened for tuberculosis infection prior to initiating therapy, and active tuberculosis has been ruled out or treated appropriately if present.",
+            "source": {
+              "document": "Aetna Clinical Policy Bulletin 0726 - Biologic Response Modifiers",
+              "page": 14,
+              "section": "Safety Requirements"
+            },
+            "ambiguous": false
+          },
+          {
+            "category": "laboratory monitoring",
+            "requirement": "Baseline laboratory tests within 3 months of initiation",
+            "evidenceText": "Member has had baseline laboratory evaluation including CBC, hepatic function panel, and assessment for hepatitis B within 3 months prior to therapy initiation.",
+            "source": {
+              "document": "Aetna Clinical Policy Bulletin 0726 - Biologic Response Modifiers",
+              "page": 15,
+              "section": "Laboratory Requirements"
+            },
+            "ambiguous": false
+          },
+          {
+            "category": "dosing and quantity limits",
+            "requirement": "Dosing must be consistent with FDA-approved labeling",
+            "evidenceText": "The requested dose and frequency are consistent with FDA-approved labeling or evidence-based practice guidelines. Quantity limits may apply per fill and per plan year.",
+            "source": {
+              "document": "Aetna Clinical Policy Bulletin 0726 - Biologic Response Modifiers",
+              "page": 16,
+              "section": "Dosing Requirements"
+            },
+            "ambiguous": true
+          }
+        ],
+        "sourceDocument": {
+          "filename": "Aetna Clinical Policy Bulletin 0726 - Biologic Response Modifiers (Standard payer policy pattern)",
+          "retrievalDate": "2026-04-04",
+          "effectiveDate": "2026-01-01"
+        }
+      }
+    },
+    {
+      "snapshotId": "src-1778304614798-izcf3i-policy",
+      "sourceId": "src-1778304614798-izcf3i",
+      "planId": "UPLOADED-CIGNA-COMMERCIAL",
+      "issuerName": "Cigna",
+      "issuerKey": "cigna",
+      "planName": "Cigna Commercial",
+      "planKey": "cigna__cigna_commercial",
+      "market": "Commercial",
+      "metalLevel": "",
+      "sourceKind": "uploaded_policy_json",
+      "sourcePosture": "deep_medical_policy",
+      "sourceFile": "cigna-infliximab-ra.json",
+      "sourceEffectiveDate": "2026-01-01",
+      "primaryDrugLabel": "Remicade (infliximab)",
+      "canonicalDrugKey": "infliximab",
+      "alternateDrugLabels": [
+        "Inflectra",
+        "Renflexis",
+        "Avsola",
+        "Ixifi"
+      ],
+      "alternateDrugKeys": [
+        "infliximab",
+        "infliximab",
+        "infliximab",
+        "ixifi"
+      ],
+      "coverageLabel": "Covered with PA",
+      "coveredFlag": true,
+      "priorAuth": true,
+      "stepTherapy": true,
+      "quantityLimit": "",
+      "ageLimit": "",
+      "specialtyFlag": false,
+      "nonFormulary": false,
+      "medicalBenefit": true,
+      "therapeuticCategory": "Rheumatoid Arthritis",
+      "therapeuticSubcategory": "",
+      "notes": "Uploaded structured policy JSON normalized into policy compare shape.",
+      "confidenceLabel": "high",
+      "confidenceRationale": "Uploaded JSON validated against the structured policy schema.",
+      "requirementsSummary": [
+        "Diagnosis: Moderately to severely active rheumatoid arthritis despite conventional therapy",
+        "Step therapy: methotrexate for at least 3 months",
+        "prescriber qualification: Prescribed by a rheumatologist or specialist experienced in managing rheumatoid arthritis",
+        "administration setting: Infliximab must be administered via IV infusion in an appropriate clinical setting",
+        "infection screening: Screening for tuberculosis and hepatitis B required prior to treatment",
+        "biosimilar preference: Biosimilar products may be preferred over reference biologic"
+      ],
+      "normalizedRuleFacets": [
+        "prior_authorization",
+        "step_therapy",
+        "prescriber_specialist"
+      ],
+      "evidenceSummary": [
+        "Documentation of moderately to severely active rheumatoid arthritis with evidence of active inflammation (elevated ESR/CRP and/or swollen/tender joint count) despite treatment with conventional disease-modifying therapy.",
+        "Individual has experienced an inadequate clinical response to at least 3 months of methotrexate at an adequate dose, or has a contraindication or intolerance to methotrexate. Documentation of specific methotrexate dose, duration, and clinical response required.",
+        "Request is from a rheumatologist or other physician specialist with documented experience in the diagnosis and management of rheumatoid arthritis."
+      ],
+      "structuredPolicy": {
+        "id": "cigna-infliximab-ra",
+        "payer": "Cigna",
+        "plan": "Commercial",
+        "policyTitle": "Cigna Infliximab Prior Authorization Policy",
+        "drug": {
+          "brandName": "Remicade",
+          "genericName": "infliximab",
+          "aliases": [
+            "Inflectra",
+            "Renflexis",
+            "Avsola",
+            "Ixifi"
+          ]
+        },
+        "indication": "Rheumatoid Arthritis",
+        "coverageStatus": "covered-with-pa",
+        "paRequired": true,
+        "diagnosisRequirements": [
+          {
+            "icd10Codes": [
+              "M05.*",
+              "M06.*"
+            ],
+            "description": "Moderately to severely active rheumatoid arthritis despite conventional therapy",
+            "evidenceText": "Documentation of moderately to severely active rheumatoid arthritis with evidence of active inflammation (elevated ESR/CRP and/or swollen/tender joint count) despite treatment with conventional disease-modifying therapy.",
+            "source": {
+              "document": "Cigna Coverage Policy 0330 - Tumor Necrosis Factor (TNF) Inhibitors",
+              "page": 8,
+              "section": "Rheumatoid Arthritis Indications"
+            }
+          }
+        ],
+        "stepTherapy": [
+          {
+            "drugName": "methotrexate",
+            "dosage": "adequate dose",
+            "duration": "at least 3 months",
+            "failureCriteria": "inadequate clinical response or documented intolerance",
+            "evidenceText": "Individual has experienced an inadequate clinical response to at least 3 months of methotrexate at an adequate dose, or has a contraindication or intolerance to methotrexate. Documentation of specific methotrexate dose, duration, and clinical response required.",
+            "source": {
+              "document": "Cigna Coverage Policy 0330 - Tumor Necrosis Factor (TNF) Inhibitors",
+              "page": 9,
+              "section": "Prior Authorization Criteria - RA"
+            }
+          }
+        ],
+        "otherRequirements": [
+          {
+            "category": "prescriber qualification",
+            "requirement": "Prescribed by a rheumatologist or specialist experienced in managing rheumatoid arthritis",
+            "evidenceText": "Request is from a rheumatologist or other physician specialist with documented experience in the diagnosis and management of rheumatoid arthritis.",
+            "source": {
+              "document": "Cigna Coverage Policy 0330 - Tumor Necrosis Factor (TNF) Inhibitors",
+              "page": 9,
+              "section": "Prescriber Requirements"
+            },
+            "ambiguous": false
+          },
+          {
+            "category": "administration setting",
+            "requirement": "Infliximab must be administered via IV infusion in an appropriate clinical setting",
+            "evidenceText": "Infliximab is administered by intravenous infusion in a healthcare setting capable of managing potential infusion reactions. Infusion must be supervised by healthcare personnel trained in administration of biologic agents.",
+            "source": {
+              "document": "Cigna Coverage Policy 0330 - Tumor Necrosis Factor (TNF) Inhibitors",
+              "page": 10,
+              "section": "Administration Requirements"
+            },
+            "ambiguous": false
+          },
+          {
+            "category": "infection screening",
+            "requirement": "Screening for tuberculosis and hepatitis B required prior to treatment",
+            "evidenceText": "Individual has been screened for latent tuberculosis infection (via tuberculin skin test or interferon-gamma release assay) and hepatitis B virus prior to initiating therapy. Active infections must be treated before starting infliximab.",
+            "source": {
+              "document": "Cigna Coverage Policy 0330 - Tumor Necrosis Factor (TNF) Inhibitors",
+              "page": 11,
+              "section": "Safety Screening"
+            },
+            "ambiguous": false
+          },
+          {
+            "category": "biosimilar preference",
+            "requirement": "Biosimilar products may be preferred over reference biologic",
+            "evidenceText": "For individuals new to infliximab therapy, a biosimilar product (Inflectra, Renflexis, Avsola, or Ixifi) may be required before the reference biologic (Remicade) will be considered medically necessary, unless the prescriber provides justification for brand preference.",
+            "source": {
+              "document": "Cigna Coverage Policy 0330 - Tumor Necrosis Factor (TNF) Inhibitors",
+              "page": 12,
+              "section": "Biosimilar Step Therapy"
+            },
+            "ambiguous": true
+          }
+        ],
+        "sourceDocument": {
+          "filename": "Cigna Coverage Policy 0330 - Tumor Necrosis Factor (TNF) Inhibitors (Standard payer policy pattern)",
+          "retrievalDate": "2026-04-04",
+          "effectiveDate": "2026-01-01"
+        }
+      }
+    },
+    {
+      "snapshotId": "src-1778304614795-v87i16-policy",
+      "sourceId": "src-1778304614795-v87i16",
+      "planId": "UPLOADED-AETNA-COMMERCIAL",
+      "issuerName": "Aetna",
+      "issuerKey": "aetna",
+      "planName": "Aetna Commercial",
+      "planKey": "aetna__aetna_commercial",
+      "market": "Commercial",
+      "metalLevel": "",
+      "sourceKind": "uploaded_policy_json",
+      "sourcePosture": "deep_medical_policy",
+      "sourceFile": "aetna-upadacitinib-ra.json",
+      "sourceEffectiveDate": "2026-01-01",
+      "primaryDrugLabel": "Rinvoq (upadacitinib)",
+      "canonicalDrugKey": "upadacitinib",
+      "alternateDrugLabels": [],
+      "alternateDrugKeys": [],
+      "coverageLabel": "Covered with PA",
+      "coveredFlag": true,
+      "priorAuth": true,
+      "stepTherapy": true,
+      "quantityLimit": "",
+      "ageLimit": "",
+      "specialtyFlag": false,
+      "nonFormulary": false,
+      "medicalBenefit": true,
+      "therapeuticCategory": "Rheumatoid Arthritis",
+      "therapeuticSubcategory": "",
+      "notes": "Uploaded structured policy JSON normalized into policy compare shape.",
+      "confidenceLabel": "high",
+      "confidenceRationale": "Uploaded JSON validated against the structured policy schema.",
+      "requirementsSummary": [
+        "Diagnosis: Moderately to severely active rheumatoid arthritis with inadequate response to multiple prior therapies",
+        "Step therapy: methotrexate or other conventional DMARD for 3 months",
+        "Step therapy: at least one TNF inhibitor for 3 months",
+        "prescriber qualification: Prescribed by a rheumatologist",
+        "age restriction: Age 18 years or older",
+        "cardiovascular risk assessment: Cardiovascular risk factors must be assessed and documented",
+        "malignancy risk assessment: Cancer risk factors and screening status must be assessed",
+        "thrombosis risk assessment: Venous thromboembolism (VTE) risk factors must be assessed"
+      ],
+      "normalizedRuleFacets": [
+        "prior_authorization",
+        "step_therapy",
+        "prescriber_specialist"
+      ],
+      "evidenceSummary": [
+        "Member has moderately to severely active rheumatoid arthritis defined by at least 6 swollen and 6 tender joints and elevated inflammatory markers (ESR ≥28 mm/hr or CRP ≥1.0 mg/dL), despite treatment with conventional and biologic DMARDs.",
+        "Member has had an inadequate response to at least 3 months of methotrexate or other conventional DMARD at maximally tolerated doses, or has documented contraindication or intolerance to methotrexate.",
+        "The medication is prescribed by a physician who specializes in rheumatology with expertise in managing moderate to severe rheumatoid arthritis."
+      ],
+      "structuredPolicy": {
+        "id": "aetna-upadacitinib-ra",
+        "payer": "Aetna",
+        "plan": "Commercial",
+        "policyTitle": "Aetna Upadacitinib Prior Authorization Policy",
+        "drug": {
+          "brandName": "Rinvoq",
+          "genericName": "upadacitinib",
+          "aliases": []
+        },
+        "indication": "Rheumatoid Arthritis",
+        "coverageStatus": "covered-with-pa",
+        "paRequired": true,
+        "diagnosisRequirements": [
+          {
+            "icd10Codes": [
+              "M05.*",
+              "M06.*"
+            ],
+            "description": "Moderately to severely active rheumatoid arthritis with inadequate response to multiple prior therapies",
+            "evidenceText": "Member has moderately to severely active rheumatoid arthritis defined by at least 6 swollen and 6 tender joints and elevated inflammatory markers (ESR ≥28 mm/hr or CRP ≥1.0 mg/dL), despite treatment with conventional and biologic DMARDs.",
+            "source": {
+              "document": "Aetna Clinical Policy Bulletin 0968 - JAK Inhibitors for Rheumatic Conditions",
+              "page": 7,
+              "section": "Rheumatoid Arthritis - Diagnosis Requirements"
+            }
+          }
+        ],
+        "stepTherapy": [
+          {
+            "drugName": "methotrexate or other conventional DMARD",
+            "dosage": "maximally tolerated dose",
+            "duration": "3 months",
+            "failureCriteria": "inadequate response, contraindication, or intolerance",
+            "evidenceText": "Member has had an inadequate response to at least 3 months of methotrexate or other conventional DMARD at maximally tolerated doses, or has documented contraindication or intolerance to methotrexate.",
+            "source": {
+              "document": "Aetna Clinical Policy Bulletin 0968 - JAK Inhibitors for Rheumatic Conditions",
+              "page": 8,
+              "section": "Step Therapy - First Step"
+            }
+          },
+          {
+            "drugName": "at least one TNF inhibitor",
+            "dosage": "FDA-approved dosing",
+            "duration": "3 months",
+            "failureCriteria": "inadequate response, loss of response, contraindication, or intolerance",
+            "evidenceText": "Member has had an inadequate response to, loss of response to, or intolerance of at least one tumor necrosis factor (TNF) inhibitor (e.g., adalimumab, etanercept, infliximab, certolizumab, golimumab) at FDA-approved doses for at least 3 months, unless contraindicated.",
+            "source": {
+              "document": "Aetna Clinical Policy Bulletin 0968 - JAK Inhibitors for Rheumatic Conditions",
+              "page": 8,
+              "section": "Step Therapy - Second Step"
+            }
+          }
+        ],
+        "otherRequirements": [
+          {
+            "category": "prescriber qualification",
+            "requirement": "Prescribed by a rheumatologist",
+            "evidenceText": "The medication is prescribed by a physician who specializes in rheumatology with expertise in managing moderate to severe rheumatoid arthritis.",
+            "source": {
+              "document": "Aetna Clinical Policy Bulletin 0968 - JAK Inhibitors for Rheumatic Conditions",
+              "page": 9,
+              "section": "Prescriber Requirements"
+            },
+            "ambiguous": false
+          },
+          {
+            "category": "age restriction",
+            "requirement": "Age 18 years or older",
+            "evidenceText": "Member is 18 years of age or older. Upadacitinib is not approved for pediatric rheumatoid arthritis.",
+            "source": {
+              "document": "Aetna Clinical Policy Bulletin 0968 - JAK Inhibitors for Rheumatic Conditions",
+              "page": 9,
+              "section": "Age Requirements"
+            },
+            "ambiguous": false
+          },
+          {
+            "category": "cardiovascular risk assessment",
+            "requirement": "Cardiovascular risk factors must be assessed and documented",
+            "evidenceText": "Provider has assessed and documented cardiovascular risk factors including history of major adverse cardiovascular events (MACE), current smoking status, and other cardiovascular risk factors. JAK inhibitors may carry increased risk of MACE in patients with cardiovascular risk factors.",
+            "source": {
+              "document": "Aetna Clinical Policy Bulletin 0968 - JAK Inhibitors for Rheumatic Conditions",
+              "page": 10,
+              "section": "Safety Requirements - Cardiovascular Risk"
+            },
+            "ambiguous": false
+          },
+          {
+            "category": "malignancy risk assessment",
+            "requirement": "Cancer risk factors and screening status must be assessed",
+            "evidenceText": "Provider has documented assessment of cancer risk factors and current cancer screening status. JAK inhibitors may carry increased risk of malignancies, particularly in current or former smokers and patients age 50 or older.",
+            "source": {
+              "document": "Aetna Clinical Policy Bulletin 0968 - JAK Inhibitors for Rheumatic Conditions",
+              "page": 11,
+              "section": "Safety Requirements - Malignancy Risk"
+            },
+            "ambiguous": false
+          },
+          {
+            "category": "thrombosis risk assessment",
+            "requirement": "Venous thromboembolism (VTE) risk factors must be assessed",
+            "evidenceText": "Provider has assessed risk factors for venous thromboembolism. Upadacitinib may increase risk of thrombosis including deep vein thrombosis, pulmonary embolism, and arterial thrombosis.",
+            "source": {
+              "document": "Aetna Clinical Policy Bulletin 0968 - JAK Inhibitors for Rheumatic Conditions",
+              "page": 11,
+              "section": "Safety Requirements - VTE Risk"
+            },
+            "ambiguous": false
+          },
+          {
+            "category": "laboratory monitoring",
+            "requirement": "Baseline and periodic laboratory monitoring required",
+            "evidenceText": "Member has had baseline laboratory evaluation including CBC, comprehensive metabolic panel, lipid panel, hepatitis B and C screening, and tuberculosis screening. Periodic monitoring during therapy is required per prescribing information.",
+            "source": {
+              "document": "Aetna Clinical Policy Bulletin 0968 - JAK Inhibitors for Rheumatic Conditions",
+              "page": 12,
+              "section": "Laboratory Monitoring"
+            },
+            "ambiguous": false
+          },
+          {
+            "category": "dosing restriction",
+            "requirement": "Lower dose (15 mg) required for patients with certain risk factors",
+            "evidenceText": "For members age 65 or older, current or former smokers, or those with other cardiovascular or malignancy risk factors, the 15 mg dose should be used unless the higher dose is deemed medically necessary and risks have been discussed with the patient.",
+            "source": {
+              "document": "Aetna Clinical Policy Bulletin 0968 - JAK Inhibitors for Rheumatic Conditions",
+              "page": 13,
+              "section": "Dosing Requirements and Risk Mitigation"
+            },
+            "ambiguous": true
+          },
+          {
+            "category": "combination therapy restriction",
+            "requirement": "Not to be used in combination with other biologic DMARDs or JAK inhibitors",
+            "evidenceText": "Upadacitinib must not be used in combination with other biologic DMARDs or JAK inhibitors due to increased risk of serious infections and lack of demonstrated benefit for combination therapy.",
+            "source": {
+              "document": "Aetna Clinical Policy Bulletin 0968 - JAK Inhibitors for Rheumatic Conditions",
+              "page": 13,
+              "section": "Combination Therapy"
+            },
+            "ambiguous": false
+          }
+        ],
+        "sourceDocument": {
+          "filename": "Aetna Clinical Policy Bulletin 0968 - JAK Inhibitors for Rheumatic Conditions (Standard payer policy pattern with enhanced safety requirements)",
+          "retrievalDate": "2026-04-04",
+          "effectiveDate": "2026-01-01"
+        }
+      }
+    },
+    {
+      "snapshotId": "src-1778304614792-g5vawd-policy",
+      "sourceId": "src-1778304614792-g5vawd",
+      "planId": "UPLOADED-BCBS-NC-COMMERCIAL",
+      "issuerName": "BCBS-NC",
+      "issuerKey": "bcbs_nc",
+      "planName": "BCBS-NC Commercial",
+      "planKey": "bcbs_nc__bcbs_nc_commercial",
+      "market": "Commercial",
+      "metalLevel": "",
+      "sourceKind": "uploaded_policy_json",
+      "sourcePosture": "deep_medical_policy",
+      "sourceFile": "bcbs-nc-bevacizumab-oncology.json",
+      "sourceEffectiveDate": "2026-01",
+      "primaryDrugLabel": "Avastin (bevacizumab)",
+      "canonicalDrugKey": "bevacizumab",
+      "alternateDrugLabels": [
+        "Mvasi",
+        "Zirabev",
+        "Alymsys",
+        "Vegzelma",
+        "Avzivi"
+      ],
+      "alternateDrugKeys": [
+        "bevacizumab",
+        "bevacizumab",
+        "bevacizumab",
+        "bevacizumab",
+        "bevacizumab"
+      ],
+      "coverageLabel": "Covered with PA",
+      "coveredFlag": true,
+      "priorAuth": true,
+      "stepTherapy": true,
+      "quantityLimit": "",
+      "ageLimit": "",
+      "specialtyFlag": false,
+      "nonFormulary": false,
+      "medicalBenefit": true,
+      "therapeuticCategory": "Oncology",
+      "therapeuticSubcategory": "",
+      "notes": "Uploaded structured policy JSON normalized into policy compare shape.",
+      "confidenceLabel": "high",
+      "confidenceRationale": "Uploaded JSON validated against the structured policy schema.",
+      "requirementsSummary": [
+        "Diagnosis: FDA labeled indication for the requested agent and route of administration",
+        "Step therapy: Preferred bevacizumab biosimilar (Mvasi or Zirabev) for Until documented serious adverse event",
+        "preferred product requirement: For bevacizumab (Avastin) or non-preferred biosimilar products, patient must have documented serious adverse event to all preferred biosimilar products and prescriber must submit FDA MedWatch Adverse Event Reporting Form",
+        "clinical benefit requirement: Patient is currently being treated with the requested agent and has been stable on therapy for at least 180 days; OR patient has been treated with the requested agent within the past 180 days AND is at risk if therapy is changed",
+        "first-line or prerequisite therapy: The requested agent will be used as a first-line agent AND is FDA labeled as a first-line agent for the requested indication, OR the patient has used the appropriate number and type(s) of prerequisite agent(s) listed in the FDA labeling",
+        "combination therapy requirement: The requested agent is being used as monotherapy AND is approved for use as monotherapy in the FDA labeling OR the requested agent will be used in combination as combination therapy with all agent(s) and/or treatments listed for concomitant use in the FDA labeling",
+        "performance status: The FDA label does NOT include a performance status requirement; OR The patient meets the performance status requirement in the FDA labeling",
+        "nccn guideline support: The patient has an indication that is supported by ALL requirements in NCCN 1 or 2A recommended use for the requested agent (i.e., the indication must be supported by ALL requirements in the NCCN 'Recommended Use' box [e.g., performance status, disease severity, previous failures, monotherapy vs combination therapy vs concomitant therapy] [medical record documentation required])"
+      ],
+      "normalizedRuleFacets": [
+        "prior_authorization",
+        "step_therapy"
+      ],
+      "evidenceSummary": [
+        "The patient has an FDA labeled indication for the requested agent and route of administration. The requested indication does NOT require genetic/specific diagnostic testing OR if genetic testing is required, both the testing has been performed AND the results indicate therapy with the requested agent is appropriate in FDA labeling.",
+        "If the request is for bevacizumab (Avastin) or a non-preferred bevacizumab biosimilar product, then both of the following criteria are met: The patient has a documented serious adverse event that required medical intervention to both preferred bevacizumab biosimilar products that is not anticipated with the requested product; AND The prescriber has completed and submitted an FDA MedWatch Adverse Event Reporting Form [medical record documentation required].",
+        "If the request is for bevacizumab (Avastin) or a non-preferred bevacizumab biosimilar product (e.g., bevacizumab-maly [Alymsys], bevacizumab-tnjn [Avzivi], bevacizumab-nwgd [Jobevne], bevacizumab-adcd [Vegzelma]), then both of the following criteria are met: a. The patient has a documented serious adverse event that required medical intervention to both preferred bevacizumab biosimilar products (i.e., bevacizumab-awwb [Mvasi], bevacizumab-bvzr [Zirabev]) that is not anticipated with the requested product; AND b. The prescriber has completed and submitted an FDA MedWatch Adverse Event Reporting Form [medical record documentation required]."
+      ],
+      "structuredPolicy": {
+        "id": "bcbs-nc-bevacizumab-oncology",
+        "payer": "BCBS-NC",
+        "plan": "Commercial",
+        "policyTitle": "Corporate Medical Policy: Preferred Injectable Oncology Program",
+        "drug": {
+          "brandName": "Avastin",
+          "genericName": "bevacizumab",
+          "aliases": [
+            "Mvasi",
+            "Zirabev",
+            "Alymsys",
+            "Vegzelma",
+            "Avzivi"
+          ],
+          "products": [
+            {
+              "name": "Mvasi (bevacizumab-awwb)",
+              "tier": "preferred",
+              "aliases": [
+                "bevacizumab-awwb"
+              ]
+            },
+            {
+              "name": "Zirabev (bevacizumab-bvzr)",
+              "tier": "preferred",
+              "aliases": [
+                "bevacizumab-bvzr"
+              ]
+            },
+            {
+              "name": "Avastin",
+              "tier": "non-preferred",
+              "aliases": []
+            },
+            {
+              "name": "Alymsys (bevacizumab-maly)",
+              "tier": "non-preferred",
+              "aliases": [
+                "bevacizumab-maly"
+              ]
+            },
+            {
+              "name": "Avzivi (bevacizumab-tnjn)",
+              "tier": "non-preferred",
+              "aliases": [
+                "bevacizumab-tnjn"
+              ]
+            },
+            {
+              "name": "Jobevne (bevacizumab-nwgd)",
+              "tier": "non-preferred",
+              "aliases": [
+                "bevacizumab-nwgd"
+              ]
+            },
+            {
+              "name": "Vegzelma (bevacizumab-adcd)",
+              "tier": "non-preferred",
+              "aliases": [
+                "bevacizumab-adcd"
+              ]
+            }
+          ]
+        },
+        "indication": "Oncology",
+        "indications": [
+          "Metastatic colorectal cancer",
+          "Non-squamous non-small cell lung cancer",
+          "Recurrent glioblastoma",
+          "Metastatic renal cell carcinoma",
+          "Persistent, recurrent, or metastatic cervical cancer",
+          "Epithelial ovarian, fallopian tube, or primary peritoneal cancer",
+          "Hepatocellular carcinoma"
+        ],
+        "coverageStatus": "covered-with-pa",
+        "paRequired": true,
+        "diagnosisRequirements": [
+          {
+            "icd10Codes": [],
+            "description": "FDA labeled indication for the requested agent and route of administration",
+            "evidenceText": "The patient has an FDA labeled indication for the requested agent and route of administration. The requested indication does NOT require genetic/specific diagnostic testing OR if genetic testing is required, both the testing has been performed AND the results indicate therapy with the requested agent is appropriate in FDA labeling.",
+            "source": {
+              "document": "BCBS NC - Corporate Medical Policy_ Preferred Injectable Oncology Program (Avastin example).pdf",
+              "page": 7,
+              "section": "Criteria for Medical Necessity - Initial Criteria for Approval - 2"
+            }
+          }
+        ],
+        "stepTherapy": [
+          {
+            "drugName": "Preferred bevacizumab biosimilar (Mvasi or Zirabev)",
+            "duration": "Until documented serious adverse event",
+            "failureCriteria": "Documented serious adverse event that required medical intervention to both preferred bevacizumab biosimilar products (bevacizumab-awwb [Mvasi], bevacizumab-bvzr [Zirabev]) that is not anticipated with the requested product",
+            "evidenceText": "If the request is for bevacizumab (Avastin) or a non-preferred bevacizumab biosimilar product, then both of the following criteria are met: The patient has a documented serious adverse event that required medical intervention to both preferred bevacizumab biosimilar products that is not anticipated with the requested product; AND The prescriber has completed and submitted an FDA MedWatch Adverse Event Reporting Form [medical record documentation required].",
+            "source": {
+              "document": "BCBS NC - Corporate Medical Policy_ Preferred Injectable Oncology Program (Avastin example).pdf",
+              "page": 8,
+              "section": "Criteria for Medical Necessity - Initial Criteria for Approval - 4"
+            }
+          }
+        ],
+        "otherRequirements": [
+          {
+            "category": "preferred product requirement",
+            "requirement": "For bevacizumab (Avastin) or non-preferred biosimilar products, patient must have documented serious adverse event to all preferred biosimilar products and prescriber must submit FDA MedWatch Adverse Event Reporting Form",
+            "evidenceText": "If the request is for bevacizumab (Avastin) or a non-preferred bevacizumab biosimilar product (e.g., bevacizumab-maly [Alymsys], bevacizumab-tnjn [Avzivi], bevacizumab-nwgd [Jobevne], bevacizumab-adcd [Vegzelma]), then both of the following criteria are met: a. The patient has a documented serious adverse event that required medical intervention to both preferred bevacizumab biosimilar products (i.e., bevacizumab-awwb [Mvasi], bevacizumab-bvzr [Zirabev]) that is not anticipated with the requested product; AND b. The prescriber has completed and submitted an FDA MedWatch Adverse Event Reporting Form [medical record documentation required].",
+            "source": {
+              "document": "BCBS NC - Corporate Medical Policy_ Preferred Injectable Oncology Program (Avastin example).pdf",
+              "page": 8,
+              "section": "Criteria for Medical Necessity - Initial Criteria for Approval - 4"
+            },
+            "ambiguous": false
+          },
+          {
+            "category": "clinical benefit requirement",
+            "requirement": "Patient is currently being treated with the requested agent and has been stable on therapy for at least 180 days; OR patient has been treated with the requested agent within the past 180 days AND is at risk if therapy is changed",
+            "evidenceText": "ONE of the following: a. The patient is currently being treated with the requested agent and has been stable on therapy for at least 180 days; OR b. The patient has been treated with the requested agent within the past 180 days AND is at risk if therapy is changed.",
+            "source": {
+              "document": "BCBS NC - Corporate Medical Policy_ Preferred Injectable Oncology Program (Avastin example).pdf",
+              "page": 7,
+              "section": "Criteria for Medical Necessity - Initial Criteria for Approval - 1"
+            },
+            "ambiguous": false
+          },
+          {
+            "category": "first-line or prerequisite therapy",
+            "requirement": "The requested agent will be used as a first-line agent AND is FDA labeled as a first-line agent for the requested indication, OR the patient has used the appropriate number and type(s) of prerequisite agent(s) listed in the FDA labeling",
+            "evidenceText": "ONE of the following: i. The requested agent will be used as a first-line agent AND is FDA labeled as a first-line agent for the requested indication, including any genomic aberrations (e.g., EGFR, ALK) and/or tumor expression factors (e.g., PD-L1 Tumor Proportion Score [TPS] values); OR ii. The patient has used the appropriate number and type(s) of prerequisite agent(s) listed in the FDA labeling for the requested indication, including any genomic aberrations (e.g., EGFR, ALK) and/or tumor expression factors (e.g., PD-L1 Tumor Proportion Score [TPS] values); OR iii. The patient has an intolerance, FDA labeled contraindication, or hypersensitivity to ALL of the required prerequisite agent(s) listed in the FDA labeling for the requested indication.",
+            "source": {
+              "document": "BCBS NC - Corporate Medical Policy_ Preferred Injectable Oncology Program (Avastin example).pdf",
+              "page": 7,
+              "section": "Criteria for Medical Necessity - Initial Criteria for Approval - 2(b)"
+            },
+            "ambiguous": false
+          },
+          {
+            "category": "combination therapy requirement",
+            "requirement": "The requested agent is being used as monotherapy AND is approved for use as monotherapy in the FDA labeling OR the requested agent will be used in combination as combination therapy with all agent(s) and/or treatments listed for concomitant use in the FDA labeling",
+            "evidenceText": "ONE of the following: i. The requested agent is being used as monotherapy AND is approved for use as monotherapy in the FDA labeling for the requested indication, including any genomic aberrations (e.g., EGFR, ALK) and/or tumor expression factors (e.g., PD-L1 Tumor Proportion Score [TPS] values); OR ii. The requested agent will be used in combination as combination therapy with all agent(s) and/or treatments (e.g., radiation) listed for concomitant use in the FDA labeling for the requested indication.",
+            "source": {
+              "document": "BCBS NC - Corporate Medical Policy_ Preferred Injectable Oncology Program (Avastin example).pdf",
+              "page": 7,
+              "section": "Criteria for Medical Necessity - Initial Criteria for Approval - 2(c)"
+            },
+            "ambiguous": false
+          },
+          {
+            "category": "performance status",
+            "requirement": "The FDA label does NOT include a performance status requirement; OR The patient meets the performance status requirement in the FDA labeling",
+            "evidenceText": "ONE of the following: i. The FDA label does NOT include a performance status requirement; OR ii. The patient meets the performance status requirement in the FDA labeling.",
+            "source": {
+              "document": "BCBS NC - Corporate Medical Policy_ Preferred Injectable Oncology Program (Avastin example).pdf",
+              "page": 8,
+              "section": "Criteria for Medical Necessity - Initial Criteria for Approval - 3(d)"
+            },
+            "ambiguous": false
+          },
+          {
+            "category": "nccn guideline support",
+            "requirement": "The patient has an indication that is supported by ALL requirements in NCCN 1 or 2A recommended use for the requested agent (i.e., the indication must be supported by ALL requirements in the NCCN 'Recommended Use' box [e.g., performance status, disease severity, previous failures, monotherapy vs combination therapy vs concomitant therapy] [medical record documentation required])",
+            "evidenceText": "The patient has an indication that is supported by ALL requirements in NCCN 1 or 2A recommended use for the requested agent (i.e., the indication must be supported by ALL requirements in the NCCN 'Recommended Use' box [e.g., performance status, disease severity, previous failures, monotherapy vs combination therapy vs concomitant therapy] [medical record documentation required]); AND",
+            "source": {
+              "document": "BCBS NC - Corporate Medical Policy_ Preferred Injectable Oncology Program (Avastin example).pdf",
+              "page": 8,
+              "section": "Criteria for Medical Necessity - Initial Criteria for Approval - 3"
+            },
+            "ambiguous": false
+          },
+          {
+            "category": "no disease progression",
+            "requirement": "The patient has not experienced disease progression or unacceptable toxicity on the same treatment as the requested agent or during treatment with another agent from the same drug class in a prior line of therapy unless there is acceptable supporting literature for use beyond progression in a different combination regimen",
+            "evidenceText": "The patient has not experienced disease progression or unacceptable toxicity on the same treatment as the requested agent or during treatment with another agent from the same drug class in a prior line of therapy (e.g., PD-L1/PD-1 inhibitors) unless there is acceptable supporting literature for use beyond progression in a different combination regimen; AND",
+            "source": {
+              "document": "BCBS NC - Corporate Medical Policy_ Preferred Injectable Oncology Program (Avastin example).pdf",
+              "page": 8,
+              "section": "Criteria for Medical Necessity - Initial Criteria for Approval - 7"
+            },
+            "ambiguous": false
+          },
+          {
+            "category": "age requirement",
+            "requirement": "The patient's age is within FDA labeling for the requested indication or NCCN 1 or 2A compendia supported recommendation for the requested agent",
+            "evidenceText": "The patient's age is within FDA labeling for the requested indication or NCCN 1 or 2A compendia supported recommendation for the requested agent; OR The prescriber has provided information in support of using the requested agent for the patient's age; AND",
+            "source": {
+              "document": "BCBS NC - Corporate Medical Policy_ Preferred Injectable Oncology Program (Avastin example).pdf",
+              "page": 9,
+              "section": "Criteria for Medical Necessity - Initial Criteria for Approval - 8"
+            },
+            "ambiguous": false
+          },
+          {
+            "category": "dosing requirement",
+            "requirement": "The requested quantity (dose) and treatment duration (and maximum units) is within FDA labeled dosing for the requested indication or NCCN 1 or 2A compendia supported dosing for the requested indication",
+            "evidenceText": "The requested quantity (dose) and treatment duration (and maximum units) is within FDA labeled dosing for the requested indication or NCCN 1 or 2A compendia supported dosing for the requested indication.",
+            "source": {
+              "document": "BCBS NC - Corporate Medical Policy_ Preferred Injectable Oncology Program (Avastin example).pdf",
+              "page": 9,
+              "section": "Criteria for Medical Necessity - Initial Criteria for Approval - 10"
+            },
+            "ambiguous": false
+          },
+          {
+            "category": "approval duration",
+            "requirement": "365 days (1 year)",
+            "evidenceText": "Duration of Approval: 365 days (1 year)",
+            "source": {
+              "document": "BCBS NC - Corporate Medical Policy_ Preferred Injectable Oncology Program (Avastin example).pdf",
+              "page": 9,
+              "section": "Criteria for Medical Necessity - Duration of Approval"
+            },
+            "ambiguous": false
+          }
+        ],
+        "sourceDocument": {
+          "filename": "BCBS NC - Corporate Medical Policy_ Preferred Injectable Oncology Program (Avastin example).pdf",
+          "retrievalDate": "2026-04-12",
+          "effectiveDate": "2026-01"
+        }
+      }
+    },
+    {
+      "snapshotId": "src-1778304614783-36vx1g-policy",
+      "sourceId": "src-1778304614783-36vx1g",
+      "planId": "UPLOADED-CIGNA-COMMERCIAL",
+      "issuerName": "Cigna",
+      "issuerKey": "cigna",
+      "planName": "Cigna Commercial",
+      "planKey": "cigna__cigna_commercial",
+      "market": "Commercial",
+      "metalLevel": "",
+      "sourceKind": "uploaded_policy_json",
+      "sourcePosture": "deep_medical_policy",
+      "sourceFile": "cigna-rituximab-nononcology.json",
+      "sourceEffectiveDate": "2026-02-01",
+      "primaryDrugLabel": "Rituxan (rituximab)",
+      "canonicalDrugKey": "rituximab",
+      "alternateDrugLabels": [
+        "Truxima",
+        "Ruxience",
+        "Riabni"
+      ],
+      "alternateDrugKeys": [
+        "rituximab",
+        "rituximab",
+        "rituximab"
+      ],
+      "coverageLabel": "Covered with PA",
+      "coveredFlag": true,
+      "priorAuth": true,
+      "stepTherapy": true,
+      "quantityLimit": "",
+      "ageLimit": "",
+      "specialtyFlag": false,
+      "nonFormulary": false,
+      "medicalBenefit": true,
+      "therapeuticCategory": "Non-Oncology",
+      "therapeuticSubcategory": "",
+      "notes": "Uploaded structured policy JSON normalized into policy compare shape.",
+      "confidenceLabel": "high",
+      "confidenceRationale": "Uploaded JSON validated against the structured policy schema.",
+      "requirementsSummary": [
+        "Diagnosis: Patient has an ANCA-associated vasculotide (granulomatosis with polyangiitis or microscopic polyangiitis)",
+        "Diagnosis: Rheumatoid arthritis in adult patients with moderately to severely active disease in combination with methotrexate",
+        "Step therapy: Conventional synthetic disease-modifying antirheumatic drug (DMARD) for 3 months",
+        "Step therapy: Preferred rituximab biosimilars (Truxima, Riabni, Ruxience) for Until documented adverse reaction",
+        "preferred product requirement: For Rituxan (brand), patient must have tried ALL three preferred biosimilars (Truxima, Riabni, and Ruxience) and documented that they cannot continue each due to formulation differences causing significant allergy or serious adverse reaction",
+        "prescriber qualification: Prescribed by or in consultation with a rheumatologist, nephrologist, pulmonologist, or immunologist for ANCA-associated vasculitis",
+        "prescriber qualification: Prescribed by or in consultation with a dermatologist for Pemphigus Vulgaris",
+        "prescriber qualification: Prescribed by or in consultation with a rheumatologist for Rheumatoid Arthritis"
+      ],
+      "normalizedRuleFacets": [
+        "prior_authorization",
+        "step_therapy",
+        "prescriber_specialist"
+      ],
+      "evidenceSummary": [
+        "Patient has an ANCA-associated vasculotide; AND. Note: Examples of ANCA-associated vasculitis include granulomatosis with polyangiitis (Wegener's granulomatosis), or microscopic polyangiitis. The medication is being administered in combination with glucocorticoids.",
+        "Patient has tried ONE conventional synthetic disease-modifying antirheumatic drug (DMARD) for at least 3 months; AND. Note: Examples of conventional synthetic DMARDs include methotrexate [oral or injectable], leflunomide, hydroxychloroquine, or sulfasalazine. An exception to the requirement for a trial of one conventional synthetic DMARD can be made if the patient already has a 3-month trial of at least one biologic other than the requested drug.",
+        "Patient meets BOTH of the following (A and B): A. Patient has tried ALL of the following: Truxima, Riabni, and Ruxience [documentation required] B. Patient cannot continue to use each formulary alternative due to a formulation difference in the inactive ingredient(s) [e.g., differences in stabilizing agent, buffering agent, and/or surfactant] which, according to the prescriber, would result in a significant allergy or serious adverse reaction [documentation required]"
+      ],
+      "structuredPolicy": {
+        "id": "cigna-rituximab-nononcology",
+        "payer": "Cigna",
+        "plan": "Commercial",
+        "policyTitle": "Drug Coverage Policy: Rituximab Intravenous Products for Non-Oncology Indications",
+        "drug": {
+          "brandName": "Rituxan",
+          "genericName": "rituximab",
+          "aliases": [
+            "Truxima",
+            "Ruxience",
+            "Riabni"
+          ],
+          "products": [
+            {
+              "name": "Truxima (rituximab-abbs)",
+              "tier": "preferred",
+              "aliases": [
+                "rituximab-abbs"
+              ]
+            },
+            {
+              "name": "Riabni (rituximab-arrx)",
+              "tier": "preferred",
+              "aliases": [
+                "rituximab-arrx"
+              ]
+            },
+            {
+              "name": "Ruxience (rituximab-pvvr)",
+              "tier": "preferred",
+              "aliases": [
+                "rituximab-pvvr"
+              ]
+            },
+            {
+              "name": "Rituxan",
+              "tier": "non-preferred",
+              "aliases": []
+            }
+          ]
+        },
+        "indication": "Non-Oncology",
+        "indications": [
+          "Chronic lymphocytic leukemia (CLL)",
+          "Granulomatosis with polyangiitis (Wegener's granulomatosis)",
+          "Microscopic polyangiitis",
+          "Non-Hodgkin lymphoma (NHL)",
+          "Pemphigus vulgaris",
+          "Rheumatoid arthritis",
+          "Antineutrophil Cytoplasmic Antibody (ANCA)-Associated Vasculitis",
+          "Autoimmune Hemolytic Anemia (AIHA)",
+          "Immune Thrombocytopenia (ITP)",
+          "Immunotherapy-Related Toxicities Associated with Checkpoint Inhibitors",
+          "Interstitial Lung Disease Associated with Systemic Autoimmune Rheumatic Disease (SARD-ILD)",
+          "Membranous Nephropathy",
+          "Minimal Change Disease (MCD)",
+          "Multiple Sclerosis (MS)",
+          "Myasthenia Gravis (MG)",
+          "Neuromyelitis Optica Spectrum Disorders (NMOSD)",
+          "Pediatric Nephrotic Syndrome",
+          "Graft-Versus-Host Disease (GVHD)",
+          "Hematopoietic Cell Transplantation",
+          "Systemic Lupus Erythematosus (SLE)",
+          "Thrombotic Thrombocytopenic Purpura (TTP)",
+          "Solid Organ Transplantation"
+        ],
+        "coverageStatus": "covered-with-pa",
+        "paRequired": true,
+        "diagnosisRequirements": [
+          {
+            "icd10Codes": [],
+            "description": "Patient has an ANCA-associated vasculotide (granulomatosis with polyangiitis or microscopic polyangiitis)",
+            "evidenceText": "Patient has an ANCA-associated vasculotide; AND. Note: Examples of ANCA-associated vasculitis include granulomatosis with polyangiitis (Wegener's granulomatosis), or microscopic polyangiitis. The medication is being administered in combination with glucocorticoids.",
+            "source": {
+              "document": "Cigna Rituximab Intravenous Products for Non-Oncology Indications.pdf",
+              "page": 7,
+              "section": "Coverage Policy - FDA-Approved Indications - 1. Antineutrophil Cytoplasmic Antibody (ANCA)-Associated Vasculitis"
+            }
+          },
+          {
+            "icd10Codes": [],
+            "description": "Rheumatoid arthritis in adult patients with moderately to severely active disease in combination with methotrexate",
+            "evidenceText": "Rheumatoid arthritis, in adult patients with moderately to severely active disease, in combination with methotrexate for patients who have had an inadequate response to one or more tumor necrosis factor inhibitors. Patient has tried ONE conventional synthetic disease-modifying antirheumatic drug (DMARD) for at least 3 months; AND. Note: Examples of conventional synthetic DMARDs include methotrexate [oral or injectable], leflunomide, hydroxychloroquine, or sulfasalazine.",
+            "source": {
+              "document": "Cigna Rituximab Intravenous Products for Non-Oncology Indications.pdf",
+              "page": 8,
+              "section": "Coverage Policy - FDA-Approved Indications - 3. Rheumatoid Arthritis"
+            }
+          }
+        ],
+        "stepTherapy": [
+          {
+            "drugName": "Conventional synthetic disease-modifying antirheumatic drug (DMARD)",
+            "duration": "3 months",
+            "failureCriteria": "Inadequate response, contraindication, or clinically significant adverse effects",
+            "evidenceText": "Patient has tried ONE conventional synthetic disease-modifying antirheumatic drug (DMARD) for at least 3 months; AND. Note: Examples of conventional synthetic DMARDs include methotrexate [oral or injectable], leflunomide, hydroxychloroquine, or sulfasalazine. An exception to the requirement for a trial of one conventional synthetic DMARD can be made if the patient already has a 3-month trial of at least one biologic other than the requested drug.",
+            "source": {
+              "document": "Cigna Rituximab Intravenous Products for Non-Oncology Indications.pdf",
+              "page": 8,
+              "section": "Coverage Policy - FDA-Approved Indications - 3. Rheumatoid Arthritis - A. Initial Therapy - i"
+            }
+          },
+          {
+            "drugName": "Preferred rituximab biosimilars (Truxima, Riabni, Ruxience)",
+            "duration": "Until documented adverse reaction",
+            "failureCriteria": "Patient has tried ALL of the following: Truxima, Riabni, and Ruxience and cannot continue to use each formulary alternative due to a formulation difference in the inactive ingredient(s) which would result in a significant allergy or serious adverse reaction",
+            "evidenceText": "Patient meets BOTH of the following (A and B): A. Patient has tried ALL of the following: Truxima, Riabni, and Ruxience [documentation required] B. Patient cannot continue to use each formulary alternative due to a formulation difference in the inactive ingredient(s) [e.g., differences in stabilizing agent, buffering agent, and/or surfactant] which, according to the prescriber, would result in a significant allergy or serious adverse reaction [documentation required]",
+            "source": {
+              "document": "Cigna Rituximab Intravenous Products for Non-Oncology Indications.pdf",
+              "page": 17,
+              "section": "Coverage Policy - Employer Plans - Preferred Product Criteria - Rituxan"
+            }
+          }
+        ],
+        "otherRequirements": [
+          {
+            "category": "preferred product requirement",
+            "requirement": "For Rituxan (brand), patient must have tried ALL three preferred biosimilars (Truxima, Riabni, and Ruxience) and documented that they cannot continue each due to formulation differences causing significant allergy or serious adverse reaction",
+            "evidenceText": "Patient meets BOTH of the following (A and B): A. Patient has tried ALL of the following: Truxima, Riabni, and Ruxience [documentation required] B. Patient cannot continue to use each formulary alternative due to a formulation difference in the inactive ingredient(s) [e.g., differences in stabilizing agent, buffering agent, and/or surfactant] which, according to the prescriber, would result in a significant allergy or serious adverse reaction [documentation required]",
+            "source": {
+              "document": "Cigna Rituximab Intravenous Products for Non-Oncology Indications.pdf",
+              "page": 17,
+              "section": "Coverage Policy - Individual and Family Plans - Preferred Product Criteria"
+            },
+            "ambiguous": false
+          },
+          {
+            "category": "prescriber qualification",
+            "requirement": "Prescribed by or in consultation with a rheumatologist, nephrologist, pulmonologist, or immunologist for ANCA-associated vasculitis",
+            "evidenceText": "The medication is prescribed by or in consultation with a rheumatologist, nephrologist, pulmonologist, or immunologist; AND",
+            "source": {
+              "document": "Cigna Rituximab Intravenous Products for Non-Oncology Indications.pdf",
+              "page": 7,
+              "section": "Coverage Policy - FDA-Approved Indications - 1. ANCA-Associated Vasculitis - A. Induction Treatment - iii"
+            },
+            "ambiguous": false
+          },
+          {
+            "category": "prescriber qualification",
+            "requirement": "Prescribed by or in consultation with a dermatologist for Pemphigus Vulgaris",
+            "evidenceText": "The medication is prescribed by or in consultation with a dermatologist; AND",
+            "source": {
+              "document": "Cigna Rituximab Intravenous Products for Non-Oncology Indications.pdf",
+              "page": 7,
+              "section": "Coverage Policy - FDA-Approved Indications - 2. Pemphigus Vulgaris - A. Initial Treatment - ii"
+            },
+            "ambiguous": false
+          },
+          {
+            "category": "prescriber qualification",
+            "requirement": "Prescribed by or in consultation with a rheumatologist for Rheumatoid Arthritis",
+            "evidenceText": "The medication is prescribed by or in consultation with a rheumatologist; AND",
+            "source": {
+              "document": "Cigna Rituximab Intravenous Products for Non-Oncology Indications.pdf",
+              "page": 8,
+              "section": "Coverage Policy - FDA-Approved Indications - 3. Rheumatoid Arthritis - A. Initial Therapy - iii"
+            },
+            "ambiguous": false
+          },
+          {
+            "category": "combination therapy restriction",
+            "requirement": "The medication will not be used concurrently with another biologic or with a targeted synthetic DMARD for Rheumatoid Arthritis",
+            "evidenceText": "The medication will not be used concurrently with another biologic or with a targeted synthetic DMARD; AND. Note: Refer to Appendix A for examples of biologics and targeted synthetic DMARDs.",
+            "source": {
+              "document": "Cigna Rituximab Intravenous Products for Non-Oncology Indications.pdf",
+              "page": 9,
+              "section": "Coverage Policy - FDA-Approved Indications - 3. Rheumatoid Arthritis - A. Initial Therapy - ii"
+            },
+            "ambiguous": false
+          },
+          {
+            "category": "treatment interval requirement",
+            "requirement": "16 weeks or greater will elapse between treatment courses for Rheumatoid Arthritis",
+            "evidenceText": "16 weeks or greater will elapse between treatment courses; AND. Note: For example, there will be a minimum of 16 weeks since the first dose of the previous course and the first dose of the next course of a rituximab product.",
+            "source": {
+              "document": "Cigna Rituximab Intravenous Products for Non-Oncology Indications.pdf",
+              "page": 9,
+              "section": "Coverage Policy - FDA-Approved Indications - 3. Rheumatoid Arthritis - B. Patient has already received one course - i"
+            },
+            "ambiguous": false
+          },
+          {
+            "category": "clinical response requirement",
+            "requirement": "Patient experienced a beneficial clinical response when assessed by at least one objective measure OR patient experienced an improvement in at least one symptom for continuation therapy",
+            "evidenceText": "Patient meets at least ONE of the following (a or b): a. Patient experienced a beneficial clinical response when assessed by at least one objective measure; OR. Note: Examples of standardized and validated measures of disease activity include Clinical Disease Activity Index (CDAI), Disease Activity Score (DAS) 28 using erythrocyte sedimentation rate (ESR) or C-reactive protein (CRP), Patient Activity Scale (PAS)-II, Rapid Assessment of Patient Index Data 3 (RAPID-3), and/or Simplified Disease Activity Index (SDAI). b. Patient experienced an improvement in at least one symptom, such as decreased joint pain, morning stiffness, or fatigue; improved function or activities of daily living; decreased tissue swelling in joints or tendon sheaths; AND",
+            "source": {
+              "document": "Cigna Rituximab Intravenous Products for Non-Oncology Indications.pdf",
+              "page": 9,
+              "section": "Coverage Policy - FDA-Approved Indications - 3. Rheumatoid Arthritis - C. Patient has already received two or more courses - iii"
+            },
+            "ambiguous": false
+          },
+          {
+            "category": "hematologist consultation requirement",
+            "requirement": "Prescribed by or in consultation with a hematologist for Autoimmune Hemolytic Anemia",
+            "evidenceText": "The medication is prescribed by or in consultation with a hematologist; AND",
+            "source": {
+              "document": "Cigna Rituximab Intravenous Products for Non-Oncology Indications.pdf",
+              "page": 9,
+              "section": "Coverage Policy - Other Uses with Supportive Evidence - 4. Autoimmune Hemolytic Anemia - A"
+            },
+            "ambiguous": false
+          },
+          {
+            "category": "specialist consultation requirement",
+            "requirement": "Prescribed by or in consultation with an oncologist, hematologist, or transplant center physician for various indications including GVHD, transplantation, and hematologic conditions",
+            "evidenceText": "The medication is prescribed by or in consultation with an oncologist, hematologist, or a physician affiliated with a transplant center; AND",
+            "source": {
+              "document": "Cigna Rituximab Intravenous Products for Non-Oncology Indications.pdf",
+              "page": 10,
+              "section": "Coverage Policy - Other Uses with Supportive Evidence - 5. Graft-Versus-Host Disease - A. Initial Therapy - iii"
+            },
+            "ambiguous": false
+          },
+          {
+            "category": "neurologist consultation requirement",
+            "requirement": "Prescribed by or in consultation with a neurologist or physician who specializes in treatment of multiple sclerosis for MS, Myasthenia Gravis, and NMOSD",
+            "evidenceText": "The medication is prescribed by or in consultation with a neurologist or a physician who specializes in the treatment of multiple sclerosis; AND",
+            "source": {
+              "document": "Cigna Rituximab Intravenous Products for Non-Oncology Indications.pdf",
+              "page": 13,
+              "section": "Coverage Policy - Other Uses with Supportive Evidence - 12. Multiple Sclerosis - A. Initial Therapy - iii"
+            },
+            "ambiguous": false
+          },
+          {
+            "category": "approval duration",
+            "requirement": "Initial approval for 1 month for most indications; follow-up approvals for 1 year for ANCA-vasculitis, 1 month for pemphigus vulgaris relapses, 1 month for rheumatoid arthritis courses",
+            "evidenceText": "Approve for 1 month if the patient meets ALL of the following (i, ii, iii and iv) for ANCA-Associated Vasculitis Induction Treatment. Follow-Up Treatment of Patients Who Have Received Induction Treatment for ANCA-Associated Vasculitis: Approve for 1 year if the patient meets ALL of the following. Pemphigus Vulgaris Initial Treatment: Approve for 1 month. Rheumatoid Arthritis Initial Therapy: Approve for 1 month.",
+            "source": {
+              "document": "Cigna Rituximab Intravenous Products for Non-Oncology Indications.pdf",
+              "page": 7,
+              "section": "Coverage Policy - FDA-Approved Indications - Duration statements"
+            },
+            "ambiguous": false
+          }
+        ],
+        "sourceDocument": {
+          "filename": "Cigna Rituximab Intravenous Products for Non-Oncology Indications.pdf",
+          "retrievalDate": "2026-04-12",
+          "effectiveDate": "2026-02-01"
+        }
+      }
+    },
     {
       "snapshotId": "src-1775423603144-b3r3iv-pdf-0",
       "sourceId": "src-1775423603144-b3r3iv",

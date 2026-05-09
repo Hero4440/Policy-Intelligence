@@ -10,9 +10,9 @@ import {
 
 export interface PolicyInsightCell {
   payer: string;
-  ruleType: PolicyCompareRowKey;
+  drug: string;
   status: PolicyStatusTone;
-  value: string;
+  score: number;
   evidence: PolicyEvidenceRef[];
 }
 
@@ -34,11 +34,11 @@ export interface PolicyInsightsPayload {
   filters: {
     payerOptions: string[];
     versionOptions: number[];
-    ruleTypeOptions: Array<{ key: PolicyCompareRowKey; label: string }>;
+    drugOptions: string[];
   };
   heatmap: {
-    rows: Array<{ key: PolicyCompareRowKey; label: string }>;
     payers: string[];
+    drugs: string[];
     cells: PolicyInsightCell[];
   };
   graph: {
@@ -121,13 +121,47 @@ function buildGraph(payload: ReturnType<typeof buildPolicyComparison>, ruleFilte
   return { nodes, edges };
 }
 
-function toInsightCell(payer: string, cell: PolicyCompareCell): PolicyInsightCell {
+function calculateFrictionScore(cells: Record<PolicyCompareRowKey, PolicyCompareCell>): number {
+  // Calculate friction score based on rule statuses
+  // favorable = 1, conditional = 5, restrictive = 10, unknown = 0
+  const weights: Record<PolicyStatusTone, number> = {
+    favorable: 1,
+    conditional: 5,
+    restrictive: 10,
+    unknown: 0,
+  };
+
+  let totalScore = 0;
+  let count = 0;
+
+  Object.values(cells).forEach((cell) => {
+    if (cell.status !== 'unknown') {
+      totalScore += weights[cell.status];
+      count++;
+    }
+  });
+
+  return count > 0 ? Math.round((totalScore / count) * 10) / 10 : 0;
+}
+
+function getOverallStatus(score: number): PolicyStatusTone {
+  if (score === 0) return 'unknown';
+  if (score <= 3) return 'favorable';
+  if (score <= 7) return 'conditional';
+  return 'restrictive';
+}
+
+function toInsightCell(payer: string, drug: string, cells: Record<PolicyCompareRowKey, PolicyCompareCell>): PolicyInsightCell {
+  const score = calculateFrictionScore(cells);
+  const status = getOverallStatus(score);
+  const evidence = Object.values(cells).flatMap((cell) => cell.evidence).slice(0, 5);
+
   return {
     payer,
-    ruleType: cell.rowKey,
-    status: cell.status,
-    value: cell.value,
-    evidence: cell.evidence
+    drug,
+    status,
+    score,
+    evidence,
   };
 }
 
@@ -136,12 +170,11 @@ export function buildPolicyInsights(filters: PolicyInsightsFilters): PolicyInsig
   const selectedPayers = normalizeSelectedPayers(filters.payers, options.payers);
   const comparePayload = buildPolicyComparison(filters.drugFamily, selectedPayers, filters.version);
   const rowFilter = filters.ruleType;
-  const filteredRows = rowFilter
-    ? compareRows.filter((row) => row.key === rowFilter)
-    : compareRows;
 
-  const heatmapCells = comparePayload.columns.flatMap((column) =>
-    filteredRows.map((row) => toInsightCell(column.payer, column.cells[row.key]))
+  // Build heatmap: payers (rows) x drugs (columns)
+  const drugs = [comparePayload.drugFamily.label]; // For now, single drug family
+  const heatmapCells = comparePayload.columns.map((column) =>
+    toInsightCell(column.payer, comparePayload.drugFamily.label, column.cells)
   );
 
   return {
@@ -149,12 +182,12 @@ export function buildPolicyInsights(filters: PolicyInsightsFilters): PolicyInsig
     filters: {
       payerOptions: options.payers,
       versionOptions: options.versions,
-      ruleTypeOptions: options.ruleTypes
+      drugOptions: drugs,
     },
     heatmap: {
-      rows: filteredRows.map((row) => ({ key: row.key, label: row.label })),
       payers: comparePayload.columns.map((column) => column.payer),
-      cells: heatmapCells
+      drugs,
+      cells: heatmapCells,
     },
     graph: buildGraph(comparePayload, rowFilter)
   };

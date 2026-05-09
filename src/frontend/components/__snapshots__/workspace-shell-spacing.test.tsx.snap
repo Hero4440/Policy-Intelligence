@@ -1,0 +1,217 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`WorkspaceShell - Visual Spacing and Alignment (Task 6) > Snapshot Tests for Visual Regression > matches snapshot for four-column collapsed layout 1`] = `
+<div
+  class="workspace-frame"
+>
+  <div
+    class="workspace-topbar"
+  >
+    <div>
+      <p
+        class="eyebrow"
+      >
+        PolicyPilot
+      </p>
+      <h1>
+        Policy Intelligence
+      </h1>
+    </div>
+    <div
+      class="topbar-actions"
+    >
+      <nav
+        class="page-nav"
+      >
+        <button
+          class="page-nav-btn page-nav-btn-active"
+        >
+          Workspace
+        </button>
+        <button
+          class="page-nav-btn"
+        >
+          Compare
+        </button>
+      </nav>
+    </div>
+  </div>
+  <div
+    class="workspace-grid-four-collapsed"
+  >
+    <aside
+      class="sidebar"
+    >
+      Sidebar Content
+    </aside>
+    <section
+      class="workspace-column workspace-column-list"
+    >
+      <section
+        class="workspace-column"
+      >
+        List Content
+      </section>
+    </section>
+    <section
+      class="workspace-column workspace-column-detail"
+    >
+      <section
+        class="workspace-column"
+      >
+        Detail Content
+      </section>
+    </section>
+    <aside
+      class="workspace-column workspace-column-right workspace-column-right-collapsed"
+    >
+      <aside
+        class="workspace-column workspace-column-right workspace-column-right-collapsed"
+      >
+        Right Sidebar
+      </aside>
+    </aside>
+  </div>
+</div>
+`;
+
+exports[`WorkspaceShell - Visual Spacing and Alignment (Task 6) > Snapshot Tests for Visual Regression > matches snapshot for four-column expanded layout 1`] = `
+<div
+  class="workspace-frame"
+>
+  <div
+    class="workspace-topbar"
+  >
+    <div>
+      <p
+        class="eyebrow"
+      >
+        PolicyPilot
+      </p>
+      <h1>
+        Policy Intelligence
+      </h1>
+    </div>
+    <div
+      class="topbar-actions"
+    >
+      <nav
+        class="page-nav"
+      >
+        <button
+          class="page-nav-btn page-nav-btn-active"
+        >
+          Workspace
+        </button>
+        <button
+          class="page-nav-btn"
+        >
+          Compare
+        </button>
+      </nav>
+    </div>
+  </div>
+  <div
+    class="workspace-grid-four"
+  >
+    <aside
+      class="sidebar"
+    >
+      Sidebar Content
+    </aside>
+    <section
+      class="workspace-column workspace-column-list"
+    >
+      <section
+        class="workspace-column"
+      >
+        List Content
+      </section>
+    </section>
+    <section
+      class="workspace-column workspace-column-detail"
+    >
+      <section
+        class="workspace-column"
+      >
+        Detail Content
+      </section>
+    </section>
+    <aside
+      class="workspace-column workspace-column-right "
+    >
+      <aside
+        class="workspace-column workspace-column-right"
+      >
+        Right Sidebar
+      </aside>
+    </aside>
+  </div>
+</div>
+`;
+
+exports[`WorkspaceShell - Visual Spacing and Alignment (Task 6) > Snapshot Tests for Visual Regression > matches snapshot for three-column layout 1`] = `
+<div
+  class="workspace-frame"
+>
+  <div
+    class="workspace-topbar"
+  >
+    <div>
+      <p
+        class="eyebrow"
+      >
+        PolicyPilot
+      </p>
+      <h1>
+        Policy Intelligence
+      </h1>
+    </div>
+    <div
+      class="topbar-actions"
+    >
+      <nav
+        class="page-nav"
+      >
+        <button
+          class="page-nav-btn page-nav-btn-active"
+        >
+          Workspace
+        </button>
+        <button
+          class="page-nav-btn"
+        >
+          Compare
+        </button>
+      </nav>
+    </div>
+  </div>
+  <div
+    class="workspace-grid"
+  >
+    <aside
+      class="sidebar"
+    >
+      Sidebar Content
+    </aside>
+    <section
+      class="workspace-column workspace-column-list"
+    >
+      <section
+        class="workspace-column"
+      >
+        List Content
+      </section>
+    </section>
+    <section
+      class="workspace-column workspace-column-detail"
+    >
+      <section
+        class="workspace-column"
+      >
+        Detail Content
+      </section>
+    </section>
+  </div>
+</div>
+`;

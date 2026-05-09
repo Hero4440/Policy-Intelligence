@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import {
   demoPatients,
   getPatientById,
@@ -16,8 +16,6 @@ type PolicyLike = {
 
 type ReadinessViewProps = {
   policy: PolicyLike;
-  selectedPatientId: string;
-  onPatientChange: (id: string) => void;
 };
 
 const statusColors: Record<ClinicalStatus, string> = {
@@ -34,7 +32,8 @@ const statusLabels: Record<ClinicalStatus, string> = {
   unable_to_verify: 'Unable to verify',
 };
 
-export function ReadinessView({ policy, selectedPatientId, onPatientChange }: ReadinessViewProps) {
+export function ReadinessView({ policy }: ReadinessViewProps) {
+  const [selectedPatientId, setSelectedPatientId] = useState('');
   const patient = getPatientById(selectedPatientId);
 
   const results: CriterionResult[] = useMemo(() => {
@@ -56,7 +55,7 @@ export function ReadinessView({ policy, selectedPatientId, onPatientChange }: Re
           id="patient-select-readiness"
           className="field-input"
           value={selectedPatientId}
-          onChange={e => onPatientChange(e.target.value)}
+          onChange={e => setSelectedPatientId(e.target.value)}
         >
           <option value="">Select a patient...</option>
           {demoPatients.map(p => (
