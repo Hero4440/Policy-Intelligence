@@ -1,0 +1,20 @@
+2026-04-25
+
+Chief Complaint Oncology treatment planning for metastatic colorectal cancer.
+
+History of Present Illness Robert Anderson is a 53 year-old male with metastatic colorectal cancer. The oncologist is considering bevacizumab therapy in combination with FOLFOX chemotherapy. There is no documented prior use of bevacizumab biosimilars such as Mvasi or Zirabev. There is no documented intolerance, contraindication, or treatment failure to Mvasi or Zirabev.
+
+Social History Patient has never smoked.
+
+Patient comes from a middle socioeconomic background.
+
+Patient currently has commercial insurance (BCBS NC - Blue Cross Blue Shield North Carolina).
+
+Allergies No Known Allergies.
+
+Medications FOLFOX chemotherapy regimen. No active bevacizumab biosimilar therapy documented.
+
+Assessment and Plan Patient is being evaluated for Avastin/bevacizumab coverage under medical benefit policy.
+
+Plan Submit prior authorization readiness check before prescribing Avastin. Evaluate whether preferred biosimilar step therapy is required before branded Avastin approval.
+

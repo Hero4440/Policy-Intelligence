@@ -6,7 +6,8 @@
       "Skill(gsd:new-project:*)",
       "Skill(gsd:new-milestone)",
       "Skill(gsd:new-milestone:*)",
-      "Read(//Users/tanmaybhuskute/.claude/agents/**)"
+      "Read(//Users/tanmaybhuskute/.claude/agents/**)",
+      "WebSearch"
     ]
   }
 }
