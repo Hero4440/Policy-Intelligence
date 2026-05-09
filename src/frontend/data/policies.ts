@@ -220,6 +220,10 @@ export function fetchPolicyComparison(input: {
   return fetchJson<PolicyComparePayload>(`/api/policies/compare?${params.toString()}`);
 }
 
+export function fetchPolicyInsightsOptions() {
+  return fetchJson<PolicyCompareOptions>('/api/policies/insights/options');
+}
+
 export function fetchPolicyInsights(input: {
   drugFamily: string;
   payers?: string[];

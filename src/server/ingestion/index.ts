@@ -50,7 +50,7 @@ let knownDrugLexicon: string[] | null = null;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const projectRoot = join(__dirname, '../../..');
-const packageDir = join(projectRoot, 'docs/hackaathon2/insurance_hackathon_final_data_package');
+const packageDir = join(projectRoot, 'docs/hackaathon/insurance_hackathon_final_data_package');
 
 function compactWhitespace(value: string): string {
   return value.replace(/\s+/g, ' ').trim();
@@ -160,10 +160,6 @@ function getKnownDrugLexicon(): string[] {
     return knownDrugLexicon;
   }
 
-  const seedRows = parseCsv(readFileSync(join(packageDir, 'query_ready_formulary.csv'), 'utf-8'));
-  const seedDrugs = seedRows
-    .map((row) => compactWhitespace(row.drug_name_display || ''))
-    .filter((drug) => drug.length >= 5);
   const structuredDrugs = [
     'adalimumab',
     'Humira',
@@ -174,7 +170,17 @@ function getKnownDrugLexicon(): string[] {
     'upadacitinib',
     'Rinvoq'
   ];
-  knownDrugLexicon = [...new Set([...seedDrugs, ...structuredDrugs])];
+
+  try {
+    const seedRows = parseCsv(readFileSync(join(packageDir, 'query_ready_formulary.csv'), 'utf-8'));
+    const seedDrugs = seedRows
+      .map((row) => compactWhitespace(row.drug_name_display || ''))
+      .filter((drug) => drug.length >= 5);
+    knownDrugLexicon = [...new Set([...seedDrugs, ...structuredDrugs])];
+  } catch {
+    // Seed CSV missing — fall back to the hardcoded list
+    knownDrugLexicon = structuredDrugs;
+  }
   return knownDrugLexicon;
 }
 
@@ -692,8 +698,9 @@ function extractDocxText(bytes: Buffer): string {
   // Minimal ZIP + XML extraction without external dependencies.
   const text: string[] = [];
 
-  // Find PK\x03\x04 local file headers and locate word/document.xml
+  // Find PK\x03\x04 local file headers and locate word/document.xml (and related parts)
   const pkSig = Buffer.from([0x50, 0x4b, 0x03, 0x04]);
+  const xmlParts: string[] = [];
   let offset = 0;
   while (offset < bytes.length - 30) {
     const sigPos = bytes.indexOf(pkSig, offset);
@@ -706,12 +713,12 @@ function extractDocxText(bytes: Buffer): string {
     const dataStart = sigPos + 30 + nameLen + extraLen;
     const name = bytes.toString('utf-8', sigPos + 30, sigPos + 30 + nameLen);
 
-    if (name === 'word/document.xml') {
+    // Extract word/document.xml plus any word/headerN.xml, word/footerN.xml parts
+    if (name === 'word/document.xml' || /^word\/(header|footer)\d*\.xml$/.test(name)) {
       let xml: string;
       if (compressionMethod === 0) {
         xml = bytes.toString('utf-8', dataStart, dataStart + compressedSize);
       } else if (compressionMethod === 8) {
-        // Deflate compressed — use Node's built-in zlib
         try {
           const compressed = bytes.subarray(dataStart, dataStart + compressedSize);
           xml = inflateRawSync(compressed).toString('utf-8');
@@ -732,20 +739,27 @@ function extractDocxText(bytes: Buffer): string {
           .replace(/&gt;/g, '>')
           .replace(/&quot;/g, '"')
           .replace(/&apos;/g, "'");
-        text.push(stripped);
+        // Prioritize document.xml by placing it first
+        if (name === 'word/document.xml') {
+          xmlParts.unshift(stripped);
+        } else {
+          xmlParts.push(stripped);
+        }
       }
-      break;
     }
 
     offset = dataStart + compressedSize;
     if (offset <= sigPos) break; // prevent infinite loop
   }
 
-  // Fallback: scan for w:t text fragments in raw bytes
+  if (xmlParts.length > 0) {
+    text.push(...xmlParts);
+  }
+
+  // Fallback: scan for <w:t> text fragments across the full raw bytes
   if (text.length === 0) {
     const rawStr = bytes.toString('utf-8');
-    // Extract text fragments between XML tags
-    const fragments = rawStr.match(/<w:t[^>]*>([^<]+)<\/w:t>/g);
+    const fragments = rawStr.match(/<w:t[^>]*>[^<]+<\/w:t>/g);
     if (fragments) {
       text.push(
         fragments

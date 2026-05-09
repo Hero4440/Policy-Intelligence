@@ -1,9 +1,13 @@
 import {
-  buildPolicyComparison,
+  buildCompareColumn,
+  canonicalDrugFamily,
   compareRows,
-  getPolicyCompareOptions,
+  loadComparablePolicies,
+  type ComparablePolicyRecord,
   type PolicyCompareCell,
+  type PolicyCompareColumn,
   type PolicyCompareRowKey,
+  type PolicyDrugFamilyOption,
   type PolicyEvidenceRef,
   type PolicyStatusTone,
 } from './policy-compare.js';
@@ -47,11 +51,26 @@ export interface PolicyInsightsPayload {
   };
 }
 
+export interface PolicyInsightsOptions {
+  drugFamilies: PolicyDrugFamilyOption[];
+  payers: string[];
+  versions: number[];
+  ruleTypes: Array<{ key: PolicyCompareRowKey; label: string }>;
+}
+
 interface PolicyInsightsFilters {
   drugFamily: string;
   payers?: string[];
   ruleType?: PolicyCompareRowKey;
   version?: number;
+}
+
+function normalizeKey(value: string): string {
+  return value.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+}
+
+function uniqueValues<T>(values: T[]): T[] {
+  return [...new Set(values)];
 }
 
 function normalizeSelectedPayers(
@@ -65,7 +84,11 @@ function normalizeSelectedPayers(
   return filtered.length > 0 ? filtered : available;
 }
 
-function buildGraph(payload: ReturnType<typeof buildPolicyComparison>, ruleFilter?: PolicyCompareRowKey) {
+function buildGraphFromColumns(
+  drugFamily: PolicyDrugFamilyOption,
+  columns: PolicyCompareColumn[],
+  ruleFilter?: PolicyCompareRowKey
+) {
   const nodes: PolicyGraphNode[] = [];
   const edges: PolicyGraphEdge[] = [];
   const seenNodes = new Set<string>();
@@ -77,15 +100,15 @@ function buildGraph(payload: ReturnType<typeof buildPolicyComparison>, ruleFilte
     nodes.push(node);
   };
 
-  const drugNodeId = `drug:${payload.drugFamily.key}`;
+  const drugNodeId = `drug:${drugFamily.key}`;
   addNode({
     id: drugNodeId,
-    label: payload.drugFamily.label,
+    label: drugFamily.label,
     kind: 'drug',
     evidence: []
   });
 
-  for (const column of payload.columns) {
+  for (const column of columns) {
     const payerNodeId = `payer:${column.payer}`;
     const policyNodeId = `policy:${column.policyId}:v${column.policyVersion}`;
 
@@ -122,8 +145,6 @@ function buildGraph(payload: ReturnType<typeof buildPolicyComparison>, ruleFilte
 }
 
 function calculateFrictionScore(cells: Record<PolicyCompareRowKey, PolicyCompareCell>): number {
-  // Calculate friction score based on rule statuses
-  // favorable = 1, conditional = 5, restrictive = 10, unknown = 0
   const weights: Record<PolicyStatusTone, number> = {
     favorable: 1,
     conditional: 5,
@@ -165,30 +186,118 @@ function toInsightCell(payer: string, drug: string, cells: Record<PolicyCompareR
   };
 }
 
-export function buildPolicyInsights(filters: PolicyInsightsFilters): PolicyInsightsPayload {
-  const options = getPolicyCompareOptions();
-  const selectedPayers = normalizeSelectedPayers(filters.payers, options.payers);
-  const comparePayload = buildPolicyComparison(filters.drugFamily, selectedPayers, filters.version);
-  const rowFilter = filters.ruleType;
+/** List drug families for insights (requires >= 1 payer, unlike compare which needs >= 2). */
+function listInsightsDrugFamilies(versionFilter?: number): PolicyDrugFamilyOption[] {
+  const families = new Map<string, { label: string; payers: Set<string> }>();
+  for (const policy of loadComparablePolicies(versionFilter)) {
+    const family = canonicalDrugFamily(policy.record);
+    if (!families.has(family.key)) {
+      families.set(family.key, { label: family.label, payers: new Set<string>() });
+    }
+    families.get(family.key)?.payers.add(policy.record.payer);
+  }
 
-  // Build heatmap: payers (rows) x drugs (columns)
-  const drugs = [comparePayload.drugFamily.label]; // For now, single drug family
-  const heatmapCells = comparePayload.columns.map((column) =>
-    toInsightCell(column.payer, comparePayload.drugFamily.label, column.cells)
+  return [...families.entries()]
+    .map(([key, value]) => ({
+      key,
+      label: value.label,
+      payers: [...value.payers].sort()
+    }))
+    .filter((family) => family.payers.length >= 1)
+    .sort((left, right) => left.label.localeCompare(right.label));
+}
+
+/** Pick best (highest version) column per payer for a given drug family. */
+function pickInsightsColumns(
+  drugFamilyKey: string,
+  selectedPayers: string[],
+  versionFilter?: number
+): { columns: PolicyCompareColumn[]; drugFamily: PolicyDrugFamilyOption } {
+  const allPolicies = loadComparablePolicies(versionFilter);
+  const matchingPolicies = allPolicies.filter(
+    (policy) => canonicalDrugFamily(policy.record).key === drugFamilyKey
+  );
+
+  if (matchingPolicies.length === 0) {
+    throw new Error(`No policies found for drug family: ${drugFamilyKey}`);
+  }
+
+  const byPayer = new Map<string, ComparablePolicyRecord>();
+  for (const policy of matchingPolicies) {
+    if (!selectedPayers.includes(policy.record.payer)) {
+      continue;
+    }
+    const existing = byPayer.get(policy.record.payer);
+    if (!existing || policy.version > existing.version) {
+      byPayer.set(policy.record.payer, policy);
+    }
+  }
+
+  const columns = selectedPayers
+    .map((payer) => byPayer.get(payer))
+    .filter((policy): policy is ComparablePolicyRecord => Boolean(policy))
+    .map(buildCompareColumn);
+
+  return {
+    columns,
+    drugFamily: canonicalDrugFamily(matchingPolicies[0].record)
+  };
+}
+
+export function getPolicyInsightsOptions(): PolicyInsightsOptions {
+  const drugFamilies = listInsightsDrugFamilies();
+  const policies = loadComparablePolicies().filter((policy) =>
+    drugFamilies.some((family) => family.key === canonicalDrugFamily(policy.record).key)
+  );
+  const payers = uniqueValues(policies.map((policy) => policy.record.payer)).sort();
+  const versions = uniqueValues(policies.map((policy) => policy.version)).sort((a, b) => a - b);
+
+  return {
+    drugFamilies,
+    payers,
+    versions,
+    ruleTypes: compareRows.map((row) => ({ key: row.key, label: row.label }))
+  };
+}
+
+export function buildPolicyInsights(filters: PolicyInsightsFilters): PolicyInsightsPayload {
+  const options = getPolicyInsightsOptions();
+
+  const drugFamilyKey = normalizeKey(filters.drugFamily);
+  if (!drugFamilyKey) {
+    throw new Error('drugFamily is required');
+  }
+
+  const drugFamilyOption = options.drugFamilies.find((f) => f.key === drugFamilyKey);
+  if (!drugFamilyOption) {
+    throw new Error(`Unknown drug family: ${filters.drugFamily}`);
+  }
+
+  const selectedPayers = normalizeSelectedPayers(filters.payers, drugFamilyOption.payers);
+  const { columns, drugFamily } = pickInsightsColumns(drugFamilyKey, selectedPayers, filters.version);
+
+  if (columns.length === 0) {
+    throw new Error(`No policy data found for ${filters.drugFamily} with the selected payers`);
+  }
+
+  const rowFilter = filters.ruleType;
+  const drugs = [drugFamily.label];
+  const heatmapCells = columns.map((column) =>
+    toInsightCell(column.payer, drugFamily.label, column.cells)
   );
 
   return {
-    drugFamily: comparePayload.drugFamily,
+    drugFamily,
     filters: {
       payerOptions: options.payers,
       versionOptions: options.versions,
       drugOptions: drugs,
     },
     heatmap: {
-      payers: comparePayload.columns.map((column) => column.payer),
+      payers: columns.map((column) => column.payer),
       drugs,
       cells: heatmapCells,
     },
-    graph: buildGraph(comparePayload, rowFilter)
+    graph: buildGraphFromColumns(drugFamily, columns, rowFilter)
   };
 }

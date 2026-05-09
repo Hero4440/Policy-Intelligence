@@ -2,7 +2,7 @@ import type { Express, Request, Response } from 'express';
 import { buildPolicyComparison, getPolicyCompareOptions } from './policy-compare.js';
 import { buildPolicyVersionDiff, listPolicyChangeEvents } from './policy-changes.js';
 import { searchPolicyEvidence } from './evidence-search.js';
-import { buildPolicyInsights } from './policy-insights.js';
+import { buildPolicyInsights, getPolicyInsightsOptions } from './policy-insights.js';
 
 function parseCsvQuery(value: unknown): string[] {
   if (typeof value !== 'string') {
@@ -66,6 +66,10 @@ export function registerPolicyRoutes(app: Express) {
       const message = error instanceof Error ? error.message : 'Failed to build policy comparison';
       res.status(400).json({ error: message });
     }
+  });
+
+  app.get('/api/policies/insights/options', (_req: Request, res: Response) => {
+    res.json(getPolicyInsightsOptions());
   });
 
   app.get('/api/policies/insights', (req: Request, res: Response) => {

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 type WorkspaceSearchBuilderProps = {
   issuers: string[];
@@ -15,58 +15,15 @@ export function WorkspaceSearchBuilder({
   onIssuerChange,
   onDrugQueryChange,
 }: WorkspaceSearchBuilderProps) {
-  const [suggestions, setSuggestions] = useState<string[]>([]);
-  const [showSuggestions, setShowSuggestions] = useState(false);
-  const [localInput, setLocalInput] = useState(drugQuery);
-  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const wrapperRef = useRef<HTMLDivElement | null>(null);
+  const [allDrugs, setAllDrugs] = useState<string[]>([]);
 
-  // Sync external drugQuery changes
+  // Fetch all available drugs on mount
   useEffect(() => {
-    setLocalInput(drugQuery);
-  }, [drugQuery]);
-
-  // Fetch suggestions on input change
-  useEffect(() => {
-    if (debounceRef.current) {
-      clearTimeout(debounceRef.current);
-    }
-
-    if (!localInput.trim()) {
-      setSuggestions([]);
-      return;
-    }
-
-    debounceRef.current = setTimeout(() => {
-      void fetch(`/api/policy/drugs?query=${encodeURIComponent(localInput.trim())}`)
-        .then((res) => (res.ok ? res.json() : { drugs: [] }))
-        .then((data) => setSuggestions((data as { drugs: string[] }).drugs || []))
-        .catch(() => setSuggestions([]));
-    }, 200);
-
-    return () => {
-      if (debounceRef.current) {
-        clearTimeout(debounceRef.current);
-      }
-    };
-  }, [localInput]);
-
-  // Close suggestions on click outside
-  useEffect(() => {
-    function handleClickOutside(e: MouseEvent) {
-      if (wrapperRef.current && !wrapperRef.current.contains(e.target as Node)) {
-        setShowSuggestions(false);
-      }
-    }
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    void fetch('/api/policy/drugs?query=')
+      .then((res) => (res.ok ? res.json() : { drugs: [] }))
+      .then((data) => setAllDrugs((data as { drugs: string[] }).drugs || []))
+      .catch(() => setAllDrugs([]));
   }, []);
-
-  function selectDrug(drug: string) {
-    setLocalInput(drug);
-    setShowSuggestions(false);
-    onDrugQueryChange(drug);
-  }
 
   return (
     <div className="compare-builder">
@@ -81,43 +38,25 @@ export function WorkspaceSearchBuilder({
       </div>
 
       <div className="filter-row">
-        <div className="filter-field" ref={wrapperRef}>
+        <div className="filter-field">
           <label className="field-label" htmlFor="drug-query">
             Drug Query
           </label>
-          <input
+          <select
             id="drug-query"
             className="field-input"
-            value={localInput}
-            onChange={(event) => {
-              setLocalInput(event.target.value);
-              setShowSuggestions(true);
-            }}
-            onFocus={() => setShowSuggestions(true)}
-            onKeyDown={(event) => {
-              if (event.key === 'Enter') {
-                setShowSuggestions(false);
-                onDrugQueryChange(localInput);
-              }
-            }}
-            placeholder="adalimumab, Humira, Rituxan..."
-            autoComplete="off"
-          />
-          {showSuggestions && suggestions.length > 0 && (
-            <div className="drug-suggestions">
-              {suggestions.map((drug) => (
-                <button
-                  key={drug}
-                  type="button"
-                  className="drug-suggestion-item"
-                  onMouseDown={(e) => e.preventDefault()}
-                  onClick={() => selectDrug(drug)}
-                >
-                  {drug}
-                </button>
-              ))}
-            </div>
-          )}
+            value={drugQuery}
+            onChange={(event) => onDrugQueryChange(event.target.value)}
+          >
+            {allDrugs.length === 0 && (
+              <option value={drugQuery}>{drugQuery}</option>
+            )}
+            {allDrugs.map((drug) => (
+              <option key={drug} value={drug}>
+                {drug}
+              </option>
+            ))}
+          </select>
         </div>
 
         <div className="filter-field">

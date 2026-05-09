@@ -1,4 +1,5 @@
 import type { PolicyCompareOptions } from '../data/policies.js';
+import { MultiSelectDropdown } from './multi-select-dropdown.js';
 
 type PolicyCompareBuilderProps = {
   options: PolicyCompareOptions | null;
@@ -13,7 +14,6 @@ type PolicyCompareBuilderProps = {
 
 export function PolicyCompareBuilder({
   options,
-  payerOptions,
   selectedDrugFamily,
   selectedPayers,
   selectedVersion,
@@ -41,7 +41,7 @@ export function PolicyCompareBuilder({
       <div className="filter-row">
         <div className="filter-field">
           <label className="field-label" htmlFor="compare-drug-family">
-            Drug Query
+            Drug Family
           </label>
           <select
             id="compare-drug-family"
@@ -77,32 +77,14 @@ export function PolicyCompareBuilder({
         </div>
       </div>
 
-      <div className="filter-field" style={{ marginTop: '16px' }}>
-        <label className="field-label">Issuer</label>
-        <div className="compare-builder-list">
-          {payerOptions.map((payer) => {
-            const selected = selectedPayers.includes(payer);
-            return (
-              <label
-                key={payer}
-                className={`compare-builder-card${selected ? ' compare-builder-card-selected' : ''}`}
-              >
-                <input
-                  type="checkbox"
-                  checked={selected}
-                  onChange={() => onTogglePayer(payer)}
-                />
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <strong>{payer}</strong>
-                  <p style={{ fontSize: '0.875rem', color: 'var(--color-gray-600)' }}>
-                    {selected ? 'Included in compare' : 'Click to include in compare'}
-                  </p>
-                </div>
-              </label>
-            );
-          })}
-        </div>
-      </div>
+      <MultiSelectDropdown
+        id="compare-issuer"
+        label="Issuer"
+        options={options.payers}
+        selected={selectedPayers}
+        onToggle={onTogglePayer}
+        placeholder="Select issuers…"
+      />
     </div>
   );
 }

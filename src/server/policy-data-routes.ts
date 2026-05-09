@@ -25,7 +25,7 @@ export function registerPolicyDataRoutes(app: Express) {
   app.get('/api/policy/drugs', (req: Request, res: Response) => {
     const query = typeof req.query.query === 'string' ? req.query.query : '';
     res.json({
-      drugs: searchDrugs(query)
+      drugs: searchDrugs(query, query ? 12 : 100)
     });
   });
 

@@ -323,11 +323,17 @@ export function AskView({ selectedDrug, selectedPayer, selectedPlanId }: AskView
                   <span>{result.summary.title}</span>
                   <span className="chat-tool-badge">{result.tool}</span>
                 </summary>
-                <ul className="ask-result-list">
-                  {result.summary.items.map((item, i) => (
-                    <li key={`${item.slice(0, 30)}-${i}`}>{item}</li>
-                  ))}
-                </ul>
+                <div className="chat-tool-table-wrapper">
+                  <table className="chat-tool-table">
+                    <tbody>
+                      {result.summary.items.map((item, i) => (
+                        <tr key={`${item.slice(0, 30)}-${i}`}>
+                          <td>{item}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </details>
             ))}
           </div>

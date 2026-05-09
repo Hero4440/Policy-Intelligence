@@ -7,7 +7,6 @@ import { DetailTabs } from './components/detail-tabs.js';
 import { CompareView } from './components/compare-view.js';
 import { AskView } from './components/ask-view.js';
 import { ChangesView } from './components/changes-view.js';
-import { ReadinessView } from './components/readiness-view.js';
 import { IngestionPanel } from './components/ingestion-panel.js';
 import { DataOverviewView } from './components/data-overview-view.js';
 import { InfoChip } from './components/info-chip.js';
@@ -40,6 +39,7 @@ import {
   fetchPolicyComparison,
   fetchPolicyChanges,
   fetchPolicyInsights,
+  fetchPolicyInsightsOptions,
   fetchPolicyVersionDiff,
   type ChangeSeverity,
   type PolicyChangesResponse,
@@ -107,6 +107,7 @@ export default function App() {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [policyCompareOptions, setPolicyCompareOptions] = useState<PolicyCompareOptions | null>(null);
+  const [policyInsightsOptions, setPolicyInsightsOptions] = useState<PolicyCompareOptions | null>(null);
   const [compareDrugFamily, setCompareDrugFamily] = useState('');
   const [comparePayers, setComparePayers] = useState<string[]>([]);
   const [compareVersion, setCompareVersion] = useState('');
@@ -137,8 +138,8 @@ export default function App() {
     [policyCompareOptions, compareDrugFamily]
   );
   const insightsPayerOptions = useMemo(
-    () => policyCompareOptions?.drugFamilies.find((entry) => entry.key === insightsDrugFamily)?.payers ?? [],
-    [policyCompareOptions, insightsDrugFamily]
+    () => policyInsightsOptions?.drugFamilies.find((entry) => entry.key === insightsDrugFamily)?.payers ?? [],
+    [policyInsightsOptions, insightsDrugFamily]
   );
 
   async function refreshDataViews() {
@@ -166,14 +167,22 @@ export default function App() {
           setCompareDrugFamily(payload.drugFamilies[0].key);
           setComparePayers(payload.drugFamilies[0].payers.slice(0, 3));
         }
+      })
+      .catch((loadError) => {
+        const message = loadError instanceof Error ? loadError.message : 'Failed to load compare options';
+        setPolicyCompareError(message);
+      });
+
+    void fetchPolicyInsightsOptions()
+      .then((payload) => {
+        setPolicyInsightsOptions(payload);
         if (!insightsDrugFamily && payload.drugFamilies[0]) {
           setInsightsDrugFamily(payload.drugFamilies[0].key);
           setInsightsPayers(payload.drugFamilies[0].payers);
         }
       })
       .catch((loadError) => {
-        const message = loadError instanceof Error ? loadError.message : 'Failed to load compare options';
-        setPolicyCompareError(message);
+        const message = loadError instanceof Error ? loadError.message : 'Failed to load insights options';
         setPolicyInsightsError(message);
       });
   }, []);
@@ -190,7 +199,7 @@ export default function App() {
   }, [policyCompareOptions, compareDrugFamily]);
 
   useEffect(() => {
-    const family = policyCompareOptions?.drugFamilies.find((entry) => entry.key === insightsDrugFamily);
+    const family = policyInsightsOptions?.drugFamilies.find((entry) => entry.key === insightsDrugFamily);
     if (!family) {
       return;
     }
@@ -198,7 +207,7 @@ export default function App() {
       const filtered = current.filter((payer) => family.payers.includes(payer));
       return filtered.length > 0 ? filtered : family.payers;
     });
-  }, [policyCompareOptions, insightsDrugFamily]);
+  }, [policyInsightsOptions, insightsDrugFamily]);
 
   useEffect(() => {
     if (!drugQuery.trim()) {
@@ -509,18 +518,6 @@ export default function App() {
     switch (activeTab) {
       case 'coverage':
         return renderCoverageDetail();
-      case 'readiness':
-        return detail?.structuredPolicy ? (
-          <ReadinessView
-            policy={detail.structuredPolicy}
-          />
-        ) : (
-          <div className="empty-state">
-            Select a plan with deep medical policy evidence to check patient readiness.
-            <br />
-            <small style={{ color: 'var(--color-gray-600)' }}>Readiness checking requires a structured policy with diagnosis and step therapy criteria.</small>
-          </div>
-        );
     }
   }
 
@@ -630,14 +627,7 @@ export default function App() {
           <div className="workspace-column">
             <div className="empty-state">Search from the detail pane to explore stored policy evidence.</div>
           </div>
-        ) : activePage === 'insights' ? null : activePage === 'changes' ? null : activePage === 'data' ? (
-          <IngestionPanel
-            ingestedSources={ingestedSources}
-            ingestionSummary={ingestionSummary}
-            catalogSummary={catalogSummary}
-            onIngestionComplete={handleIngestionComplete}
-          />
-        ) : (
+        ) : activePage === 'insights' ? null : activePage === 'changes' ? null : activePage === 'data' ? null : (
           <div className="workspace-column">
             <div className="panel-header">
               <div>
@@ -690,7 +680,7 @@ export default function App() {
             selectedEvidence={selectedInsightsEvidence}
             onOpenEvidence={(title, evidence) => setSelectedInsightsEvidence({ title, evidence })}
             onClearEvidence={() => setSelectedInsightsEvidence(null)}
-            options={policyCompareOptions}
+            options={policyInsightsOptions}
             payerOptions={insightsPayerOptions}
             selectedDrugFamily={insightsDrugFamily}
             selectedPayers={insightsPayers}
@@ -774,6 +764,13 @@ export default function App() {
             onDrugFamilyChange={setCompareDrugFamily}
             onTogglePayer={(payer) => setComparePayers((current) => toggleStringValue(current, payer))}
             onVersionChange={setCompareVersion}
+          />
+        ) : activePage === 'data' ? (
+          <IngestionPanel
+            ingestedSources={ingestedSources}
+            ingestionSummary={ingestionSummary}
+            catalogSummary={catalogSummary}
+            onIngestionComplete={handleIngestionComplete}
           />
         ) : undefined
       }

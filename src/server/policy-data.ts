@@ -547,10 +547,17 @@ export function searchDrugs(query: string, limit = 12): string[] {
   }
 
   if (normalized.length === 0) {
+    for (const row of formularyRows) {
+      addCandidate(row.drugNameDisplay);
+    }
     structuredPolicies.forEach((policy) => {
       addCandidate(policy.drug.genericName);
       addCandidate(policy.drug.brandName);
     });
+    for (const snapshot of ingestedSnapshots) {
+      addCandidate(snapshot.primaryDrugLabel);
+      snapshot.alternateDrugLabels.forEach((label) => addCandidate(label));
+    }
     return [...candidates.values()].sort().slice(0, limit);
   }
 

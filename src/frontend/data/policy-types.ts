@@ -89,7 +89,7 @@ export interface IngestedSourceRecord {
   fileName: string;
   mimeType: string;
   sizeBytes: number;
-  sourceKind: 'pdf' | 'json_policy' | 'csv_formulary' | 'jsonl_records' | 'fhir_bundle' | 'unknown';
+  sourceKind: 'pdf' | 'json_policy' | 'csv_formulary' | 'jsonl_records' | 'fhir_bundle' | 'docx' | 'unknown';
   status: 'normalized' | 'partial' | 'stored' | 'rejected';
   uploadedAt: string;
   issuerName: string;
@@ -99,6 +99,10 @@ export interface IngestedSourceRecord {
   summary: string;
   normalizedSnapshotIds: string[];
 }
+
+export type AntonRxCatalogSummary = PolicyCatalogSummary;
+export type AntonRxCoverageMatch = PolicyCoverageMatch;
+export type AntonRxChangeWatch = PolicyChangeWatch;
 
 export interface IngestionSummary {
   sourceCount: number;

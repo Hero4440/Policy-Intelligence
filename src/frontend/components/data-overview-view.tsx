@@ -1,5 +1,6 @@
+import { useState } from 'react';
 import type { AntonRxCatalogSummary, IngestedSourceRecord, IngestionSummary } from '../data/policy-types.js';
-import { InfoChip, InfoLabel } from './info-chip.js';
+import { InfoLabel } from './info-chip.js';
 
 type DataOverviewViewProps = {
   ingestedSources: IngestedSourceRecord[];
@@ -21,6 +22,7 @@ export function DataOverviewView({
   ingestionSummary,
   catalogSummary
 }: DataOverviewViewProps) {
+  const [drugPage, setDrugPage] = useState(0);
   const statusCounts = countByStatus(ingestedSources);
   const detectedDrugCounts = new Map<string, number>();
   for (const source of ingestedSources) {
@@ -29,22 +31,15 @@ export function DataOverviewView({
     }
   }
   const topDetectedDrugs = [...detectedDrugCounts.entries()]
-    .sort((left, right) => right[1] - left[1] || left[0].localeCompare(right[0]))
-    .slice(0, 8);
+    .sort((left, right) => right[1] - left[1] || left[0].localeCompare(right[0]));
+  const DRUGS_PER_PAGE = 10;
 
   return (
     <div className="data-overview">
       <div className="panel-header">
         <div>
-          <p className="eyebrow">Data Page</p>
           <h2>Dataset visibility and ingestion health</h2>
         </div>
-      </div>
-
-      <div className="data-overview-legend">
-        <InfoChip label="Uploaded Sources" description="Raw files that entered the system, including PDFs, JSON, CSV, and FHIR bundles." />
-        <InfoChip label="Uploaded Snapshots" description="Normalized plan-drug records created from uploaded sources. These are what power compare and detail views." />
-        <InfoChip label="Normalized" description="Upload produced structured searchable records. Partial means the source was stored with metadata but still needs deeper normalization." />
       </div>
 
       <div className="detail-summary-card">
@@ -107,12 +102,49 @@ export function DataOverviewView({
         {topDetectedDrugs.length === 0 ? (
           <div className="empty-state">Upload policy files to see detected drug families.</div>
         ) : (
-          topDetectedDrugs.map(([drug, count]) => (
-            <article key={drug} className="detail-card">
-              <p className="detail-card-title">{drug}</p>
-              <p>Detected in {count} uploaded source{count === 1 ? '' : 's'}</p>
-            </article>
-          ))
+          <>
+            <table className="data-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Drug</th>
+                  <th>Sources</th>
+                </tr>
+              </thead>
+              <tbody>
+                {topDetectedDrugs
+                  .slice(drugPage * DRUGS_PER_PAGE, (drugPage + 1) * DRUGS_PER_PAGE)
+                  .map(([drug, count], i) => (
+                    <tr key={drug}>
+                      <td className="row-num">{drugPage * DRUGS_PER_PAGE + i + 1}</td>
+                      <td>{drug}</td>
+                      <td>{count}</td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+            {topDetectedDrugs.length > DRUGS_PER_PAGE && (
+              <div className="table-pagination">
+                <button
+                  type="button"
+                  disabled={drugPage === 0}
+                  onClick={() => setDrugPage((p) => p - 1)}
+                >
+                  Prev
+                </button>
+                <span>
+                  {drugPage + 1} / {Math.ceil(topDetectedDrugs.length / DRUGS_PER_PAGE)}
+                </span>
+                <button
+                  type="button"
+                  disabled={(drugPage + 1) * DRUGS_PER_PAGE >= topDetectedDrugs.length}
+                  onClick={() => setDrugPage((p) => p + 1)}
+                >
+                  Next
+                </button>
+              </div>
+            )}
+          </>
         )}
       </div>
 

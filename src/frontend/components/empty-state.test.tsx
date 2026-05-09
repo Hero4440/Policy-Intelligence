@@ -86,7 +86,7 @@ describe('Empty States - Rendering', () => {
 
       const emptyState = container.querySelector('.empty-state');
       expect(emptyState).toBeInTheDocument();
-      expect(emptyState).toHaveTextContent('Select a drug family to view the policy heat map and relationship graph.');
+      expect(emptyState).toHaveTextContent('Select a drug family to view the policy relationship graph.');
     });
   });
 

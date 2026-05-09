@@ -11,6 +11,7 @@ PolicyPilot is a comprehensive policy intelligence platform that helps healthcar
 - **Data Management**: Upload and manage policy documents and formularies
 - **Evidence Explorer**: Search policy documents by keywords
 - **AI-Powered Chat**: Ask questions about policies using grounded AI chat
+- **Patient Readiness Checking**: Check if patients meet prior authorization criteria via AI chat (see Chat Features below)
 
 ## Design System
 
@@ -154,6 +155,35 @@ The application adapts to different screen sizes with responsive breakpoints:
 - Full mobile layout
 - Stacked navigation
 - Optimized for small screens
+
+## Chat Features
+
+The AI-powered chat interface provides intelligent policy assistance through natural language queries:
+
+### Available Chat Capabilities
+
+1. **Drug Coverage Queries**: Ask about coverage for specific drugs across payers
+2. **Prior Authorization Criteria**: Get detailed PA requirements for drugs and plans
+3. **Cross-Plan Comparisons**: Compare coverage across multiple payers
+4. **Policy Changes**: Track and understand policy updates over time
+5. **Patient Readiness Checking**: ⚠️ **TO BE IMPLEMENTED** - Check if a patient meets prior authorization criteria
+
+### Patient Readiness via Chat
+
+**Status**: Implementation pending
+
+The chat interface will support patient readiness checking through natural language queries like:
+- "Does Linda Washington meet the criteria for Humira under Aetna?"
+- "Check if patient meets PA requirements for adalimumab"
+- "Is Sarah Anderson ready for Enbrel approval?"
+
+**Implementation Requirements**:
+- Integrate `check_patient_readiness` MCP tool with chat interface
+- Support patient context passing (FHIR data or demo patient selection)
+- Display criteria matching results in chat responses
+- Provide actionable feedback on missing criteria
+
+**Current Workaround**: Use the MCP tool directly via the server API until chat integration is complete.
 
 ## Getting Started
 

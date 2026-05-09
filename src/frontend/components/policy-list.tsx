@@ -7,7 +7,7 @@ type PolicyListProps = {
   onSelectPlan: (planId: string) => void;
 };
 
-const ITEMS_PER_PAGE = 5;
+const ITEMS_PER_PAGE = 10;
 
 export function PolicyList({ matches, selectedPlanId, onSelectPlan }: PolicyListProps) {
   const [currentPage, setCurrentPage] = useState(1);

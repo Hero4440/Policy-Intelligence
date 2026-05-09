@@ -1,4 +1,4 @@
-export type TabId = 'coverage' | 'readiness';
+export type TabId = 'coverage';
 
 type DetailTabsProps = {
   activeTab: TabId;
@@ -7,7 +7,6 @@ type DetailTabsProps = {
 
 const tabs: { id: TabId; label: string }[] = [
   { id: 'coverage', label: 'Coverage' },
-  { id: 'readiness', label: 'Readiness' },
 ];
 
 export function DetailTabs({ activeTab, onTabChange }: DetailTabsProps) {

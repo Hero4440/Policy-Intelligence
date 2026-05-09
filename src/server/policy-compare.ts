@@ -693,4 +693,10 @@ export function buildPolicyComparison(drugFamily: string, payers: string[], vers
   };
 }
 
-export { compareRows };
+export {
+  compareRows,
+  loadComparablePolicies,
+  buildCompareColumn,
+  canonicalDrugFamily,
+  type ComparablePolicyRecord
+};
