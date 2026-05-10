@@ -1,0 +1,18 @@
+2026-05-09
+
+Chief Complaint Gastroenterology evaluation for management of refractory Crohn's disease.
+
+History of Present Illness Marcus Chen is a 45 year-old male with Crohn's disease diagnosed 12 years ago. Disease has been refractory to conventional therapies including mesalamine, azathioprine, and corticosteroids. Recent colonoscopy revealed active inflammation with ulceration in the terminal ileum and colon. Gastroenterologist is considering adalimumab (Humira) therapy. No documented prior use of adalimumab biosimilars such as Hadlima or Hyrimoz. No documented intolerance, contraindication, or treatment failure to Hadlima or Hyrimoz.
+
+Social History Patient works as an IT professional. Non-smoker. Moderate alcohol use. Lives with spouse.
+
+Patient currently has Pennsylvania Medical Assistance (State Medicaid).
+
+Allergies No Known Allergies.
+
+Medications Current therapy: Mesalamine 4.8g daily, Azathioprine 150mg daily. Prednisone 20mg daily (attempting taper). Antidiarrheals and iron supplementation as needed.
+
+Assessment and Plan Patient is being evaluated for Humira (adalimumab) subcutaneous injection therapy coverage under medical benefit policy for moderate-to-severe refractory Crohn's disease.
+
+Plan Submit prior authorization readiness check before prescribing Humira. Verify failed conventional DMARD therapy documentation and disease activity assessment. Confirm TB screening and appropriate vaccinations prior to TNF-inhibitor initiation.
+

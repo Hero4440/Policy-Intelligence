@@ -7,7 +7,10 @@
       "Skill(gsd:new-milestone)",
       "Skill(gsd:new-milestone:*)",
       "Read(//Users/tanmaybhuskute/.claude/agents/**)",
-      "WebSearch"
+      "WebSearch",
+      "Bash(pkill -f \"tsx watch src/mcp\")",
+      "Bash(npm run *)",
+      "Bash(pkill -f \"vite\")"
     ]
   }
 }

@@ -1,0 +1,18 @@
+2026-05-09
+
+Chief Complaint Rheumatology evaluation for management of moderate-to-severe rheumatoid arthritis with inadequate response to conventional DMARDs.
+
+History of Present Illness Sarah Martinez is a 61 year-old female with rheumatoid arthritis diagnosed 8 years ago. She has failed trial of methotrexate and sulfasalazine with persistent joint inflammation and functional impairment. Rheumatologist is considering infliximab (Remicade) therapy. No documented prior use of infliximab biosimilars such as Inflectra or Renflexis. No documented intolerance, contraindication, or treatment failure to Inflectra or Renflexis.
+
+Social History Patient does not smoke. Patient is a retired administrative professional with stable housing.
+
+Patient currently has commercial insurance (Cigna).
+
+Allergies Penicillin (rash).
+
+Medications Current DMARD therapy: Methotrexate 15mg weekly (inadequate response). Prednisone 5mg daily. NSAIDs for symptom management.
+
+Assessment and Plan Patient is being evaluated for Remicade (infliximab) IV infusion therapy coverage under medical benefit policy for rheumatoid arthritis.
+
+Plan Submit prior authorization readiness check before prescribing Remicade. Determine if preferred biosimilar step therapy is required before branded Remicade approval. Verify DMARD failure documentation and disease activity measures.
+

@@ -1,0 +1,18 @@
+2026-05-09
+
+Chief Complaint Oncology treatment planning for HER2-positive metastatic breast cancer.
+
+History of Present Illness Jennifer Kim is a 47 year-old female with stage IV HER2-positive breast cancer diagnosed 6 months ago. Pathology confirmed HER2 overexpression (3+ by immunohistochemistry). Patient completed initial chemotherapy with partial response. Oncologist is now considering trastuzumab (Herceptin) therapy in combination with continuing chemotherapy regimen. No documented prior use of trastuzumab biosimilars such as Ogivri or Herzuma. No documented intolerance, contraindication, or treatment failure to Ogivri or Herzuma.
+
+Social History Patient is a working professional. Non-smoker. Lives with family support system.
+
+Patient currently has commercial insurance (Aetna).
+
+Allergies No Known Allergies.
+
+Medications Chemotherapy regimen (paclitaxel/carboplatin). Supportive care medications. No active trastuzumab therapy documented.
+
+Assessment and Plan Patient is being evaluated for Herceptin (trastuzumab) coverage under medical benefit policy for HER2-positive metastatic breast cancer.
+
+Plan Submit prior authorization readiness check before prescribing Herceptin. Evaluate whether preferred biosimilar step therapy is required before branded Herceptin approval. Confirm HER2 status documentation and baseline cardiac function assessment.
+

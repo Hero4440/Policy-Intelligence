@@ -1,6 +1,31 @@
 {
   "sources": [
     {
+      "id": "src-1778379612285-42x4mv",
+      "fileName": "Aetna CPB 0313- Trastuzumab (Herceptin) and Biosimilars.pdf",
+      "mimeType": "application/pdf",
+      "sizeBytes": 406090,
+      "sourceKind": "pdf",
+      "status": "normalized",
+      "uploadedAt": "2026-05-10T02:20:14.961Z",
+      "issuerName": "Aetna",
+      "effectiveDate": "2026",
+      "detectedDrugs": [
+        "negative"
+      ],
+      "notes": [
+        "Extracted 6 pages of text for manual or downstream normalization.",
+        "Parsed policy title: Aetna CPB 0313- Trastuzumab (Herceptin) and Biosimilars",
+        "Detected 1 policy-targeted drug label."
+      ],
+      "summary": "Aetna CPB 0313- Trastuzumab (Herceptin) and Biosimilars.pdf normalized into 1 searchable record.",
+      "rawPath": "/Users/tanmaybhuskute/Documents/Policy-Intelligence/data/ingestion/raw/src-1778379612285-42x4mv-Aetna-CPB-0313-Trastuzumab-Herceptin-and-Biosimilars.pdf",
+      "extractedTextPath": "/Users/tanmaybhuskute/Documents/Policy-Intelligence/data/ingestion/extracted/src-1778379612285-42x4mv-Aetna-CPB-0313-Trastuzumab-Herceptin-and-Biosimilars.pdf.txt",
+      "normalizedSnapshotIds": [
+        "src-1778379612285-42x4mv-pdf-0"
+      ]
+    },
+    {
       "id": "src-1778345222908-1kp9fn",
       "fileName": "IFP2895550-AZ_UHC_IFP_PY26.pdf",
       "mimeType": "application/pdf",
@@ -812,6 +837,53 @@
     }
   ],
   "snapshots": [
+    {
+      "snapshotId": "src-1778379612285-42x4mv-pdf-0",
+      "sourceId": "src-1778379612285-42x4mv",
+      "planId": "UPLOADED-AETNA-NEGATIVE",
+      "issuerName": "Aetna",
+      "issuerKey": "aetna",
+      "planName": "Aetna CPB 0313- Trastuzumab (Herceptin) and Biosimilars",
+      "planKey": "aetna__aetna_cpb_0313_trastuzumab_herceptin_and_biosimilars",
+      "market": "Uploaded policy",
+      "metalLevel": "",
+      "sourceKind": "uploaded_pdf_policy",
+      "sourcePosture": "uploaded_normalized",
+      "sourceFile": "Aetna CPB 0313- Trastuzumab (Herceptin) and Biosimilars.pdf",
+      "sourceEffectiveDate": "2026",
+      "primaryDrugLabel": "negative",
+      "canonicalDrugKey": "negative",
+      "alternateDrugLabels": [],
+      "alternateDrugKeys": [],
+      "coverageLabel": "Uploaded policy extract",
+      "coveredFlag": true,
+      "priorAuth": false,
+      "stepTherapy": false,
+      "quantityLimit": "",
+      "ageLimit": "",
+      "specialtyFlag": false,
+      "nonFormulary": false,
+      "medicalBenefit": false,
+      "therapeuticCategory": "Policy-derived",
+      "therapeuticSubcategory": "",
+      "notes": "Provisional snapshot parsed from uploaded PDF policy: Aetna CPB 0313- Trastuzumab (Herceptin) and Biosimilars",
+      "confidenceLabel": "medium",
+      "confidenceRationale": "Derived from policy title, first-page content, and requirement section heuristics. Preserve provenance before using for hard adjudication.",
+      "requirementsSummary": [
+        "Y0001_NR_37041_2024_C © 2026 Aetna Inc.",
+        "This document contains prescription brand name drugs that are trademarks or registered trademarks of pharmaceutical manufacturers that are not",
+        "affiliated with Aetna Inc.",
+        "Authorization of up to 12 months may be granted for neoadjuvant treatment of HER2-positive breast cancer as part",
+        "of a complete treatment regimen.",
+        "Authorization of up to 12 months may be granted for adjuvant treatment of HER2-positive breast cancer."
+      ],
+      "normalizedRuleFacets": [],
+      "evidenceSummary": [
+        "Y0001_NR_37041_2024_C © 2026 Aetna Inc.",
+        "This document contains prescription brand name drugs that are trademarks or registered trademarks of pharmaceutical manufacturers that are not",
+        "affiliated with Aetna Inc."
+      ]
+    },
     {
       "snapshotId": "src-1778345222375-pxwmks-pdf-0",
       "sourceId": "src-1778345222375-pxwmks",

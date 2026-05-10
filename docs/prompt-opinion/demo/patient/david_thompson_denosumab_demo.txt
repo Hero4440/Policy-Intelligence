@@ -1,0 +1,18 @@
+2026-05-09
+
+Chief Complaint Oncology consultation for prevention of skeletal complications in metastatic cancer patient.
+
+History of Present Illness David Thompson is a 70 year-old male with metastatic prostate cancer with involvement of the skeleton. Bone scans confirm multiple osseous lesions. Patient is at high risk for skeletal-related events including pathological fractures and spinal cord compression. Oncologist is considering denosumab (Prolia) therapy to reduce risk of skeletal complications and manage bone disease. No documented prior use of bone-protective agents or denosumab therapy. No documented intolerance or contraindication to denosumab.
+
+Social History Patient is retired. Former smoker (quit 15 years ago). Lives independently with wife.
+
+Patient currently has commercial insurance (EmblemHealth).
+
+Allergies No Known Allergies.
+
+Medications Androgen deprivation therapy (leuprolide). Docetaxel chemotherapy. Supportive medications including bisphosphonate trials with limited efficacy.
+
+Assessment and Plan Patient is being evaluated for Prolia (denosumab) subcutaneous injection therapy coverage under medical benefit policy for prevention of skeletal complications in metastatic bone disease.
+
+Plan Submit prior authorization readiness check before prescribing Prolia. Verify bone metastases documentation and prior skeletal events. Confirm baseline renal function and calcium levels. Evaluate dental status prior to initiating denosumab therapy.
+
