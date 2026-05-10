@@ -49,6 +49,9 @@ export interface DoctorAgentResponse {
   // Section 1: Direct answer
   answer: string;
 
+  // Section 1b: Explanation with evidence
+  answerExplanation: string;
+
   // Section 2: Readiness status
   status: ReadinessStatus;
 
@@ -84,6 +87,11 @@ export function formatDoctorAgentResponse(response: DoctorAgentResponse): string
   // Answer
   lines.push('## Answer');
   lines.push(response.answer);
+  lines.push('');
+
+  // Answer Explanation with source references
+  lines.push('## Explanation');
+  lines.push(response.answerExplanation);
   lines.push('');
 
   // Status
@@ -201,6 +209,7 @@ export function createDoctorAgentResponse(
 ): DoctorAgentResponse {
   return {
     answer,
+    answerExplanation: '',
     status,
     patientFacts: [],
     policyFindings: [],

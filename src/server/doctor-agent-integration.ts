@@ -14,14 +14,14 @@ import type {
 } from './doctor-agent-output.js';
 import { createDoctorAgentResponse } from './doctor-agent-output.js';
 
-interface PatientContext {
+export interface PatientContext {
   name?: string;
   diagnosis?: string;
   age?: number;
   clinicalFindings?: Record<string, string>;
 }
 
-interface DoctorAgentContext {
+export interface DoctorAgentContext {
   patient?: PatientContext;
   payer?: string;
   drug?: string;
@@ -276,6 +276,137 @@ function assessConfidence(
 }
 
 /**
+ * Build detailed explanation that references sources
+ */
+function buildAnswerExplanation(
+  context: DoctorAgentContext,
+  patientFacts: PatientFact[],
+  policyFindings: PolicyFinding[],
+  criteriaChecklist: CriteriaChecklistItem[],
+  sources: SourceCitation[]
+): string {
+  const lines: string[] = [];
+
+  // Patient context summary
+  if (context.patient?.name) {
+    lines.push(`**Patient:** ${context.patient.name}`);
+  }
+  if (context.drug) {
+    lines.push(`**Requested Drug:** ${context.drug}`);
+  }
+  if (context.payer) {
+    lines.push(`**Payer:** ${context.payer}`);
+  }
+
+  if (lines.length > 0) {
+    lines.push('');
+  }
+
+  // Policy coverage context
+  if (policyFindings.length > 0) {
+    const finding = policyFindings[0];
+    lines.push(`## Coverage Status`);
+    lines.push(`${context.drug || 'This drug'} is **${finding.coverageStatus}** under the ${context.payer || finding.payer} plan. ${finding.paRequired ? 'Prior authorization is required.' : 'No prior authorization required.'}`);
+    lines.push('');
+
+    // Reference the source for coverage status
+    const coverageSource = sources.find(s => s.source.includes(finding.payer) || s.source.includes(finding.policy));
+    if (coverageSource) {
+      lines.push(`*Evidence: ${coverageSource.tool} from ${coverageSource.source}*`);
+      lines.push('');
+    }
+  }
+
+  // Criteria assessment
+  if (criteriaChecklist.length > 0) {
+    const passed = criteriaChecklist.filter(c => c.status === 'PASS').length;
+    const failed = criteriaChecklist.filter(c => c.status === 'FAIL').length;
+    const unknown = criteriaChecklist.filter(c => c.status === 'UNKNOWN').length;
+
+    lines.push(`## Criteria Assessment`);
+    lines.push(`Based on the policy requirements from the ${context.payer || 'applicable'} plan:`);
+    lines.push('');
+    lines.push(`- **Passed:** ${passed} criteria`);
+    if (failed > 0) {
+      lines.push(`- **Failed:** ${failed} criteria`);
+    }
+    if (unknown > 0) {
+      lines.push(`- **Uncertain:** ${unknown} criteria requiring verification`);
+    }
+    lines.push('');
+
+    // Highlight specific passed criteria
+    const passedCriteria = criteriaChecklist.filter(c => c.status === 'PASS').slice(0, 3);
+    if (passedCriteria.length > 0) {
+      lines.push(`**Criteria Met:**`);
+      for (const criterion of passedCriteria) {
+        lines.push(`- ${criterion.requirement}: Patient evidence shows "${criterion.patientEvidence}"`);
+      }
+      lines.push('');
+    }
+
+    // Highlight failed/uncertain criteria
+    const notPassedCriteria = criteriaChecklist.filter(c => c.status !== 'PASS').slice(0, 3);
+    if (notPassedCriteria.length > 0) {
+      lines.push(`**Criteria Needing Review:**`);
+      for (const criterion of notPassedCriteria) {
+        const status = criterion.status === 'FAIL' ? 'Not met' : 'Uncertain';
+        lines.push(`- ${criterion.requirement} (${status}): Policy requires "${criterion.policyEvidence}"`);
+      }
+      lines.push('');
+    }
+  }
+
+  // Policy requirements context
+  if (policyFindings.length > 0) {
+    const finding = policyFindings[0];
+    if (finding.keyCriteria.length > 0) {
+      lines.push(`## Policy Requirements`);
+      lines.push(`The ${context.payer || finding.payer} policy for ${context.drug || finding.drug} requires:`);
+      lines.push('');
+      for (const criterion of finding.keyCriteria.slice(0, 5)) {
+        lines.push(`- ${criterion}`);
+      }
+      lines.push('');
+    }
+
+    if (finding.stepTherapy) {
+      lines.push(`**Step Therapy:** ${finding.stepTherapy}`);
+      lines.push('');
+    }
+  }
+
+  // Data quality assessment
+  if (patientFacts.length > 0) {
+    const highConfidenceFacts = patientFacts.filter(f => f.confidence === 'HIGH').length;
+    lines.push(`## Evidence Quality`);
+    lines.push(`This assessment is based on ${highConfidenceFacts} documented clinical facts with high confidence. ${patientFacts.some(f => f.confidence !== 'HIGH') ? 'Some clinical data may require verification.' : 'All clinical data is well-documented.'}`);
+    lines.push('');
+  }
+
+  // Source citations
+  if (sources.length > 0) {
+    lines.push(`## Sources Referenced`);
+    const uniqueSources = new Map<string, SourceCitation>();
+    for (const source of sources) {
+      if (!uniqueSources.has(source.source)) {
+        uniqueSources.set(source.source, source);
+      }
+    }
+
+    for (const source of uniqueSources.values()) {
+      lines.push(`- **${source.source}** (via ${source.tool})`);
+      if (source.evidence) {
+        lines.push(`  - "${source.evidence}"`);
+      }
+    }
+    lines.push('');
+  }
+
+  return lines.join('\n');
+}
+
+/**
  * Convert DoctorAgentContext and tool results into DoctorAgentResponse
  */
 export function buildDoctorAgentResponse(context: DoctorAgentContext): DoctorAgentResponse {
@@ -321,7 +452,17 @@ export function buildDoctorAgentResponse(context: DoctorAgentContext): DoctorAge
       ? `${matchedCount}/${totalCriteria} criteria appear met for prior authorization. ${readinessStatus === 'Ready for PA submission' ? 'Patient appears ready for submission.' : 'Additional review required before submission.'}`
       : 'Unable to determine readiness without complete policy and patient information.';
 
+  // Build detailed explanation with source references
+  const answerExplanation = buildAnswerExplanation(
+    context,
+    patientFacts,
+    policyFindings,
+    criteriaChecklist,
+    sources
+  );
+
   return createDoctorAgentResponse(answer, readinessStatus, {
+    answerExplanation,
     patientFacts,
     policyFindings,
     criteriaChecklist,

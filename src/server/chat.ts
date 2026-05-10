@@ -20,6 +20,8 @@ import { matchPatientAgainstPolicy } from '../mcp/matching/criteria_matcher.js';
 import { findPolicy, findPoliciesByDrug } from '../mcp/policy_store/loader.js';
 import { normalizeDrugName } from '../../data/lookup/drug-aliases.js';
 import { DISCLAIMER } from '../mcp/matching/language.js';
+import { buildDoctorAgentResponse, type DoctorAgentContext } from './doctor-agent-integration.js';
+import { formatDoctorAgentResponse } from './doctor-agent-output.js';
 
 type ToolName =
   | 'which_plans_cover_drug'
@@ -745,6 +747,140 @@ export function registerChatRoutes(app: Express) {
       session: serializeSession(session),
       messages: session.messages
     });
+  });
+
+  app.post('/api/chat/doctor-agent', async (req: Request, res: Response) => {
+    const { sessionId, messages, model, context } = req.body as {
+      sessionId?: string;
+      messages?: Array<{ role: 'user' | 'assistant'; content: string }>;
+      model?: string;
+      context?: ChatContext;
+    };
+
+    if (!sessionId) {
+      res.status(400).json({ error: 'sessionId is required' });
+      return;
+    }
+
+    const latestUserMessage = messages?.filter((message) => message.role === 'user').at(-1)?.content?.trim();
+    if (!latestUserMessage) {
+      res.status(400).json({ error: 'A user message is required' });
+      return;
+    }
+
+    appendSessionMessage(sessionId, {
+      id: crypto.randomUUID(),
+      role: 'user',
+      content: latestUserMessage
+    });
+
+    const selectedModel = model?.trim() || DEFAULT_MODEL;
+
+    try {
+      let plannerResult: PlannerResult;
+      try {
+        plannerResult = await planToolUse(sessionId, latestUserMessage, selectedModel, context);
+      } catch {
+        plannerResult = heuristicFallback(latestUserMessage, context);
+      }
+
+      const toolResults: ToolExecutionResult[] = [];
+      for (const toolCall of plannerResult.tool_calls ?? []) {
+        const result = await executeToolCall(toolCall, latestUserMessage, context);
+        toolResults.push(result);
+        appendSessionMessage(sessionId, {
+          id: crypto.randomUUID(),
+          role: 'tool',
+          content: JSON.stringify({
+            tool: result.tool,
+            args: result.args,
+            data: result.data
+          })
+        });
+      }
+
+      // Build structured doctor agent response
+      const doctorAgentContext: DoctorAgentContext = {
+        userMessage: latestUserMessage,
+        toolResults,
+        payer: context?.selectedIssuer,
+        drug: context?.selectedDrug
+      };
+
+      const response = buildDoctorAgentResponse(doctorAgentContext);
+      res.json(response);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      res.status(500).json({ error: message });
+    }
+  });
+
+  app.post('/api/chat/doctor-agent/markdown', async (req: Request, res: Response) => {
+    const { sessionId, messages, model, context } = req.body as {
+      sessionId?: string;
+      messages?: Array<{ role: 'user' | 'assistant'; content: string }>;
+      model?: string;
+      context?: ChatContext;
+    };
+
+    if (!sessionId) {
+      res.status(400).json({ error: 'sessionId is required' });
+      return;
+    }
+
+    const latestUserMessage = messages?.filter((message) => message.role === 'user').at(-1)?.content?.trim();
+    if (!latestUserMessage) {
+      res.status(400).json({ error: 'A user message is required' });
+      return;
+    }
+
+    appendSessionMessage(sessionId, {
+      id: crypto.randomUUID(),
+      role: 'user',
+      content: latestUserMessage
+    });
+
+    const selectedModel = model?.trim() || DEFAULT_MODEL;
+
+    try {
+      let plannerResult: PlannerResult;
+      try {
+        plannerResult = await planToolUse(sessionId, latestUserMessage, selectedModel, context);
+      } catch {
+        plannerResult = heuristicFallback(latestUserMessage, context);
+      }
+
+      const toolResults: ToolExecutionResult[] = [];
+      for (const toolCall of plannerResult.tool_calls ?? []) {
+        const result = await executeToolCall(toolCall, latestUserMessage, context);
+        toolResults.push(result);
+        appendSessionMessage(sessionId, {
+          id: crypto.randomUUID(),
+          role: 'tool',
+          content: JSON.stringify({
+            tool: result.tool,
+            args: result.args,
+            data: result.data
+          })
+        });
+      }
+
+      // Build structured doctor agent response
+      const doctorAgentContext: DoctorAgentContext = {
+        userMessage: latestUserMessage,
+        toolResults,
+        payer: context?.selectedIssuer,
+        drug: context?.selectedDrug
+      };
+
+      const response = buildDoctorAgentResponse(doctorAgentContext);
+      const markdown = formatDoctorAgentResponse(response);
+
+      res.type('text/markdown').send(markdown);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      res.status(500).json({ error: message });
+    }
   });
 
   app.post('/api/chat', async (req: Request, res: Response) => {
