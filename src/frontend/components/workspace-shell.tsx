@@ -38,8 +38,16 @@ export function WorkspaceShell({
       {pageNav && (
         <aside className="app-sidebar">
           <div className="app-sidebar-header">
-            <p className="eyebrow">POLICYPILOT</p>
-            <h1>Policy Intelligence</h1>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '12px' }}>
+              <img
+                src="/assets/policy-pilot-image.png"
+                alt="PolicyPilot"
+                style={{ height: '60px', width: 'auto' }}
+              />
+              <h2 style={{ margin: 0, fontSize: '18px', fontWeight: 600, color: '#1a1a1a' }}>
+                Policy Intelligence
+              </h2>
+            </div>
           </div>
           {pageNav}
         </aside>

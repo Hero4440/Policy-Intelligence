@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "generatedDate": "2026-04-12",
+  "generatedDate": "2026-05-10",
   "therapeuticArea": "Rheumatoid Arthritis, Oncology, Non-Oncology",
   "policies": [
     {
@@ -22,10 +22,10 @@
       "drug": "adalimumab"
     },
     {
-      "id": "cigna-infliximab-ra",
-      "file": "cigna-infliximab-ra.json",
-      "payer": "Cigna",
-      "drug": "infliximab"
+      "id": "aetna-etanercept-ra",
+      "file": "aetna-etanercept-ra.json",
+      "payer": "Aetna",
+      "drug": "etanercept"
     },
     {
       "id": "aetna-upadacitinib-ra",
@@ -34,16 +34,40 @@
       "drug": "upadacitinib"
     },
     {
-      "id": "bcbs-nc-bevacizumab-oncology",
-      "file": "bcbs-nc-bevacizumab-oncology.json",
-      "payer": "BCBS-NC",
-      "drug": "bevacizumab"
+      "id": "cigna-infliximab-ra",
+      "file": "cigna-infliximab-ra.json",
+      "payer": "Cigna",
+      "drug": "infliximab"
     },
     {
       "id": "cigna-rituximab-nononcology",
       "file": "cigna-rituximab-nononcology.json",
       "payer": "Cigna",
       "drug": "rituximab"
+    },
+    {
+      "id": "bcbs-nc-bevacizumab-oncology",
+      "file": "bcbs-nc-bevacizumab-oncology.json",
+      "payer": "BCBS-NC",
+      "drug": "bevacizumab"
+    },
+    {
+      "id": "aetna-herceptin",
+      "file": "aetna-herceptin.json",
+      "payer": "Aetna",
+      "drug": "trastuzumab"
+    },
+    {
+      "id": "cigna-herceptin-v7",
+      "file": "cigna-herceptin_v7.json",
+      "payer": "Cigna",
+      "drug": "trastuzumab"
+    },
+    {
+      "id": "uhc-herceptin",
+      "file": "uhc-herceptin.json",
+      "payer": "UHC",
+      "drug": "trastuzumab"
     }
   ]
 }

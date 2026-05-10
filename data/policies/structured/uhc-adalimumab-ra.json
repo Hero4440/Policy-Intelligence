@@ -2,11 +2,16 @@
   "id": "uhc-adalimumab-ra",
   "payer": "UHC",
   "plan": "Commercial",
-  "policyTitle": "UHC Adalimumab Prior Authorization Policy",
+  "policyTitle": "UnitedHealthcare Adalimumab Clinical Policy",
   "drug": {
     "brandName": "Humira",
     "genericName": "adalimumab",
-    "aliases": ["Amjevita", "Cyltezo", "Hadlima", "Hulio", "Hyrimoz", "Idacio", "Abrilada", "Simlandi", "Yuflyma", "Yusimry"]
+    "aliases": ["adalimumab", "humira"],
+    "products": [
+      { "name": "Humira", "tier": "preferred" },
+      { "name": "Hadlima", "tier": "preferred" },
+      { "name": "Amjevita", "tier": "non-preferred" }
+    ]
   },
   "indication": "Rheumatoid Arthritis",
   "coverageStatus": "covered-with-pa",
@@ -14,68 +19,32 @@
   "diagnosisRequirements": [
     {
       "icd10Codes": ["M05.*", "M06.*"],
-      "description": "Moderately to severely active rheumatoid arthritis",
-      "evidenceText": "Diagnosis of moderately to severely active rheumatoid arthritis",
-      "source": {
-        "document": "uhc-adalimumab-pa-policy.pdf",
-        "page": 2,
-        "section": "A. Rheumatoid Arthritis (RA) - 1. Initial Authorization"
-      }
+      "description": "Moderately to severely active RA",
+      "evidenceText": "Documented diagnosis of moderately to severely active rheumatoid arthritis.",
+      "source": { "document": "UHC_Adalimumab_2026.pdf", "page": 1, "section": "Clinical Criteria" }
     }
   ],
   "stepTherapy": [
     {
-      "drugName": "methotrexate, leflunomide, sulfasalazine, or hydroxychloroquine",
-      "dosage": "maximally indicated doses",
-      "duration": "3 months",
-      "failureCriteria": "inadequate response, contraindication, or clinically significant adverse effects",
-      "evidenceText": "History of failure to a 3 month trial of one non-biologic disease modifying anti-rheumatic drug (DMARD) [e.g., methotrexate, leflunomide, sulfasalazine, hydroxychloroquine] at the maximally indicated doses, unless contraindicated or clinically significant adverse effects are experienced",
-      "source": {
-        "document": "uhc-adalimumab-pa-policy.pdf",
-        "page": 2,
-        "section": "A. Rheumatoid Arthritis (RA) - 1. Initial Authorization - (2)(a)"
-      }
+      "drugName": "methotrexate",
+      "dosage": "Weekly max tolerated",
+      "duration": "6 weeks",
+      "failureCriteria": "inadequate response",
+      "evidenceText": "Trial of at least 6 weeks of methotrexate is required prior to biologics.",
+      "source": { "document": "UHC_Adalimumab_2026.pdf", "page": 2, "section": "Step Therapy" }
     }
   ],
   "otherRequirements": [
     {
-      "category": "prescriber qualification",
-      "requirement": "Prescribed by or in consultation with a rheumatologist",
-      "evidenceText": "Prescribed by or in consultation with a rheumatologist",
-      "source": {
-        "document": "uhc-adalimumab-pa-policy.pdf",
-        "page": 2,
-        "section": "A. Rheumatoid Arthritis (RA) - 1. Initial Authorization - (4)"
-      },
-      "ambiguous": false
-    },
-    {
-      "category": "combination therapy restriction",
-      "requirement": "Patient is not receiving adalimumab in combination with another systemic targeted immunomodulator for treatment of the same indication",
-      "evidenceText": "Patient is not receiving adalimumab in combination with another systemic targeted immunomodulator. [e.g., Enbrel (etanercept), Cimzia (certolizumab), Simponi (golimumab), Orencia (abatacept), Xeljanz (tofacitinib), Olumiant (baricitinib), Rinvoq (upadacitinib)] for treatment of the same indication.",
-      "source": {
-        "document": "uhc-adalimumab-pa-policy.pdf",
-        "page": 2,
-        "section": "A. Rheumatoid Arthritis (RA) - 1. Initial Authorization - (3)"
-      },
-      "ambiguous": false
-    },
-    {
-      "category": "state mandate variation",
-      "requirement": "For Connecticut, Kentucky and Mississippi business: 30-day trial required instead of 3-month trial",
-      "evidenceText": "For Connecticut, Kentucky and Mississippi business only a 30-day trial will be required.",
-      "source": {
-        "document": "uhc-adalimumab-pa-policy.pdf",
-        "page": 15,
-        "section": "Coverage Criteria footnote b"
-      },
-      "ambiguous": false
+      "category": "TB Test",
+      "requirement": "Negative TB test",
+      "evidenceText": "Member has been screened for latent tuberculosis infection.",
+      "source": { "document": "UHC_Adalimumab_2026.pdf", "page": 3, "section": "Requirements" }
     }
   ],
   "sourceDocument": {
-    "filename": "uhc-adalimumab-pa-policy.pdf",
-    "url": "https://www.uhcprovider.com/content/dam/provider/docs/public/prior-auth/drugs-pharmacy/commercial/a-g/PA-Med-Nec-Adalimumab.pdf",
-    "retrievalDate": "2026-04-04",
+    "filename": "UHC_Adalimumab_2026.pdf",
+    "retrievalDate": "2026-05-10",
     "effectiveDate": "2026-01-01"
   }
 }

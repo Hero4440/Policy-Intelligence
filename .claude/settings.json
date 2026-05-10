@@ -10,7 +10,10 @@
       "WebSearch",
       "Bash(pkill -f \"tsx watch src/mcp\")",
       "Bash(npm run *)",
-      "Bash(pkill -f \"vite\")"
+      "Bash(pkill -f \"vite\")",
+      "Bash(python3)",
+      "Bash(npm list *)",
+      "Bash(pip3 install *)"
     ]
   }
 }

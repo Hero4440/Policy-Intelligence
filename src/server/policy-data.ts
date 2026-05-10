@@ -17,6 +17,9 @@ import uhcEtanercept from '../../data/policies/structured/uhc-etanercept-ra.json
 import aetnaAdalimumab from '../../data/policies/structured/aetna-adalimumab-ra.json';
 import cignaInfliximab from '../../data/policies/structured/cigna-infliximab-ra.json';
 import aetnaUpadacitinib from '../../data/policies/structured/aetna-upadacitinib-ra.json';
+import aetnaHerceptin from '../../data/policies/structured/aetna-herceptin.json';
+import cignaHerceptin from '../../data/policies/structured/cigna-herceptin_v7.json';
+import uhcHerceptin from '../../data/policies/structured/uhc-herceptin.json';
 
 type CsvRow = Record<string, string>;
 
@@ -402,7 +405,10 @@ function loadCatalog(): CatalogData {
     uhcEtanercept,
     aetnaAdalimumab,
     cignaInfliximab,
-    aetnaUpadacitinib
+    aetnaUpadacitinib,
+    aetnaHerceptin,
+    cignaHerceptin,
+    uhcHerceptin
   ] as StructuredPolicyRecord[];
   const ingestedSnapshots = listIngestedSnapshots();
 

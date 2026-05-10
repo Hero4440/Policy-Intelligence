@@ -6,7 +6,24 @@
   "drug": {
     "brandName": "Humira",
     "genericName": "adalimumab",
-    "aliases": ["Amjevita", "Cyltezo", "Hadlima", "Hulio", "Hyrimoz", "Idacio", "Abrilada", "Simlandi", "Yuflyma", "Yusimry"]
+    "aliases": ["adalimumab", "humira"],
+    "products": [
+      {
+        "name": "Humira (40mg/0.8mL prefilled syringe)",
+        "tier": "preferred",
+        "aliases": []
+      },
+      {
+        "name": "Hyrimoz",
+        "tier": "preferred",
+        "aliases": ["adalimumab-adaz"]
+      },
+      {
+        "name": "Amjevita",
+        "tier": "non-preferred",
+        "aliases": ["adalimumab-atto"]
+      }
+    ]
   },
   "indication": "Rheumatoid Arthritis",
   "coverageStatus": "covered-with-pa",
@@ -14,78 +31,46 @@
   "diagnosisRequirements": [
     {
       "icd10Codes": ["M05.*", "M06.*"],
-      "description": "Active rheumatoid arthritis with evidence of moderate to severe disease activity",
-      "evidenceText": "Member has active rheumatoid arthritis with documented evidence of moderate to severe disease activity, including elevated inflammatory markers (ESR or CRP) or active joint involvement.",
+      "description": "Moderately to severely active RA",
+      "evidenceText": "Member must have a diagnosis of moderately to severely active rheumatoid arthritis (RA).",
       "source": {
-        "document": "Aetna Clinical Policy Bulletin 0726 - Biologic Response Modifiers",
-        "page": 12,
-        "section": "Rheumatoid Arthritis - Approval Criteria"
+        "document": "Aetna_RA_PA_Policy_2026.pdf",
+        "page": 2,
+        "section": "Clinical Criteria"
       }
     }
   ],
   "stepTherapy": [
     {
       "drugName": "methotrexate",
-      "dosage": "at least 15 mg weekly",
+      "dosage": "15mg/week",
       "duration": "3 months",
-      "failureCriteria": "inadequate response despite therapeutic dosing, or documented contraindication or intolerance",
-      "evidenceText": "Member has had an inadequate response to a trial of at least 3 months of methotrexate at a dose of at least 15 mg weekly (unless contraindicated or not tolerated). Inadequate response is defined as persistent moderate to severe disease activity.",
+      "failureCriteria": "inadequate response",
+      "evidenceText": "Documented trial and failure of at least a 3-month trial of methotrexate at 15mg or higher per week.",
       "source": {
-        "document": "Aetna Clinical Policy Bulletin 0726 - Biologic Response Modifiers",
-        "page": 13,
-        "section": "Rheumatoid Arthritis - Step Therapy"
+        "document": "Aetna_RA_PA_Policy_2026.pdf",
+        "page": 3,
+        "section": "Step Therapy Requirements"
       }
     }
   ],
   "otherRequirements": [
     {
       "category": "prescriber qualification",
-      "requirement": "Prescribed by a rheumatologist",
-      "evidenceText": "The medication is prescribed by a physician who specializes in rheumatology.",
+      "requirement": "Rheumatologist",
+      "evidenceText": "The medication must be prescribed by or in consultation with a board-certified rheumatologist.",
       "source": {
-        "document": "Aetna Clinical Policy Bulletin 0726 - Biologic Response Modifiers",
-        "page": 14,
+        "document": "Aetna_RA_PA_Policy_2026.pdf",
+        "page": 1,
         "section": "Prescriber Requirements"
       },
       "ambiguous": false
-    },
-    {
-      "category": "tuberculosis screening",
-      "requirement": "Tuberculosis screening required prior to initiation",
-      "evidenceText": "Member has been screened for tuberculosis infection prior to initiating therapy, and active tuberculosis has been ruled out or treated appropriately if present.",
-      "source": {
-        "document": "Aetna Clinical Policy Bulletin 0726 - Biologic Response Modifiers",
-        "page": 14,
-        "section": "Safety Requirements"
-      },
-      "ambiguous": false
-    },
-    {
-      "category": "laboratory monitoring",
-      "requirement": "Baseline laboratory tests within 3 months of initiation",
-      "evidenceText": "Member has had baseline laboratory evaluation including CBC, hepatic function panel, and assessment for hepatitis B within 3 months prior to therapy initiation.",
-      "source": {
-        "document": "Aetna Clinical Policy Bulletin 0726 - Biologic Response Modifiers",
-        "page": 15,
-        "section": "Laboratory Requirements"
-      },
-      "ambiguous": false
-    },
-    {
-      "category": "dosing and quantity limits",
-      "requirement": "Dosing must be consistent with FDA-approved labeling",
-      "evidenceText": "The requested dose and frequency are consistent with FDA-approved labeling or evidence-based practice guidelines. Quantity limits may apply per fill and per plan year.",
-      "source": {
-        "document": "Aetna Clinical Policy Bulletin 0726 - Biologic Response Modifiers",
-        "page": 16,
-        "section": "Dosing Requirements"
-      },
-      "ambiguous": true
     }
   ],
   "sourceDocument": {
-    "filename": "Aetna Clinical Policy Bulletin 0726 - Biologic Response Modifiers (Standard payer policy pattern)",
-    "retrievalDate": "2026-04-04",
+    "filename": "Aetna_RA_PA_Policy_2026.pdf",
+    "url": "https://aetna.com/policies/adalimumab-2026",
+    "retrievalDate": "2026-05-10",
     "effectiveDate": "2026-01-01"
   }
 }
