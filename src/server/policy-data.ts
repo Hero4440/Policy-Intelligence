@@ -329,7 +329,7 @@ function loadCatalog(): CatalogData {
   }
 
   const plansRows = readCsv('plans.csv');
-  const formularyRows = readCsv('query_ready_formulary.csv');
+  const formularyRows = readCsv('formulary_drugs.csv');
   const rulesRows = readCsv('coverage_rules_by_plan.csv');
 
   const plans = plansRows.map<PolicyPlan>((row) => ({
