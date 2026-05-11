@@ -4,7 +4,7 @@
     "builder": "dockerfile"
   },
   "deploy": {
-    "startCommand": "node --loader tsx/esm src/server/index.ts",
+    "startCommand": "node --import tsx/esm src/server/index.ts",
     "restartPolicyType": "on_failure",
     "restartPolicyMaxRetries": 5,
     "memoryMB": 512,
