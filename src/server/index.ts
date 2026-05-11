@@ -1,6 +1,6 @@
+import '../env-loader.js';
 import express from 'express';
 import cors from 'cors';
-import { existsSync } from 'fs';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import { createMcpApp } from '../mcp/index.js';

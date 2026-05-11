@@ -86,6 +86,48 @@ function stripCodeFences(content: string): string {
   return trimmed.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '').trim();
 }
 
+function generateLocalResponse(latestUserMessage: string, toolResults: ToolExecutionResult[]): string {
+  if (toolResults.length === 0) {
+    return 'I found no matching policies for your query. Try asking about specific drugs like adalimumab, rituximab, or etanercept, and their coverage requirements across payers.';
+  }
+
+  const lines: string[] = [];
+  lines.push('### Policy Coverage Summary\n');
+
+  for (const result of toolResults) {
+    if (result.tool === 'get_plan_drug_details' && result.data) {
+      const detail = result.data as any;
+      if (detail.coverageLabel) {
+        lines.push(`**Coverage Status:** ${detail.coverageLabel}\n`);
+      }
+      if (detail.requirementsSummary && Array.isArray(detail.requirementsSummary)) {
+        lines.push('**Requirements:**');
+        detail.requirementsSummary.forEach((req: string) => {
+          lines.push(`- ${req}`);
+        });
+        lines.push('');
+      }
+    } else if (result.tool === 'compare_drug_across_plans' || result.tool === 'which_plans_cover_drug') {
+      if (result.summary?.items) {
+        lines.push(`**${result.summary.title}:**`);
+        result.summary.items.forEach((item: string) => {
+          lines.push(`- ${item}`);
+        });
+        lines.push('');
+      }
+    } else if (result.tool === 'check_patient_readiness' && result.data) {
+      const readiness = result.data as any;
+      if (readiness.summary) {
+        lines.push(`**Patient Readiness:** ${readiness.summary.met}/${readiness.summary.total} criteria met (${readiness.summary.pct}%)\n`);
+      }
+    }
+  }
+
+  lines.push('\n*Note: This response was generated from structured policy data. For real-time AI analysis, please check your connection or try again.*');
+
+  return lines.join('\n').trim();
+}
+
 function heuristicFallback(latestUserMessage: string, context?: ChatContext): PlannerResult {
   const lowered = latestUserMessage.toLowerCase();
   const contextualDrug = context?.selectedDrug?.trim();
@@ -541,22 +583,36 @@ async function streamFinalAnswer(
     }
   ];
 
-  const readableStream = await geminiStream(promptMessages, model);
-  const reader = readableStream.getReader();
   let assistantText = '';
 
   try {
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
+    const readableStream = await geminiStream(promptMessages, model);
+    const reader = readableStream.getReader();
 
-      if (value) {
-        assistantText += value;
-        sseWrite(res, 'message_delta', { delta: value });
+    try {
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        if (value) {
+          assistantText += value;
+          sseWrite(res, 'message_delta', { delta: value });
+        }
       }
+    } finally {
+      reader.releaseLock();
     }
-  } finally {
-    reader.releaseLock();
+  } catch (error) {
+    const errorMsg = error instanceof Error ? error.message : String(error);
+    console.error('streamFinalAnswer error:', errorMsg);
+
+    // Check for API key or blocking related errors
+    if (errorMsg.includes('blocked') || errorMsg.includes('API key') || errorMsg.includes('not valid') || errorMsg.includes('PERMISSION_DENIED')) {
+      assistantText = generateLocalResponse(latestUserMessage, toolResults);
+      sseWrite(res, 'message_delta', { delta: assistantText });
+    } else {
+      throw error;
+    }
   }
 
   if (assistantText) {

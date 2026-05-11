@@ -1,3 +1,5 @@
+import '../env-loader.js';
+import { fileURLToPath } from 'url';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import { createMcpExpressApp } from '@modelcontextprotocol/sdk/server/express.js';
@@ -20,7 +22,6 @@ import { registerEvaluatePatientAgainstPolicy } from './tools/evaluate_patient_a
 import { registerGenerateNextSteps } from './tools/generate_next_steps.js';
 import { registerGetCaseSummary } from './tools/get_case_summary.js';
 import { getAllPolicies } from './policy_store/loader.js';
-import { fileURLToPath } from 'url';
 
 export function createMcpApp() {
   // No allowedHosts — we handle host validation ourselves to support rotating ngrok URLs

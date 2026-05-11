@@ -215,6 +215,7 @@ export async function geminiStream(
       errorMessage = `${errorMessage}: ${text || response.statusText}`;
     }
 
+    console.error('Gemini streaming API error:', { status: response.status, message: errorMessage });
     throw new Error(errorMessage);
   }
 
