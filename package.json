@@ -24,7 +24,8 @@
     "ingest:examples": "tsx scripts/ingest-example-policies.ts",
     "test:storage": "node --import tsx/esm tests/storage/storage-smoke.ts",
     "test:accessibility": "tsx tests/accessibility/contrast-test.ts",
-    "test:contrast": "tsx tests/accessibility/contrast-test.ts"
+    "test:contrast": "tsx tests/accessibility/contrast-test.ts",
+    "build": "npm run frontend:build"
   },
   "keywords": [],
   "author": "",
