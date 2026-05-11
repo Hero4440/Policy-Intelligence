@@ -1,7 +1,9 @@
-import { readFileSync, existsSync, mkdirSync, writeFileSync } from 'fs';
+import { readFileSync, existsSync, mkdirSync, createReadStream } from 'fs';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import { S3Client, GetObjectCommand } from '@aws-sdk/client-s3';
+import { Readable } from 'stream';
+import csvParser from 'csv-parser';
 import { normalizeDrugName } from '../../data/lookup/drug-aliases.ts';
 import type { PolicyRecord as StructuredPolicyRecord } from '../../data/schemas/policy.schema.ts';
 import { listIngestedSnapshots, type IngestedCoverageSnapshot } from './ingestion/store.js';
@@ -241,7 +243,7 @@ function parseCsv(text: string): CsvRow[] {
   );
 }
 
-async function downloadFromS3(fileName: string): Promise<string> {
+async function downloadFromS3Stream(fileName: string): Promise<Readable> {
   const endpoint = process.env.S3_ENDPOINT;
   const bucket = process.env.S3_BUCKET;
   const accessKey = process.env.S3_ACCESS_KEY;
@@ -266,31 +268,23 @@ async function downloadFromS3(fileName: string): Promise<string> {
   });
 
   const response = await s3Client.send(command);
-  const text = await response.Body?.transformToString() || '';
-  return text;
+  return response.Body as Readable;
 }
 
-async function ensureCsvFile(fileName: string): Promise<string> {
+async function getLocalOrS3Stream(fileName: string): Promise<Readable> {
   const fullPath = join(packageDir, fileName);
 
   if (existsSync(fullPath)) {
-    return readFileSync(fullPath, 'utf-8');
+    return createReadStream(fullPath);
   }
 
   try {
-    console.log(`Downloading ${fileName} from S3...`);
-    const content = await downloadFromS3(fileName);
-
-    if (!existsSync(packageDir)) {
-      mkdirSync(packageDir, { recursive: true });
-    }
-
-    writeFileSync(fullPath, content);
-    console.log(`Saved ${fileName} to ${fullPath}`);
-    return content;
+    console.log(`Streaming ${fileName} from S3...`);
+    const stream = await downloadFromS3Stream(fileName);
+    return stream;
   } catch (error) {
-    console.error(`Failed to download ${fileName} from S3:`, error);
-    throw new Error(`CSV file ${fileName} not available and could not be downloaded from S3`);
+    console.error(`Failed to get stream for ${fileName}:`, error);
+    throw new Error(`CSV file ${fileName} not available`);
   }
 }
 
@@ -299,8 +293,22 @@ function readCsv(fileName: string): CsvRow[] {
 }
 
 async function readCsvAsync(fileName: string): Promise<CsvRow[]> {
-  const content = await ensureCsvFile(fileName);
-  return parseCsv(content);
+  const stream = await getLocalOrS3Stream(fileName);
+  const rows: CsvRow[] = [];
+
+  return new Promise((resolve, reject) => {
+    stream
+      .pipe(csvParser())
+      .on('data', (row: CsvRow) => {
+        rows.push(row);
+      })
+      .on('end', () => {
+        resolve(rows);
+      })
+      .on('error', (error) => {
+        reject(error);
+      });
+  });
 }
 
 function asBool(value: string): boolean {
