@@ -22,6 +22,8 @@ import { normalizeDrugName } from '../../data/lookup/drug-aliases.js';
 import { DISCLAIMER } from '../mcp/matching/language.js';
 import { buildDoctorAgentResponse, type DoctorAgentContext } from './doctor-agent-integration.js';
 import { formatDoctorAgentResponse } from './doctor-agent-output.js';
+import { geminiChat, geminiStream } from './gemini-client.js';
+import { getDefaultModel } from './gemini-client.js';
 
 type ToolName =
   | 'which_plans_cover_drug'
@@ -62,14 +64,6 @@ type ChatContext = {
 };
 
 type ChatPayload = Array<{ role: 'system' | 'user' | 'assistant'; content: string }>;
-type OllamaMode = 'ollama' | 'openai';
-type OllamaChatResponse = { message?: { content?: string } };
-type OpenAiChatResponse = { choices?: Array<{ message?: { content?: string } }> };
-type OllamaStreamResponse = { message?: { content?: string }; done?: boolean };
-type OpenAiStreamResponse = { choices?: Array<{ delta?: { content?: string } }>; done?: boolean };
-
-const OLLAMA_BASE_URL = (process.env.OLLAMA_URL ?? 'http://127.0.0.1:11434').replace(/\/+$/, '');
-const DEFAULT_MODEL = process.env.OLLAMA_MODEL ?? 'llama3.1';
 
 function compactWhitespace(value: string): string {
   return value.replace(/\s+/g, ' ').trim();
@@ -82,123 +76,6 @@ function compactMessages(messages: ChatMessage[]): string {
     .join('\n');
 }
 
-function ollamaEndpointCandidates() {
-  const explicit = process.env.OLLAMA_URL;
-  if (explicit && /\/api\/chat$|\/v1\/chat\/completions$/.test(explicit)) {
-    return [explicit];
-  }
-
-  return [
-    `${OLLAMA_BASE_URL}/api/chat`,
-    `${OLLAMA_BASE_URL}/v1/chat/completions`
-  ];
-}
-
-async function resolveInstalledModel(requestedModel: string): Promise<string> {
-  try {
-    const response = await fetch(`${OLLAMA_BASE_URL}/api/tags`);
-    if (!response.ok) {
-      return requestedModel;
-    }
-
-    const payload = await response.json() as { models?: Array<{ name?: string; model?: string }> };
-    const installed = (payload.models ?? [])
-      .map((entry) => entry.name ?? entry.model)
-      .filter((name): name is string => Boolean(name));
-
-    if (installed.includes(requestedModel)) {
-      return requestedModel;
-    }
-
-    const prefixMatch = installed.find((name) => name.startsWith(`${requestedModel}:`));
-    if (prefixMatch) {
-      return prefixMatch;
-    }
-
-    if (requestedModel === DEFAULT_MODEL) {
-      const preferredFallbacks = ['llama3.1:8b', 'llama3.2:3b', 'llama3:8b'];
-      const fallback = preferredFallbacks.find((name) => installed.includes(name));
-      if (fallback) {
-        return fallback;
-      }
-    }
-  } catch {
-    return requestedModel;
-  }
-
-  return requestedModel;
-}
-
-async function fetchOllama(
-  bodyFactory: (mode: OllamaMode) => unknown
-) {
-  let lastStatus: number | undefined;
-  let lastError: Error | undefined;
-
-  for (const endpoint of ollamaEndpointCandidates()) {
-    const mode: OllamaMode = endpoint.includes('/v1/') ? 'openai' : 'ollama';
-
-    try {
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(bodyFactory(mode))
-      });
-
-      if (response.status === 404) {
-        lastStatus = response.status;
-        continue;
-      }
-
-      if (!response.ok) {
-        const text = await response.text();
-        throw new Error(`Ollama request failed with ${response.status}: ${text || response.statusText}`);
-      }
-
-      return { response, mode };
-    } catch (error) {
-      lastError = error instanceof Error ? error : new Error(String(error));
-    }
-  }
-
-  if (lastError) {
-    throw lastError;
-  }
-
-  throw new Error(`Ollama request failed with ${lastStatus ?? 'unknown status'}`);
-}
-
-async function ollamaChat(messages: ChatPayload, model: string) {
-  const resolvedModel = await resolveInstalledModel(model);
-  const { response, mode } = await fetchOllama(
-    (selectedMode) => selectedMode === 'openai'
-      ? {
-          model: resolvedModel,
-          stream: false,
-          response_format: { type: 'json_object' },
-          messages
-        }
-      : {
-          model: resolvedModel,
-          stream: false,
-          format: 'json',
-          messages
-        }
-  );
-
-  const payload = await response.json();
-  const content = mode === 'openai'
-    ? (payload as OpenAiChatResponse).choices?.[0]?.message?.content?.trim()
-    : (payload as OllamaChatResponse).message?.content?.trim();
-
-  if (!content) {
-    throw new Error('Ollama returned an empty response');
-  }
-
-  return content;
-}
 
 function stripCodeFences(content: string): string {
   const trimmed = content.trim();
@@ -303,7 +180,7 @@ async function planToolUse(
     `Latest user message: ${latestUserMessage}`
   ].join('\n');
 
-  const raw = await ollamaChat(
+  const raw = await geminiChat(
     [
       { role: 'system', content: plannerPrompt },
       { role: 'user', content: latestUserMessage }
@@ -609,7 +486,6 @@ async function streamFinalAnswer(
   context?: ChatContext
 ) {
   const session = getOrCreateSession(sessionId);
-  const resolvedModel = await resolveInstalledModel(model);
   const promptMessages: ChatPayload = [
     {
       role: 'system',
@@ -663,71 +539,22 @@ async function streamFinalAnswer(
     }
   ];
 
-  const { response, mode } = await fetchOllama(
-    (selectedMode) => selectedMode === 'openai'
-      ? {
-          model: resolvedModel,
-          stream: true,
-          messages: promptMessages
-        }
-      : {
-          model: resolvedModel,
-          stream: true,
-          messages: promptMessages
-        }
-  );
-
-  if (!response.body) {
-    throw new Error('Ollama streaming response was empty');
-  }
-
-  const decoder = new TextDecoder();
-  let pending = '';
+  const readableStream = await geminiStream(promptMessages, model);
+  const reader = readableStream.getReader();
   let assistantText = '';
 
-  for await (const chunk of response.body) {
-    pending += decoder.decode(chunk, { stream: true });
-    const lines = pending.split('\n');
-    pending = lines.pop() ?? '';
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
 
-    for (const line of lines) {
-      const trimmed = line.trim();
-      if (!trimmed) {
-        continue;
-      }
-
-      if (trimmed === 'data: [DONE]') {
-        appendSessionMessage(sessionId, {
-          id: crypto.randomUUID(),
-          role: 'assistant',
-          content: assistantText
-        });
-        sseWrite(res, 'message_done', { message: assistantText });
-        return;
-      }
-
-      const normalized = trimmed.startsWith('data:') ? trimmed.slice(5).trim() : trimmed;
-      const payload = JSON.parse(normalized);
-      const delta = mode === 'openai'
-        ? (payload as OpenAiStreamResponse).choices?.[0]?.delta?.content ?? ''
-        : (payload as OllamaStreamResponse).message?.content ?? '';
-
-      if (delta) {
-        assistantText += delta;
-        sseWrite(res, 'message_delta', { delta });
-      }
-
-      const isDone = mode === 'openai' ? false : Boolean((payload as OllamaStreamResponse).done);
-      if (isDone) {
-        appendSessionMessage(sessionId, {
-          id: crypto.randomUUID(),
-          role: 'assistant',
-          content: assistantText
-        });
-        sseWrite(res, 'message_done', { message: assistantText });
-        return;
+      if (value) {
+        assistantText += value;
+        sseWrite(res, 'message_delta', { delta: value });
       }
     }
+  } finally {
+    reader.releaseLock();
   }
 
   if (assistantText) {
@@ -774,7 +601,7 @@ export function registerChatRoutes(app: Express) {
       content: latestUserMessage
     });
 
-    const selectedModel = model?.trim() || DEFAULT_MODEL;
+    const selectedModel = model?.trim() || getDefaultModel();
 
     try {
       let plannerResult: PlannerResult;
@@ -840,7 +667,7 @@ export function registerChatRoutes(app: Express) {
       content: latestUserMessage
     });
 
-    const selectedModel = model?.trim() || DEFAULT_MODEL;
+    const selectedModel = model?.trim() || getDefaultModel();
 
     try {
       let plannerResult: PlannerResult;
@@ -913,7 +740,7 @@ export function registerChatRoutes(app: Express) {
     res.setHeader('Connection', 'keep-alive');
     res.flushHeaders();
 
-    const selectedModel = model?.trim() || DEFAULT_MODEL;
+    const selectedModel = model?.trim() || getDefaultModel();
 
     try {
       let plannerResult: PlannerResult;

@@ -382,7 +382,7 @@ export function registerAskPolicyQuestion(server: McpServer): void {
         } catch (error) {
           const message = error instanceof Error ? error.message : 'Unknown LLM error';
           return buildErrorResponse(message, {
-            hint: 'Check that Ollama is running and that LOCAL_LLM_MODEL or OLLAMA_MODEL points to an installed local model.',
+            hint: 'Check that GEMINI_KEY_API environment variable is set.',
             available_payers: uniqueSorted(getAllPolicies().map(policy => policy.payer)),
             available_drugs: uniqueSorted(getAllPolicies().map(policy => policy.drug.genericName))
           });

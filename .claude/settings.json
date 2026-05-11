@@ -13,7 +13,12 @@
       "Bash(pkill -f \"vite\")",
       "Bash(python3)",
       "Bash(npm list *)",
-      "Bash(pip3 install *)"
+      "Bash(pip3 install *)",
+      "Bash(npx tsc *)",
+      "Bash(npx tsx *)",
+      "Bash(cat)",
+      "Read(//tmp/**)",
+      "Bash(curl -s --max-time 30 -X POST http://localhost:3000/api/chat -H 'Content-Type: application/json' -d '{ *)"
     ]
   }
 }

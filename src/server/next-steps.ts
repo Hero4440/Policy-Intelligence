@@ -1,5 +1,6 @@
 import type { CoverageEvaluation, EvaluationChecklistItem, EvaluationPolicyEvidence } from '../storage/types.js';
 import { getEvaluation } from '../storage/evaluation-store.js';
+import { geminiChat, getDefaultModel } from './gemini-client.js';
 
 export interface MissingDocItem {
   criterion: string;
@@ -46,12 +47,7 @@ export class EvaluationNotFoundError extends Error {
   }
 }
 
-type LocalLlmMode = 'ollama' | 'openai';
-type OllamaChatResponse = { message?: { content?: string } };
-type OpenAiChatResponse = { choices?: Array<{ message?: { content?: string } }> };
-
-const OLLAMA_BASE_URL = (process.env.OLLAMA_URL ?? 'http://127.0.0.1:11434').replace(/\/+$/, '');
-const DEFAULT_MODEL = process.env.LOCAL_LLM_MODEL ?? process.env.OLLAMA_MODEL ?? 'llama3.1';
+type ChatPayload = Array<{ role: 'system' | 'user' | 'assistant'; content: string }>;
 
 function readEvaluation(evalId: string): CoverageEvaluation | null {
   return getEvaluation(evalId);
@@ -126,129 +122,19 @@ function buildClinicNextSteps(evaluation: CoverageEvaluation, missingDocsList: M
   return steps;
 }
 
-function ollamaEndpointCandidates(): string[] {
-  const explicit = process.env.OLLAMA_URL;
-  if (explicit && /\/api\/chat$|\/v1\/chat\/completions$/.test(explicit)) {
-    return [explicit];
-  }
-
-  return [
-    `${OLLAMA_BASE_URL}/api/chat`,
-    `${OLLAMA_BASE_URL}/v1/chat/completions`
+async function callGemini(prompt: string): Promise<string> {
+  const messages: ChatPayload = [
+    {
+      role: 'system',
+      content: 'You generate concise policy workflow summaries and structured JSON when requested. Follow the user prompt exactly.'
+    },
+    {
+      role: 'user',
+      content: prompt
+    }
   ];
-}
 
-async function resolveInstalledModel(requestedModel: string): Promise<string> {
-  try {
-    const response = await fetch(`${OLLAMA_BASE_URL}/api/tags`);
-    if (!response.ok) {
-      return requestedModel;
-    }
-
-    const payload = await response.json() as { models?: Array<{ name?: string; model?: string }> };
-    const installed = (payload.models ?? [])
-      .map((entry) => entry.name ?? entry.model)
-      .filter((name): name is string => Boolean(name));
-
-    if (installed.includes(requestedModel)) {
-      return requestedModel;
-    }
-
-    const prefixMatch = installed.find((name) => name.startsWith(`${requestedModel}:`));
-    if (prefixMatch) {
-      return prefixMatch;
-    }
-
-    const fallback = ['llama3.1:8b', 'llama3.2:3b', 'llama3:8b'].find((name) => installed.includes(name));
-    if (fallback) {
-      return fallback;
-    }
-  } catch {
-    return requestedModel;
-  }
-
-  return requestedModel;
-}
-
-async function callLlama(prompt: string): Promise<string> {
-  const resolvedModel = await resolveInstalledModel(DEFAULT_MODEL);
-  let lastStatus: number | undefined;
-  let lastError: Error | undefined;
-
-  for (const endpoint of ollamaEndpointCandidates()) {
-    const mode: LocalLlmMode = endpoint.includes('/v1/') ? 'openai' : 'ollama';
-
-    try {
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(
-          mode === 'openai'
-            ? {
-                model: resolvedModel,
-                stream: false,
-                temperature: 0.2,
-                messages: [
-                  {
-                    role: 'system',
-                    content: 'You generate concise policy workflow summaries and structured JSON when requested. Follow the user prompt exactly.'
-                  },
-                  {
-                    role: 'user',
-                    content: prompt
-                  }
-                ]
-              }
-            : {
-                model: resolvedModel,
-                stream: false,
-                options: { temperature: 0.2 },
-                messages: [
-                  {
-                    role: 'system',
-                    content: 'You generate concise policy workflow summaries and structured JSON when requested. Follow the user prompt exactly.'
-                  },
-                  {
-                    role: 'user',
-                    content: prompt
-                  }
-                ]
-              }
-        )
-      });
-
-      if (response.status === 404) {
-        lastStatus = response.status;
-        continue;
-      }
-
-      if (!response.ok) {
-        const text = await response.text();
-        throw new Error(`Local Llama request failed with ${response.status}: ${text || response.statusText}`);
-      }
-
-      const payload = await response.json();
-      const content = mode === 'openai'
-        ? (payload as OpenAiChatResponse).choices?.[0]?.message?.content?.trim()
-        : (payload as OllamaChatResponse).message?.content?.trim();
-
-      if (!content) {
-        throw new Error('Local Llama returned an empty response');
-      }
-
-      return content;
-    } catch (error) {
-      lastError = error instanceof Error ? error : new Error(String(error));
-    }
-  }
-
-  if (lastError) {
-    throw lastError;
-  }
-
-  throw new Error(`Local Llama request failed with ${lastStatus ?? 'unknown status'}`);
+  return await geminiChat(messages, getDefaultModel());
 }
 
 function buildPatientExplanationFallback(evaluation: CoverageEvaluation, missingDocsList: MissingDocItem[]): string {
@@ -295,7 +181,7 @@ async function buildPatientExplanation(
   const prompt = `You are a patient care coordinator. Given this coverage evaluation result, write a friendly 2-3 paragraph explanation for the patient. Coverage status: ${evaluation.coverageStatus}. Drug: ${evaluation.requestedDrug || evaluation.policyTitle || evaluation.policyId}. Payer: ${evaluation.payer || 'Unknown payer'}. Missing items: ${missingDocsList.map((item) => item.criterion).join(', ') || 'none'}. Be empathetic and avoid medical jargon.`;
 
   try {
-    return await callLlama(prompt);
+    return await callGemini(prompt);
   } catch {
     return buildPatientExplanationFallback(evaluation, missingDocsList);
   }
@@ -307,10 +193,10 @@ async function buildPayerAnalystBreakdown(
   const prompt = `You are a payer analyst. Given this coverage evaluation, write a concise clinical analyst narrative. For each criterion, note status and what evidence satisfies it. Respond in JSON with keys: summary (string), criteriaAnalysis (array of {criterion, status, policyEvidence: {snippet, document, page, section}, clinicAction}). Evaluation: ${JSON.stringify(evaluation)}`;
 
   try {
-    const raw = await callLlama(prompt);
+    const raw = await callGemini(prompt);
     const parsed = JSON.parse(raw) as Partial<PayerAnalystBreakdown>;
     if (!parsed.summary || !Array.isArray(parsed.criteriaAnalysis)) {
-      throw new Error('Llama response missing required keys');
+      throw new Error('Gemini response missing required keys');
     }
 
     return {
@@ -355,7 +241,7 @@ async function buildPayerAnalystBreakdown(
     };
   } catch {
     try {
-      const summary = await callLlama(
+      const summary = await callGemini(
         `You are a payer analyst. Write a one-paragraph summary of which criteria apply in this evaluation, what evidence is still needed, and the likely next payer-facing action. Evaluation: ${JSON.stringify(evaluation)}`
       );
       const fallback = buildAnalystFallback(evaluation);
