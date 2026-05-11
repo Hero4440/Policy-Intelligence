@@ -6,6 +6,9 @@ dist/
 .env.local.*
 .DS_Store
 **/.DS_Store
+__pycache__/
+**/__pycache__/
+*.pyc
 **/.env.local
 **/.env.local.*
 /data/ingestion/db.json
