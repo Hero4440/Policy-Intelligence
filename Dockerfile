@@ -36,8 +36,8 @@ COPY --from=builder /app/dist ./dist
 # Copy source code (needed for tsx runtime)
 COPY src ./src
 
-# Create data directory for persistent storage
-RUN mkdir -p /app/data
+# Copy all data (policies, schemas, lookups, demo patients, evaluations, etc.)
+COPY data ./data
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
