@@ -1,9 +1,22 @@
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'fs';
-import { join } from 'path';
-import demoPatient01 from '../../data/patients/demo-patients/patient-01-full-match.json';
-import demoPatient02 from '../../data/patients/demo-patients/patient-02-partial-match.json';
-import demoPatient03 from '../../data/patients/demo-patients/patient-03-poor-match.json';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
 import { normalizeDrugName } from '../../data/lookup/drug-aliases.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+function loadDemoPatients() {
+  const patient01Path = join(__dirname, '../../data/patients/demo-patients/patient-01-full-match.json');
+  const patient02Path = join(__dirname, '../../data/patients/demo-patients/patient-02-partial-match.json');
+  const patient03Path = join(__dirname, '../../data/patients/demo-patients/patient-03-poor-match.json');
+
+  return {
+    patient01: JSON.parse(readFileSync(patient01Path, 'utf-8')),
+    patient02: JSON.parse(readFileSync(patient02Path, 'utf-8')),
+    patient03: JSON.parse(readFileSync(patient03Path, 'utf-8'))
+  };
+}
 import { extractPatientData } from '../mcp/fhir/extractors.js';
 import { hasEvaluationsForCase } from './evaluation-store.js';
 import { PATIENTS_DIR, ensureDataDirectories } from './paths.js';
@@ -479,10 +492,11 @@ export function ensureSeedPatientCases(): void {
     return;
   }
 
+  const demoPatients = loadDemoPatients();
   const seeds = [
     {
       caseId: 'seed-sarah-anderson',
-      bundle: demoPatient01,
+      bundle: demoPatients.patient01,
       patientName: 'Sarah Anderson',
       payer: 'UHC',
       diagnosis: 'Rheumatoid arthritis with rheumatoid factor',
@@ -491,7 +505,7 @@ export function ensureSeedPatientCases(): void {
     },
     {
       caseId: 'seed-michael-chen',
-      bundle: demoPatient02,
+      bundle: demoPatients.patient02,
       patientName: 'Michael Chen',
       payer: 'UHC',
       diagnosis: 'Rheumatoid arthritis, unspecified',
@@ -500,7 +514,7 @@ export function ensureSeedPatientCases(): void {
     },
     {
       caseId: 'seed-linda-washington',
-      bundle: demoPatient03,
+      bundle: demoPatients.patient03,
       patientName: 'Linda Washington',
       payer: 'Aetna',
       diagnosis: 'Rheumatoid arthritis, unspecified',

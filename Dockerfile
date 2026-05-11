@@ -11,6 +11,7 @@ RUN npm ci
 
 # Copy source code
 COPY src ./src
+COPY data ./data
 COPY index.html ./
 COPY tsconfig.json ./
 COPY vite.config.ts ./
