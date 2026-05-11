@@ -8,10 +8,16 @@ dist/
 **/.DS_Store
 **/.env.local
 **/.env.local.*
-/data/
+/data/ingestion/db.json
 docs/hackaathon/
 docs/hackaathon2/
-data/ingestion/db.json
+# Allow essential data directories for production
+!data/
+!data/policies/
+!data/patients/
+!data/schemas/
+!data/lookup/
+!data/evaluations/
 
 .claude/
 .kiro/
