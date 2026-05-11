@@ -173,7 +173,7 @@ async function planToolUse(
     '- Use the current workspace context when the user asks follow-up questions without repeating the drug or plan.',
     '- Never fabricate plan IDs or criteria. If the plan is ambiguous, use compare or list tools first.',
     '',
-    `Known issuers: ${listIssuers().join(', ')}`,
+    `Known issuers: ${(await listIssuers()).join(', ')}`,
     `Current workspace context:\n${formatContext(context)}`,
     `Recent conversation:\n${compactMessages(session.messages)}`,
     '',
@@ -191,7 +191,7 @@ async function planToolUse(
   return JSON.parse(stripCodeFences(raw)) as PlannerResult;
 }
 
-function inferDrug(args: Record<string, unknown>, latestUserMessage: string, context?: ChatContext): string {
+async function inferDrug(args: Record<string, unknown>, latestUserMessage: string, context?: ChatContext): Promise<string> {
   const direct = typeof args.drug === 'string' ? compactWhitespace(args.drug) : '';
   if (direct) {
     return direct;
@@ -201,7 +201,7 @@ function inferDrug(args: Record<string, unknown>, latestUserMessage: string, con
     return compactWhitespace(context.selectedDrug);
   }
 
-  const suggested = searchDrugs(latestUserMessage, 1)[0];
+  const suggested = (await searchDrugs(latestUserMessage, 1))[0];
   return suggested || compactWhitespace(latestUserMessage);
 }
 
@@ -242,13 +242,13 @@ async function resolvePlanIdFromArgs(args: Record<string, unknown>, drug: string
 
 async function executeToolCall(toolCall: ToolCall, latestUserMessage: string, context?: ChatContext): Promise<ToolExecutionResult> {
   const args = toolCall.arguments ?? {};
-  const drug = inferDrug(args, latestUserMessage, context);
+  const drug = await inferDrug(args, latestUserMessage, context);
   const issuer = inferIssuer(args, context);
 
   switch (toolCall.tool) {
     case 'list_drugs': {
       const query = typeof args.query === 'string' ? args.query : latestUserMessage;
-      const drugs = searchDrugs(query);
+      const drugs = await searchDrugs(query);
       return {
         tool: toolCall.tool,
         args: { query },
@@ -261,7 +261,7 @@ async function executeToolCall(toolCall: ToolCall, latestUserMessage: string, co
     }
 
     case 'list_issuers': {
-      const issuers = listIssuers();
+      const issuers = await listIssuers();
       return {
         tool: toolCall.tool,
         args: {},
@@ -305,7 +305,7 @@ async function executeToolCall(toolCall: ToolCall, latestUserMessage: string, co
     }
 
     case 'get_change_watch': {
-      const changeWatch = getChangeWatch(drug, issuer);
+      const changeWatch = await getChangeWatch(drug, issuer);
       return {
         tool: toolCall.tool,
         args: { drug, issuer: issuer ?? null },
@@ -321,7 +321,7 @@ async function executeToolCall(toolCall: ToolCall, latestUserMessage: string, co
       const session = getOrCreateSession('');  // We'll get session from context
       const patientId = typeof args.patientId === 'string' ? args.patientId.trim() : '';
       const payer = typeof args.payer === 'string' ? args.payer.trim() : inferIssuer(args, context) || '';
-      const drugForReadiness = inferDrug(args, latestUserMessage, context);
+      const drugForReadiness = await inferDrug(args, latestUserMessage, context);
       const genericDrug = normalizeDrugName(drugForReadiness);
 
       // Try to find a matching policy
@@ -423,7 +423,7 @@ async function executeToolCall(toolCall: ToolCall, latestUserMessage: string, co
       if (!planId) {
         const matches = await compareDrugAcrossPlans(drug, issuer);
         if (matches.length === 1) {
-          const detail = getPlanDrugDetail(matches[0].planId, drug);
+          const detail = await getPlanDrugDetail(matches[0].planId, drug);
           if (!detail) {
             throw new Error('No plan detail found');
           }
@@ -452,7 +452,7 @@ async function executeToolCall(toolCall: ToolCall, latestUserMessage: string, co
         };
       }
 
-      const detail = getPlanDrugDetail(planId, drug);
+      const detail = await getPlanDrugDetail(planId, drug);
       if (!detail) {
         throw new Error(`No detail found for ${planId} and ${drug}`);
       }
