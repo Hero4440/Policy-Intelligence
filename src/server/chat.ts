@@ -273,7 +273,8 @@ async function executeToolCall(toolCall: ToolCall, latestUserMessage: string, co
     }
 
     case 'which_plans_cover_drug': {
-      const matches = compareDrugAcrossPlans(drug, issuer).filter((match) => match.coveredFlag);
+      const allMatches = await compareDrugAcrossPlans(drug, issuer);
+      const matches = allMatches.filter((match) => match.coveredFlag);
       return {
         tool: toolCall.tool,
         args: { drug, issuer: issuer ?? null },
@@ -288,7 +289,7 @@ async function executeToolCall(toolCall: ToolCall, latestUserMessage: string, co
     }
 
     case 'compare_drug_across_plans': {
-      const matches = compareDrugAcrossPlans(drug, issuer);
+      const matches = await compareDrugAcrossPlans(drug, issuer);
       return {
         tool: toolCall.tool,
         args: { drug, issuer: issuer ?? null },
