@@ -18,7 +18,6 @@ dist
 .env.development
 coverage
 tests
+docs
 scripts
 .planning
-# Keep docs directory for production (contains formulary data)
-# docs

@@ -12,7 +12,6 @@ RUN npm ci
 # Copy source code
 COPY src ./src
 COPY data ./data
-COPY docs ./docs
 COPY index.html ./
 COPY tsconfig.json ./
 COPY vite.config.ts ./
@@ -37,11 +36,8 @@ COPY --from=builder /app/dist ./dist
 # Copy source code (needed for tsx runtime)
 COPY src ./src
 
-# Copy all data (policies, schemas, lookups, demo patients, evaluations, etc.)
+# Copy all data (policies, schemas, lookups, demo patients, evaluations, formulary CSVs, etc.)
 COPY data ./data
-
-# Copy docs (includes insurance_hackathon_final_data_package with formulary data)
-COPY docs ./docs
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \

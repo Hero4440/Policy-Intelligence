@@ -180,7 +180,7 @@ interface CatalogData {
 }
 
 const projectRoot = join(__dirname, '../..');
-const packageDir = join(projectRoot, 'docs/hackaathon/insurance_hackathon_final_data_package');
+const packageDir = join(projectRoot, 'data/formulary');
 
 let cache: CatalogData | null = null;
 
