@@ -115,11 +115,8 @@ export function ChatView() {
   const [error, setError] = useState<string | null>(null);
   const [activeEvidence, setActiveEvidence] = useState<{ title: string; evidence: PolicyEvidenceRef[] } | null>(null);
   const [suggestedQuestions, setSuggestedQuestions] = useState<string[]>(() => getContextualSuggestions([]));
-  const [isDragging, setIsDragging] = useState(false);
-  const [uploadStatus, setUploadStatus] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
@@ -134,65 +131,6 @@ export function ChatView() {
   }, [input]);
 
   const hasSidebar = useMemo(() => Boolean(activeEvidence && activeEvidence.evidence.length > 0), [activeEvidence]);
-
-  async function handleFileUpload(files: FileList | null) {
-    if (!files || files.length === 0) return;
-
-    const file = files[0];
-    
-    // Validate file type
-    if (!file.name.endsWith('.json')) {
-      setError('Please upload a JSON file (FHIR patient bundle or policy JSON)');
-      return;
-    }
-
-    setUploadStatus(`Uploading ${file.name}...`);
-    setError(null);
-
-    try {
-      const formData = new FormData();
-      formData.append('file', file);
-
-      const response = await fetch('/api/upload/json', {
-        method: 'POST',
-        body: formData
-      });
-
-      if (!response.ok) {
-        const payload = await response.json().catch(() => ({ error: `Upload failed: ${response.status}` }));
-        throw new Error(typeof payload.error === 'string' ? payload.error : `Upload failed: ${response.status}`);
-      }
-
-      const result = await response.json();
-      setUploadStatus(`✓ Successfully uploaded ${file.name}`);
-      
-      // Clear status after 3 seconds
-      setTimeout(() => setUploadStatus(null), 3000);
-    } catch (uploadError) {
-      setError(uploadError instanceof Error ? uploadError.message : 'File upload failed');
-      setUploadStatus(null);
-    }
-  }
-
-  function handleDragOver(event: React.DragEvent<HTMLDivElement>) {
-    event.preventDefault();
-    setIsDragging(true);
-  }
-
-  function handleDragLeave(event: React.DragEvent<HTMLDivElement>) {
-    event.preventDefault();
-    setIsDragging(false);
-  }
-
-  function handleDrop(event: React.DragEvent<HTMLDivElement>) {
-    event.preventDefault();
-    setIsDragging(false);
-    handleFileUpload(event.dataTransfer.files);
-  }
-
-  function handleFileInputChange(event: React.ChangeEvent<HTMLInputElement>) {
-    handleFileUpload(event.target.files);
-  }
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -386,38 +324,6 @@ export function ChatView() {
             <p className="eyebrow">Chat</p>
             <h2>Ask natural-language questions about policies</h2>
           </div>
-        </div>
-
-        {/* File Upload Section */}
-        <div 
-          className={`chat-upload-zone${isDragging ? ' chat-upload-zone-dragging' : ''}`}
-          onDragOver={handleDragOver}
-          onDragLeave={handleDragLeave}
-          onDrop={handleDrop}
-        >
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept=".json"
-            onChange={handleFileInputChange}
-            style={{ display: 'none' }}
-          />
-          <button
-            type="button"
-            className="chat-upload-btn"
-            onClick={() => fileInputRef.current?.click()}
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M17 8L12 3L7 8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M12 3V15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-            Upload JSON
-          </button>
-          <p className="chat-upload-hint">
-            Drop FHIR patient bundles or policy JSON files here, or click Upload JSON above.
-          </p>
-          {uploadStatus && <p className="chat-upload-status">{uploadStatus}</p>}
         </div>
 
         <div className="chat-messages">
