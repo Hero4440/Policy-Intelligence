@@ -172,7 +172,7 @@ function getKnownDrugLexicon(): string[] {
   ];
 
   try {
-    const seedRows = parseCsv(readFileSync(join(packageDir, 'query_ready_formulary.csv'), 'utf-8'));
+    const seedRows = parseCsv(readFileSync(join(packageDir, 'formulary_drugs.csv'), 'utf-8'));
     const seedDrugs = seedRows
       .map((row) => compactWhitespace(row.drug_name_display || ''))
       .filter((drug) => drug.length >= 5);
