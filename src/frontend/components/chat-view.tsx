@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { marked } from 'marked';
 import { PolicyEvidencePanel } from './policy-evidence-panel.js';
 import type { PolicyEvidenceRef } from '../data/policies.js';
 
@@ -426,7 +427,14 @@ export function ChatView() {
 
           {messages.map((message) => (
             <div key={message.id} className={`chat-message chat-message-${message.role}`}>
-              <p>{message.content}</p>
+              {message.role === 'assistant' ? (
+                <div
+                  className="chat-markdown"
+                  dangerouslySetInnerHTML={{ __html: marked(message.content) }}
+                />
+              ) : (
+                <p>{message.content}</p>
+              )}
               {message.role === 'assistant' && message.evidence && message.evidence.length > 0 && (
                 <button
                   type="button"
