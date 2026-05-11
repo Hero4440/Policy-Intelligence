@@ -14,9 +14,9 @@ import {
 } from './paths.js';
 import type { PolicyIndex, PolicyIndexEntry, PolicyRecord, PolicyVersion } from './types.js';
 
-function rebuildAndSaveIndex(entries: PolicyIndexEntry[]): void {
+function rebuildAndSaveIndex(entries: PolicyIndexEntry[], preserveTimestamp?: string): void {
   const index: PolicyIndex = {
-    updatedAt: new Date().toISOString(),
+    updatedAt: preserveTimestamp ?? new Date().toISOString(),
     policies: [...entries].sort((a, b) => a.policyId.localeCompare(b.policyId))
   };
   const tmpPath = `${POLICY_INDEX_PATH}.tmp`;
@@ -86,7 +86,18 @@ export function loadStorageOnStartup(): void {
   }
 
   replaceCurrentPolicyCache(cacheEntries);
-  rebuildAndSaveIndex(indexEntries);
+  // Load existing index to preserve updatedAt timestamp
+  const existingIndex = (() => {
+    try {
+      if (existsSync(POLICY_INDEX_PATH)) {
+        return JSON.parse(readFileSync(POLICY_INDEX_PATH, 'utf-8')) as PolicyIndex;
+      }
+    } catch {
+      // If index is corrupted, rebuild with new timestamp
+    }
+    return null;
+  })();
+  rebuildAndSaveIndex(indexEntries, existingIndex?.updatedAt);
   console.error('[startup] index rebuilt:', indexEntries.length, 'policies');
   console.error('[startup] loaded:', cacheEntries.length, 'policies from disk');
 }
