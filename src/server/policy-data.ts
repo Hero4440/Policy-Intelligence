@@ -186,6 +186,7 @@ const projectRoot = join(__dirname, '../..');
 const packageDir = join(projectRoot, 'data/formulary');
 
 let cache: CatalogData | null = null;
+let loadingPromise: Promise<CatalogData> | null = null;
 
 function parseCsv(text: string): CsvRow[] {
   const rows: string[][] = [];
@@ -394,9 +395,14 @@ async function loadCatalog(): Promise<CatalogData> {
     return cache;
   }
 
-  const plansRows = await readCsvAsync('plans.csv');
-  const formularyRows = await readCsvAsync('query_ready_formulary.csv');
-  const rulesRows = await readCsvAsync('coverage_rules_by_plan.csv');
+  if (loadingPromise) {
+    return loadingPromise;
+  }
+
+  loadingPromise = (async () => {
+    const plansRows = await readCsvAsync('plans.csv');
+    const formularyRows = await readCsvAsync('query_ready_formulary.csv');
+    const rulesRows = await readCsvAsync('coverage_rules_by_plan.csv');
 
   const plans = plansRows.map<PolicyPlan>((row) => ({
     planId: row.plan_id,
@@ -482,19 +488,22 @@ async function loadCatalog(): Promise<CatalogData> {
     rulesByPlan.set(row.plan_id, existing);
   }
 
-  const structuredPolicies = loadStructuredPolicies();
-  const ingestedSnapshots = listIngestedSnapshots();
+    const structuredPolicies = loadStructuredPolicies();
+    const ingestedSnapshots = listIngestedSnapshots();
 
-  cache = {
-    plans,
-    formularyRows: normalizedFormularyRows,
-    rulesByPlan,
-    plansById,
-    structuredPolicies,
-    ingestedSnapshots
-  };
+    cache = {
+      plans,
+      formularyRows: normalizedFormularyRows,
+      rulesByPlan,
+      plansById,
+      structuredPolicies,
+      ingestedSnapshots
+    };
 
-  return cache;
+    return cache;
+  })();
+
+  return loadingPromise;
 }
 
 function aggregateFormularyMatches(rows: FormularyRow[], plansById: Map<string, PolicyPlan>, drugQuery: string): PolicyCoverageMatch[] {
