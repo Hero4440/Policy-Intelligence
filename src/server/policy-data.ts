@@ -277,16 +277,21 @@ async function ensureCsvFile(fileName: string): Promise<string> {
     return readFileSync(fullPath, 'utf-8');
   }
 
-  console.log(`Downloading ${fileName} from S3...`);
-  const content = await downloadFromS3(fileName);
+  try {
+    console.log(`Downloading ${fileName} from S3...`);
+    const content = await downloadFromS3(fileName);
 
-  if (!existsSync(packageDir)) {
-    mkdirSync(packageDir, { recursive: true });
+    if (!existsSync(packageDir)) {
+      mkdirSync(packageDir, { recursive: true });
+    }
+
+    writeFileSync(fullPath, content);
+    console.log(`Saved ${fileName} to ${fullPath}`);
+    return content;
+  } catch (error) {
+    console.error(`Failed to download ${fileName} from S3:`, error);
+    throw new Error(`CSV file ${fileName} not available and could not be downloaded from S3`);
   }
-
-  writeFileSync(fullPath, content);
-  console.log(`Saved ${fileName} to ${fullPath}`);
-  return content;
 }
 
 function readCsv(fileName: string): CsvRow[] {
