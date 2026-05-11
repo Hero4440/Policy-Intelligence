@@ -1,0 +1,280 @@
+╔════════════════════════════════════════════════════════════════════════════╗
+║                    🚀 DEPLOY NOW - ACTION ITEMS                            ║
+║                    PolicyPilot Hackathon Submission                        ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+DEADLINE: May 11, 2026 at 11:00 PM ET (2 days away)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📋 PHASE 1: RAILWAY DEPLOYMENT (START NOW - 2-3 hours)
+
+□ Step 1: Read RAILWAY_QUICK_START.md (10 min)
+   File: /RAILWAY_QUICK_START.md
+
+□ Step 2: Create Railway Account
+   → Go to railway.app
+   → Sign up with GitHub
+   → Return to this checklist
+
+□ Step 3: Deploy to Railway
+   → Log into railway.app dashboard
+   → Click "Create new project"
+   → Select "Deploy from GitHub"
+   → Connect GitHub account
+   → Select "Policy-Intelligence" repo
+   → Click "Add Service"
+   → Wait for auto-build (3-5 minutes)
+
+□ Step 4: Add Environment Variables
+   → In Railway dashboard: Variables tab
+   → Add three variables:
+      GEMINI_KEY_API = [paste from .env.local]
+      NODE_ENV = production
+      PORT = 3000
+   → Click "Add"
+
+□ Step 5: Get Public URL
+   → Go to Deployments tab
+   → Click latest deployment
+   → Copy "Public URL"
+   → Save it! Format: https://policypilot-xxx.railway.app
+
+□ Step 6: Test Endpoints
+   → Open terminal, run:
+      curl https://policypilot-xxx.railway.app/api/health
+   → Should see: { "status": "ok", ... }
+   → ✓ If you see JSON, you're good!
+
+RESULT: Backend is LIVE at https://policypilot-xxx.railway.app ✓
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📋 PHASE 2: PUBLISH TO PROMPT OPINION (2 hours)
+
+□ Step 1: Log into Prompt Opinion
+   → Go to app.promptopinion.ai
+   → Sign in (create account if needed)
+
+□ Step 2: Create MCP Integration
+   → Dashboard → Add Integration
+   → Select MCP Server type
+   → Fill in:
+      Name: PolicyPilot Healthcare Intelligence
+      Description: Healthcare policy Q&A and coverage evaluation
+      Endpoint: https://policypilot-xxx.railway.app/mcp
+      [Replace xxx with your actual Railway URL]
+
+□ Step 3: Select Tools
+   → Choose all 17 tools from dropdown
+   → Or select key ones: list_policies, ask_policy_question,
+     evaluate_patient_against_policy, get_drug_coverage
+
+□ Step 4: Publish to Marketplace
+   → Click "Publish"
+   → Wait for approval (usually instant)
+   → Copy marketplace URL
+   → Save it! Format: https://[marketplace-url]/policypilot
+
+RESULT: Marketplace URL obtained ✓
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📋 PHASE 3: RECORD DEMO VIDEO (1-2 hours)
+
+□ Step 1: Plan Demo Script (30 min)
+   What to show (keep under 3 minutes total):
+
+   1. INTRO (30 sec)
+      "PolicyPilot is a healthcare AI that answers policy questions
+       and evaluates patient coverage across multiple payers."
+
+   2. DEMO: List Policies (30 sec)
+      → Use Prompt Opinion platform
+      → Call "list_policies" tool
+      → Show it returns 2 sample policies (BCBS NC, Cigna)
+
+   3. DEMO: Ask Question (45 sec)
+      → Call "ask_policy_question" tool
+      → Ask: "What are prior auth requirements for bevacizumab
+        under BCBS NC?"
+      → Show evidence-backed answer with citations
+
+   4. DEMO: Patient Evaluation (45 sec)
+      → Call "evaluate_patient_against_policy" tool
+      → Show coverage status + checklist
+
+   5. CLOSING (15 sec)
+      "17 tools for comprehensive healthcare policy intelligence."
+
+□ Step 2: Record Video
+   Use any screen recorder:
+   → macOS: QuickTime Player (built-in)
+   → macOS: OBS (free, better quality)
+   → Windows: OBS or Camtasia
+   → Online: Loom (free, browser-based)
+
+   Tips:
+   • Keep energy up (judges want to see enthusiasm)
+   • Slow down your clicks/typing
+   • Use mouse pointer to highlight
+   • Mute background noise
+   • Test audio before recording
+
+□ Step 3: Edit Video (optional)
+   If total > 3 min, cut it down (focus on demos, skip intro/closing)
+
+□ Step 4: Upload to YouTube or Vimeo
+   → Create video (set to "Unlisted" if not public)
+   → Copy video URL
+   → Save it! Format: https://youtube.com/watch?v=...
+
+RESULT: Demo video uploaded ✓
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📋 PHASE 4: SUBMIT DEVPOST FORM (30 min)
+
+□ Step 1: Gather all URLs
+   Before you start, have these ready:
+   __ Railway Backend URL: https://policypilot-xxx.railway.app
+   __ Marketplace URL: https://[marketplace-url]/policypilot
+   __ Video URL: https://youtube.com/watch?v=...
+
+□ Step 2: Go to Devpost
+   → Visit agents-assemble.devpost.com
+   → Click "Join Hackathon" (if first time)
+   → Click "Enter a Submission"
+
+□ Step 3: Fill Form Fields
+
+   PROJECT TITLE:
+   "PolicyPilot: Healthcare Policy Intelligence MCP"
+
+   PROJECT DESCRIPTION (150-300 words):
+   "PolicyPilot is an AI-powered healthcare policy intelligence system
+   that helps clinic staff understand drug coverage and prior authorization
+   requirements across multiple payers.
+
+   Built as an MCP Server with 17 specialized tools, PolicyPilot uses
+   Google Gemini API for grounded reasoning over policy documents.
+
+   Key capabilities:
+   • Natural language Q&A about policies with evidence citations
+   • Drug coverage lookup across payers
+   • Prior authorization criteria extraction
+   • Patient document analysis and fact extraction
+   • Coverage evaluation with evidence-backed checklists
+   • Policy comparison and change tracking
+
+   All data is synthetic/de-identified. No real patient information is used.
+
+   Built for healthcare organizations, clinic staff, and patients."
+
+   MARKETPLACE URL:
+   https://[your-marketplace-url]/policypilot
+
+   VIDEO URL:
+   https://youtube.com/watch?v=...
+
+   TESTING INSTRUCTIONS:
+   "1. Visit Prompt Opinion at app.promptopinion.ai
+   2. Search marketplace for 'PolicyPilot'
+   3. Click 'Add to workspace'
+   4. Test these tools:
+      - list_policies: Returns 2 sample policies
+      - ask_policy_question: Ask about bevacizumab PA requirements
+      - evaluate_patient_against_policy: Get coverage status
+   5. See video for full workflow"
+
+□ Step 4: Review Everything
+   __ Title is clear and describes the project
+   __ Description explains the AI and healthcare value
+   __ URLs are valid and working
+   __ Video plays and shows the tools
+   __ Testing instructions are clear
+
+□ Step 5: SUBMIT
+   → Click "Submit"
+   → SAVE THE CONFIRMATION URL
+   → Celebrate! 🎉
+
+RESULT: Submission complete ✓
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📌 QUICK REFERENCE
+
+✅ READY NOW:
+   • Dockerfile (created)
+   • 17 MCP tools (implemented)
+   • Gemini API (integrated)
+   • Documentation (complete)
+
+⬜ YOU NEED TO DO:
+   • Create Railway account
+   • Deploy (press button)
+   • Test endpoints
+   • Publish marketplace
+   • Record 3-min video
+   • Fill Devpost form
+
+⏰ TIME ESTIMATE:
+   Phase 1 (Deploy): 2-3 hours
+   Phase 2 (Marketplace): 2 hours
+   Phase 3 (Video): 1-2 hours
+   Phase 4 (Submit): 30 min
+   TOTAL: 5-8 hours spread over 2 days
+
+📅 TIMELINE:
+   Now → May 11 morning: Phases 1-3
+   May 11 morning → May 11 11 PM: Phase 4 + buffer
+
+💥 CRITICAL DATES:
+   May 11, 2026, 11:00 PM ET = DEADLINE (hard stop)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📚 REFERENCE DOCUMENTS
+
+Start here:
+   RAILWAY_QUICK_START.md (10-minute read)
+
+Detailed guides:
+   docs/RAILWAY_DEPLOYMENT.md (complete reference)
+   DEPLOYMENT_CHECKLIST.md (phased approach)
+   HACKATHON_SUBMISSION_READY.md (executive summary)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🆘 IF STUCK
+
+Railway deployment issues:
+   1. Check Railway dashboard → Logs tab
+   2. Verify GEMINI_KEY_API is set (not empty)
+   3. Read: docs/RAILWAY_DEPLOYMENT.md → Troubleshooting
+
+Video too long / not recording:
+   1. Skip intro/outro, just show tools
+   2. Use simpler recording tool (Loom, QuickTime)
+   3. Re-record, focus on essentials
+
+Can't find form field:
+   1. Check Devpost submission requirements section
+   2. Make sure you're on agents-assemble.devpost.com
+
+Still stuck:
+   Email: the.whitfield.222@gmail.com
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✨ YOU'VE GOT THIS!
+
+Your project is genuinely good. This is just getting it deployed (easy)
+and on video (straightforward). You're 80% done already.
+
+Focus on Phase 1 first. Everything else follows naturally.
+
+START NOW with: RAILWAY_QUICK_START.md
+
+🚀 Let's go!
