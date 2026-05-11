@@ -251,8 +251,13 @@ export function ChatView() {
 
             try {
               const parsed = JSON.parse(data);
-              if (parsed.type === 'final_answer' && parsed.content) {
-                assistantContent += parsed.content;
+              // Handle message_delta events (streaming chunks)
+              if (parsed.delta) {
+                assistantContent += parsed.delta;
+              }
+              // Handle message_done event (final message)
+              if (parsed.message) {
+                assistantContent = parsed.message;
               }
             } catch {
               // Ignore parse errors
@@ -335,8 +340,13 @@ export function ChatView() {
 
               try {
                 const parsed = JSON.parse(data);
-                if (parsed.type === 'final_answer' && parsed.content) {
-                  assistantContent += parsed.content;
+                // Handle message_delta events (streaming chunks)
+                if (parsed.delta) {
+                  assistantContent += parsed.delta;
+                }
+                // Handle message_done event (final message)
+                if (parsed.message) {
+                  assistantContent = parsed.message;
                 }
               } catch {
                 // Ignore parse errors
