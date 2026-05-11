@@ -213,7 +213,7 @@ function inferIssuer(args: Record<string, unknown>, context?: ChatContext): stri
   return context?.selectedIssuer?.trim() ? compactWhitespace(context.selectedIssuer) : undefined;
 }
 
-function resolvePlanIdFromArgs(args: Record<string, unknown>, drug: string, context?: ChatContext): string | undefined {
+async function resolvePlanIdFromArgs(args: Record<string, unknown>, drug: string, context?: ChatContext): Promise<string | undefined> {
   if (typeof args.planId === 'string' && args.planId.trim()) {
     return compactWhitespace(args.planId);
   }
@@ -231,7 +231,8 @@ function resolvePlanIdFromArgs(args: Record<string, unknown>, drug: string, cont
     return undefined;
   }
 
-  const matches = compareDrugAcrossPlans(drug).filter((match) =>
+  const allMatches = await compareDrugAcrossPlans(drug);
+  const matches = allMatches.filter((match) =>
     match.planName.toLowerCase() === planName.toLowerCase()
     || match.planId.toLowerCase() === planName.toLowerCase()
   );
@@ -418,9 +419,9 @@ async function executeToolCall(toolCall: ToolCall, latestUserMessage: string, co
     }
 
     case 'get_plan_drug_details': {
-      const planId = resolvePlanIdFromArgs(args, drug, context);
+      const planId = await resolvePlanIdFromArgs(args, drug, context);
       if (!planId) {
-        const matches = compareDrugAcrossPlans(drug, issuer);
+        const matches = await compareDrugAcrossPlans(drug, issuer);
         if (matches.length === 1) {
           const detail = getPlanDrugDetail(matches[0].planId, drug);
           if (!detail) {
