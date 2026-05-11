@@ -5,15 +5,15 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "${RAILWAY_BACKEND_URL}/api/$1"
+      "destination": "https://policy-intelligence-production.up.railway.app/api/$1"
     },
     {
       "source": "/mcp/(.*)",
-      "destination": "${RAILWAY_BACKEND_URL}/mcp/$1"
+      "destination": "https://policy-intelligence-production.up.railway.app/mcp/$1"
     },
     {
       "source": "/health",
-      "destination": "${RAILWAY_BACKEND_URL}/health"
+      "destination": "https://policy-intelligence-production.up.railway.app/health"
     },
     {
       "source": "/(.*)",
