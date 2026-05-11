@@ -1,7 +1,7 @@
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { policySummaryInput } from '../schemas/tool_inputs.js';
 import { findPolicy, getAllPolicies } from '../policy_store/loader.js';
-import { normalizeDrugName } from '../../../data/lookup/drug-aliases.js';
+import { normalizeDrugName } from '../../../data/lookup/drug-aliases.ts';
 import { buildErrorResponse, buildStandardResponse } from '../utils/response_builder.js';
 import { calculateConfidence, extractEvidenceArray } from '../utils/evidence_formatter.js';
 

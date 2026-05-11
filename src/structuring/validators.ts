@@ -1,5 +1,5 @@
 import fs from 'fs/promises';
-import { PolicyRecordSchema, type PolicyRecord } from '../../data/schemas/policy.schema.js';
+import { PolicyRecordSchema, type PolicyRecord } from '../../data/schemas/policy.schema.ts';
 import { ZodError } from 'zod';
 
 /**

@@ -1,6 +1,6 @@
 import { existsSync, readdirSync, readFileSync } from 'fs';
 import { join } from 'path';
-import { PolicyRecordSchema } from '../../data/schemas/policy.schema.js';
+import { PolicyRecordSchema } from '../../data/schemas/policy.schema.ts';
 import {
   derivePolicyId,
   listPolicyIndex,

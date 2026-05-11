@@ -5,8 +5,8 @@ import { fileURLToPath } from 'url';
 import { inflateRawSync } from 'zlib';
 import { PDFParse } from 'pdf-parse';
 import { cleanPolicyText } from '../../extraction/text-cleaner.js';
-import { normalizeDrugName } from '../../../data/lookup/drug-aliases.js';
-import { PolicyRecordSchema } from '../../../data/schemas/policy.schema.js';
+import { normalizeDrugName } from '../../../data/lookup/drug-aliases.ts';
+import { PolicyRecordSchema } from '../../../data/schemas/policy.schema.ts';
 import {
   canonicalDrugKey,
   canonicalIssuerKey,

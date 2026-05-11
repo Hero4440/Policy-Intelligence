@@ -1,8 +1,8 @@
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-import type { PolicyRecord } from '../../../data/schemas/policy.schema.js';
+import type { PolicyRecord } from '../../../data/schemas/policy.schema.ts';
 import { compareDrugInput } from '../schemas/tool_inputs.js';
 import { findPoliciesByDrug, getAllPolicies } from '../policy_store/loader.js';
-import { normalizeDrugName } from '../../../data/lookup/drug-aliases.js';
+import { normalizeDrugName } from '../../../data/lookup/drug-aliases.ts';
 import {
   buildErrorResponse,
   buildStandardResponse,

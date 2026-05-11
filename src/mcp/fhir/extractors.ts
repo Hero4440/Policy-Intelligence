@@ -6,7 +6,7 @@
  * to gracefully handle missing or malformed FHIR data.
  */
 
-import { normalizeDrugName } from '../../../data/lookup/drug-aliases.js';
+import { normalizeDrugName } from '../../../data/lookup/drug-aliases.ts';
 import {
   ExtractedPatientData,
   ExtractedDiagnosis,

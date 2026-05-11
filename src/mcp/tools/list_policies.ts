@@ -1,7 +1,7 @@
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { listPoliciesInput } from '../schemas/tool_inputs.js';
 import { getAllPolicies } from '../policy_store/loader.js';
-import { normalizeDrugName } from '../../../data/lookup/drug-aliases.js';
+import { normalizeDrugName } from '../../../data/lookup/drug-aliases.ts';
 import { buildErrorResponse, buildStandardResponse } from '../utils/response_builder.js';
 
 function uniqueSorted(values: string[]): string[] {

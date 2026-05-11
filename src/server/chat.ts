@@ -18,7 +18,7 @@ import {
 import { extractPatientData } from '../mcp/fhir/extractors.js';
 import { matchPatientAgainstPolicy } from '../mcp/matching/criteria_matcher.js';
 import { findPolicy, findPoliciesByDrug } from '../mcp/policy_store/loader.js';
-import { normalizeDrugName } from '../../data/lookup/drug-aliases.js';
+import { normalizeDrugName } from '../../data/lookup/drug-aliases.ts';
 import { DISCLAIMER } from '../mcp/matching/language.js';
 import { buildDoctorAgentResponse, type DoctorAgentContext } from './doctor-agent-integration.js';
 import { formatDoctorAgentResponse } from './doctor-agent-output.js';

@@ -1,4 +1,4 @@
-import type { PolicyRecord } from '../../../data/schemas/policy.schema.js';
+import type { PolicyRecord } from '../../../data/schemas/policy.schema.ts';
 import type { ConfidenceLevel, EvidenceItem } from './response_builder.js';
 
 type EvidenceSource = {

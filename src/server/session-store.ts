@@ -1,4 +1,4 @@
-import { PolicyRecordSchema } from '../../data/schemas/policy.schema.js';
+import { PolicyRecordSchema } from '../../data/schemas/policy.schema.ts';
 
 export type ChatRole = 'user' | 'assistant' | 'tool';
 

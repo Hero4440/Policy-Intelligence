@@ -1,6 +1,6 @@
 import type { Express, Request, Response } from 'express';
 import { extractPatientData } from '../mcp/fhir/extractors.js';
-import { PolicyRecordSchema } from '../../data/schemas/policy.schema.js';
+import { PolicyRecordSchema } from '../../data/schemas/policy.schema.ts';
 import { addUploadedPolicy, getOrCreateSession, serializeSession, setUploadedPatient } from './session-store.js';
 
 type UploadFilePayload = {

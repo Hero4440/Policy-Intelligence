@@ -1,7 +1,7 @@
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { patientReadinessInput } from '../schemas/tool_inputs.js';
 import { findPolicy, getAllPolicies } from '../policy_store/loader.js';
-import { normalizeDrugName } from '../../../data/lookup/drug-aliases.js';
+import { normalizeDrugName } from '../../../data/lookup/drug-aliases.ts';
 import { extractFhirToken, createFhirClient, fetchPatientBundle } from '../fhir/client.js';
 import { extractPatientData } from '../fhir/extractors.js';
 import { matchPatientAgainstPolicy, CriterionResult } from '../matching/criteria_matcher.js';

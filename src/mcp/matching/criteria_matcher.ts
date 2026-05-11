@@ -7,10 +7,10 @@
  * other requirements that may need documentation.
  */
 
-import { PolicyRecord, DiagnosisReq, StepTherapy, OtherReq, SourceRef } from '../../../data/schemas/policy.schema.js';
+import { PolicyRecord, DiagnosisReq, StepTherapy, OtherReq, SourceRef } from '../../../data/schemas/policy.schema.ts';
 import { ExtractedPatientData } from '../fhir/types.js';
 import { ClinicalStatus, ClinicalLanguage } from './language.js';
-import { normalizeDrugName } from '../../../data/lookup/drug-aliases.js';
+import { normalizeDrugName } from '../../../data/lookup/drug-aliases.ts';
 
 export interface CriterionResult {
   criterion: string;

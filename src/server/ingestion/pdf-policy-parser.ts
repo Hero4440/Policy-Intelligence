@@ -1,4 +1,4 @@
-import { normalizeDrugName } from '../../../data/lookup/drug-aliases.js';
+import { normalizeDrugName } from '../../../data/lookup/drug-aliases.ts';
 
 export interface ParsedPdfPolicy {
   title: string;

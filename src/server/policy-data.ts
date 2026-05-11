@@ -1,8 +1,8 @@
 import { readFileSync } from 'fs';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
-import { normalizeDrugName } from '../../data/lookup/drug-aliases.js';
-import type { PolicyRecord as StructuredPolicyRecord } from '../../data/schemas/policy.schema.js';
+import { normalizeDrugName } from '../../data/lookup/drug-aliases.ts';
+import type { PolicyRecord as StructuredPolicyRecord } from '../../data/schemas/policy.schema.ts';
 import { listIngestedSnapshots, type IngestedCoverageSnapshot } from './ingestion/store.js';
 import {
   canonicalDrugKey,

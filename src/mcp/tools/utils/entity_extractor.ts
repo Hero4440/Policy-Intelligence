@@ -1,4 +1,4 @@
-import { drugAliases, normalizeDrugName } from '../../../../data/lookup/drug-aliases.js';
+import { drugAliases, normalizeDrugName } from '../../../../data/lookup/drug-aliases.ts';
 
 export interface ExtractedEntities {
   drug?: string;

@@ -1,4 +1,4 @@
-import { drugAliases } from '../../../../data/lookup/drug-aliases.js';
+import { drugAliases } from '../../../../data/lookup/drug-aliases.ts';
 import { getAllPolicies } from '../../policy_store/loader.js';
 import { extractEvidenceArray } from '../../utils/evidence_formatter.js';
 import type { EvidenceItem } from '../../utils/response_builder.js';

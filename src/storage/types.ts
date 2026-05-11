@@ -1,6 +1,6 @@
-export type { PolicyRecord } from '../../data/schemas/policy.schema.js';
+export type { PolicyRecord } from '../../data/schemas/policy.schema.ts';
 
-import type { PolicyRecord } from '../../data/schemas/policy.schema.js';
+import type { PolicyRecord } from '../../data/schemas/policy.schema.ts';
 
 export interface PolicyVersion {
   policyId: string;
