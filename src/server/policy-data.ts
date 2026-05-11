@@ -12,14 +12,32 @@ import {
   preferredIssuerLabel,
   type NormalizedRuleFacet
 } from './normalization.js';
-import uhcAdalimumab from '../../data/policies/structured/uhc-adalimumab-ra.json';
-import uhcEtanercept from '../../data/policies/structured/uhc-etanercept-ra.json';
-import aetnaAdalimumab from '../../data/policies/structured/aetna-adalimumab-ra.json';
-import cignaInfliximab from '../../data/policies/structured/cigna-infliximab-ra.json';
-import aetnaUpadacitinib from '../../data/policies/structured/aetna-upadacitinib-ra.json';
-import aetnaHerceptin from '../../data/policies/structured/aetna-herceptin.json';
-import cignaHerceptin from '../../data/policies/structured/cigna-herceptin_v7.json';
-import uhcHerceptin from '../../data/policies/structured/uhc-herceptin.json';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+function loadStructuredPolicies(): StructuredPolicyRecord[] {
+  const policiesPath = join(__dirname, '../../data/policies/structured');
+  const policyFiles = [
+    'uhc-adalimumab-ra.json',
+    'uhc-etanercept-ra.json',
+    'aetna-adalimumab-ra.json',
+    'cigna-infliximab-ra.json',
+    'aetna-upadacitinib-ra.json',
+    'aetna-herceptin.json',
+    'cigna-herceptin_v7.json',
+    'uhc-herceptin.json'
+  ];
+
+  return policyFiles.map(file => {
+    try {
+      return JSON.parse(readFileSync(join(policiesPath, file), 'utf-8')) as StructuredPolicyRecord;
+    } catch (error) {
+      console.warn(`Failed to load policy ${file}:`, error);
+      return null;
+    }
+  }).filter((policy): policy is StructuredPolicyRecord => policy !== null);
+}
 
 type CsvRow = Record<string, string>;
 
@@ -400,16 +418,7 @@ function loadCatalog(): CatalogData {
     rulesByPlan.set(row.plan_id, existing);
   }
 
-  const structuredPolicies = [
-    uhcAdalimumab,
-    uhcEtanercept,
-    aetnaAdalimumab,
-    cignaInfliximab,
-    aetnaUpadacitinib,
-    aetnaHerceptin,
-    cignaHerceptin,
-    uhcHerceptin
-  ] as StructuredPolicyRecord[];
+  const structuredPolicies = loadStructuredPolicies();
   const ingestedSnapshots = listIngestedSnapshots();
 
   cache = {
