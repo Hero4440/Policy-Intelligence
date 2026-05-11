@@ -382,7 +382,7 @@ async function loadCatalog(): Promise<CatalogData> {
   }
 
   const plansRows = await readCsvAsync('plans.csv');
-  const formularyRows = await readCsvAsync('formulary_drugs.csv');
+  const formularyRows = await readCsvAsync('query_ready_formulary.csv');
   const rulesRows = await readCsvAsync('coverage_rules_by_plan.csv');
 
   const plans = plansRows.map<PolicyPlan>((row) => ({
