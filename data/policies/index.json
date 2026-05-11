@@ -1,0 +1,26 @@
+{
+  "updatedAt": "2026-05-11T15:43:02.867Z",
+  "policies": [
+    {
+      "policyId": "cigna-herceptin",
+      "payer": "Cigna",
+      "title": "Breast Cancer",
+      "drugFamily": "Herceptin",
+      "versions": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "currentVersion": 10,
+      "currentVersionFile": "cigna-herceptin_v10.json",
+      "lastUpdatedAt": "2026-04-22T02:29:02.263Z"
+    }
+  ]
+}

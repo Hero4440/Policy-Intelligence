@@ -1,0 +1,39 @@
+{
+  "id": "aetna-etanercept-ra",
+  "payer": "Aetna",
+  "plan": "Commercial",
+  "policyTitle": "Aetna Etanercept (Enbrel) Pharmacy Policy",
+  "drug": {
+    "brandName": "Enbrel",
+    "genericName": "etanercept",
+    "aliases": ["etanercept", "enbrel"],
+    "products": [{ "name": "Enbrel", "tier": "preferred" }]
+  },
+  "indication": "Rheumatoid Arthritis",
+  "coverageStatus": "covered-with-pa",
+  "paRequired": true,
+  "diagnosisRequirements": [
+    {
+      "icd10Codes": ["M05.*"],
+      "description": "Seropositive RA",
+      "evidenceText": "Diagnosis of seropositive rheumatoid arthritis required.",
+      "source": { "document": "Aetna_Etanercept_2026.pdf", "page": 1, "section": "Criteria" }
+    }
+  ],
+  "stepTherapy": [
+    {
+      "drugName": "leflunomide",
+      "dosage": "Standard dosing",
+      "duration": "3 months",
+      "failureCriteria": "inadequate response",
+      "evidenceText": "Requires trial and failure of methotrexate AND leflunomide for 3 months.",
+      "source": { "document": "Aetna_Etanercept_2026.pdf", "page": 2, "section": "Step Therapy" }
+    }
+  ],
+  "otherRequirements": [],
+  "sourceDocument": {
+    "filename": "Aetna_Etanercept_2026.pdf",
+    "retrievalDate": "2026-05-10",
+    "effectiveDate": "2026-01-01"
+  }
+}

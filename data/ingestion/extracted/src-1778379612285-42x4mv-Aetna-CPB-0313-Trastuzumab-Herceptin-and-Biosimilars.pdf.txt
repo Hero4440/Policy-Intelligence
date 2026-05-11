@@ -1,0 +1,236 @@
+Reference number
+2474-A
+Aetna Medicare Part B Drug Criteria
+Herceptin and Trastuzumab Biosimilars
+This policy is for Aetna Medicare members. Find the Aetna Commercial Medical Drug Criteria.
+For Aetna Medicare members, National Coverage Determinations (NCDs) and Local Coverage Determinations
+(LCDs) will be applied to Part B drug requests when applicable. Aetna Medicare Part B Drug Criteria documents will
+be used in the absence of an NCD and LCD.
+POLICY
+Products Referenced by this Document
+Drugs that are listed in the following table include both brand and generic and all dosage forms and strengths unless
+otherwise stated. Over-the-counter (OTC) products are not included unless otherwise stated.
+Brand Name Generic Name
+Herceptin trastuzumab
+Ogivri trastuzumab-dkst
+Kanjinti trastuzumab-anns
+Trazimera trastuzumab-qyyp
+Herzuma trastuzumab-pkrb
+Ontruzant trastuzumab-dttb
+Hercessi trastuzumab-strf
+Indications
+The indications below including FDA-approved indications and compendial uses are considered a covered benefit
+provided that all the approval criteria are met and the member has no exclusions to the prescribed therapy.
+FDA-Approved Indications1-7
+Adjuvant Breast Cancer
+Adjuvant treatment of human epidermal growth factor receptor 2 (HER2)-overexpressing node positive or node
+negative (estrogen receptor [ER]/progesterone receptor [PR] negative or with one high risk feature) breast cancer
+• as part of a treatment regimen consisting of doxorubicin, cyclophosphamide, and either paclitaxel or
+docetaxel
+• as part of a treatment regimen with docetaxel and carboplatin
+Y0001_NR_37041_2024_C © 2026 Aetna Inc.
+This document contains prescription brand name drugs that are trademarks or registered trademarks of pharmaceutical manufacturers that are not
+affiliated with Aetna Inc.
+1
+
+-- 1 of 6 --
+
+Y0001_NR_37041_2024_C © 2026 Aetna Inc.
+This document contains prescription brand name drugs that are trademarks or registered trademarks of pharmaceutical manufacturers that are not
+affiliated with Aetna Inc.
+2
+Reference number
+2474-A
+• as a single agent following multi-modality anthracycline based therapy
+Metastatic Breast Cancer
+• In combination with paclitaxel for first-line treatment of HER2-overexpressing metastatic breast cancer
+• As a single agent for treatment of HER2-overexpressing breast cancer in patients who have received one
+or more chemotherapy regimens for metastatic disease
+Metastatic Gastric Cancer
+In combination with cisplatin and capecitabine or 5-fluorouracil, for the treatment of patients with HER2
+overexpressing metastatic gastric or gastroesophageal junction adenocarcinoma who have not received prior
+treatment for metastatic disease
+Compendial Uses8-11
+• HER2-positive breast cancer
+▪ Neoadjuvant therapy
+▪ Treatment of recurrent, advanced, unresectable, or stage IV (M1) disease
+▪ Treatment for no response to preoperative systemic therapy
+• HER2-negative breast cancer treatment of stage IV (M1) disease
+• Intra-cerebrospinal fluid (CSF) treatment of leptomeningeal metastases (malignant meningitis) from
+HER2-positive breast cancer
+• HER2-positive esophageal and esophagogastric junction cancer
+• HER2- positive uterine serous carcinoma and carcinosarcoma
+• HER2-positive salivary gland tumor
+• HER2-amplified/positive and RAS and BRAF wild-type colorectal cancer
+• HER2-positive biliary tract cancers
+• HER2-positive non-small cell lung cancer
+• Prostate cancer
+All other indications will be assessed on an individual basis. Submissions for indications other than those listed in this
+criteria should be accompanied by supporting evidence from Medicare approved compendia.
+Documentation
+The following documentation must be available, upon request, for all submissions:
+• Human epidermal growth factor receptor 2 (HER2) status, where applicable
+• RAS mutation status, where applicable
+• BRAF mutation status, where applicable
+Coverage Criteria
+
+-- 2 of 6 --
+
+Y0001_NR_37041_2024_C © 2026 Aetna Inc.
+This document contains prescription brand name drugs that are trademarks or registered trademarks of pharmaceutical manufacturers that are not
+affiliated with Aetna Inc.
+3
+Reference number
+2474-A
+Breast Cancer1-9
+Authorization of up to 12 months may be granted for neoadjuvant treatment of HER2-positive breast cancer as part
+of a complete treatment regimen.
+Authorization of up to 12 months may be granted for adjuvant treatment of HER2-positive breast cancer.
+Authorization of 12 months may be granted for treatment of HER2-positive breast cancer with no response to
+preoperative systemic therapy, recurrent, advanced, unresectable, or metastatic (including brain metastases)
+disease.
+Authorization of 12 months may be granted for intra-CSF treatment of leptomeningeal metastases (malignant
+meningitis) from HER2-positive breast cancer.
+Authorization of 12 months may be granted for treatment of HER2-negative metastatic breast cancer when used in
+combination with neratinib and fulvestrant as third-line or later therapy.
+Esophageal, Gastric, or Gastroesophageal Junction Cancer1-9
+Authorization of 12 months may be granted for treatment or palliative therapy of HER2-positive esophageal, gastric,
+or esophagogastric junction cancer in combination with chemotherapy.
+Uterine Serous Carcinoma or Carcinosarcoma8
+Authorization of 12 months may be granted for treatment of HER2-positive stage III-IV, metastatic, or recurrent
+uterine serous carcinoma or carcinosarcoma in combination with carboplatin and paclitaxel and continued as a single
+agent for maintenance therapy.
+Salivary Gland Tumor8,11
+Authorization of 12 months may be granted for treatment of recurrent, unresectable, or metastatic HER2-positive
+salivary gland tumors when used as a single agent or in combination with docetaxel or pertuzumab.
+Colorectal Cancer8,10
+Authorization of 12 months may be granted for treatment of unresectable, inoperable, advanced, or metastatic
+colorectal cancer, including appendiceal adenocarcinoma and anal adenocarcinoma, when all of the following criteria
+are met:
+• Member has HER2-positive/amplified disease.
+• The disease is negative (wild-type) for RAS (KRAS and NRAS) and BRAF mutations.
+• The requested medication will be used in combination with tucatinib, pertuzumab, or lapatinib.
+• Member has received prior therapy for the disease or is not appropriate for intensive therapy or will
+receive hepatic artery infusion.
+Biliary Tract Cancers8
+Authorization of 12 months may be granted for subsequent treatment of unresectable, resected gross residual (R2),
+or metastatic HER2-positive (IHC 3+/ISH +/NGS amplification) biliary tract cancers (including intrahepatic and
+extrahepatic cholangiocarcinoma and gallbladder cancer) when used in combination with pertuzumab or tucatinib.
+
+-- 3 of 6 --
+
+Y0001_NR_37041_2024_C © 2026 Aetna Inc.
+This document contains prescription brand name drugs that are trademarks or registered trademarks of pharmaceutical manufacturers that are not
+affiliated with Aetna Inc.
+4
+Reference number
+2474-A
+Non-Small Cell Lung Cancer9
+Authorization of 12 months may be granted for treatment of HER2-positive (IHC 3+, 2+, or 1+) non-small cell lung
+cancer.
+Prostate Cancer9
+Authorization of 12 months may be granted for treatment of prostate cancer.
+Continuation of Therapy
+All members (including new members) requesting authorization for continuation of therapy must be currently
+receiving therapy with the requested medication.
+Authorization of 12 months may be granted when all of the following criteria are met:
+• The member is currently receiving therapy with the requested medication.
+• The requested medication is being used to treat a diagnosis or condition listed in the coverage criteria
+section.
+• For members requesting reauthorization for adjuvant or neoadjuvant treatment of breast cancer, the
+maximum treatment duration is 12 months.
+• The member is receiving benefit from therapy. Benefit is defined as:
+▪ No evidence of unacceptable toxicity while on the current regimen AND
+▪ No evidence of disease progression while on the current regimen.
+Summary of Evidence
+The contents of this policy were created after examining the following resources:
+• The prescribing information for Herceptin, Kanjinti, Ogivri, Trazimera, Herzuma, Ontruzant, and Hercessi
+• The available compendium
+▪ National Comprehensive Cancer Network (NCCN) Drugs and Biologics Compendium
+▪ Micromedex DrugDex
+▪ American Hospital Formulary Service- Drug Information (AHFS-DI)
+▪ Lexi-Drugs
+▪ Clinical Pharmacology
+• NCCN Guideline: Breast Cancer
+• NCCN Guideline: Biliary Tract Cancers
+• NCCN Guideline: Central Nervous System Cancers
+• NCCN Guideline: Colon Cancer
+• NCCN Guideline: Esophageal and Esophagogastric Junction Cancers
+• NCCN Guideline: Gastric Cancer
+• NCCN Guideline: Head and Neck Cancers
+• NCCN Guideline: Rectal Cancer
+• NCCN Guideline: Uterine Neoplasms
+
+-- 4 of 6 --
+
+Y0001_NR_37041_2024_C © 2026 Aetna Inc.
+This document contains prescription brand name drugs that are trademarks or registered trademarks of pharmaceutical manufacturers that are not
+affiliated with Aetna Inc.
+5
+Reference number
+2474-A
+After reviewing the information in the above resources, the FDA-approved indications listed in the prescribing
+information for Herceptin, Kanjinti, Ogivri, Trazimera, Herzuma, Ontruzant, and Hercessi are covered in addition to
+the following:
+• HER2-positive breast cancer:
+▪ Neoadjuvant therapy
+▪ Treatment of recurrent, advanced, unresectable, or stage IV (M1) disease
+▪ Treatment for no response to preoperative systemic therapy
+• HER2-negative breast cancer treatment of stage IV (M1) disease
+• Intra-cerebrospinal fluid (CSF) treatment of leptomeningeal metastases (malignant meningitis) from
+HER2-positive breast cancer
+• HER2-positive esophageal and esophagogastric junction cancer
+• HER2- positive uterine serous carcinoma and carcinosarcoma
+• HER2-positive salivary gland tumor
+• HER2-amplified/positive and RAS and BRAF wild-type colorectal cancer
+• HER2-positive biliary tract cancers
+• HER2-positive non-small cell lung cancer
+• Prostate cancer
+Explanation of Rationale
+Support for FDA-approved indications can be found in the manufacturer’s prescribing information.
+Support for all indications other than non-small cell lung cancer and prostate cancer can be found in the NCCN Drugs
+and Biologics Compendium. Use of information in the NCCN Drugs and Biologics Compendium for off-label use of
+drugs and biologicals in an anti-cancer chemotherapeutic regimen is supported by the Medicare Benefit Policy
+Manual, Chapter 15, section 50.4.5 (Off-Label Use of Drugs and Biologicals in an Anti-Cancer Chemotherapeutic
+Regimen).
+Support for non-small cell lung cancer and prostate cancer can be found in the Micromedex DrugDex database. Use
+of information in the DrugDex database for off-label use of drugs and biologicals in an anti-cancer chemotherapeutic
+regimen is supported by the Medicare Benefit Policy Manual, Chapter 15, section 50.4.5 (Off-Label Use of Drugs and
+Biologicals in an Anti-Cancer Chemotherapeutic Regimen).
+References
+1. Herceptin [package insert]. South San Francisco, CA: Genentech, Inc.; June 2024.
+2. Kanjinti [package insert]. Thousand Oaks, CA: Amgen Inc.; June 2025.
+3. Ogivri [package insert]. Cambridge, MA: Biocon Biologics Inc.; November 2024.
+4. Trazimera [package insert]. Cork, Ireland: Pfizer Ireland Pharmaceuticals; November 2020.
+5. Herzuma [package insert]. Incheon, Republic of Korea: Celltrion, Inc.; December 2024.
+6. Ontruzant [package insert]. Jersey City, NJ: Organon LLC; February 2025.
+7. Hercessi [package insert]. Raleigh, NC: Accord BioPharma Inc.; September 2024.
+8. The NCCN Drugs & Biologics Compendium ® © 2025 National Comprehensive Cancer Network, Inc.
+https://www.nccn.org. Accessed September 5, 2025.
+
+-- 5 of 6 --
+
+Reference number
+2474-A
+9. Micromedex® (electronic version). Merative, Ann Arbor, Michigan, USA. Available at:
+https://www.micromedexsolutions.com. Accessed September 5, 2025.
+10. National Comprehensive Cancer Network. NCCN Clinical Practice Guidelines in Oncology: Anal Carcinoma.
+Version 4.2025. Available at: https://www.nccn.org/professionals/physician_gls/pdf/anal.pdf. Accessed
+September 5, 2025.
+11. National Comprehensive Cancer Network. NCCN Clinical Practice Guidelines in Oncology: Head and Neck
+Cancers. Version 5.2025. Available at: https://www.nccn.org/professionals/physician_gls/pdf/head-and
+neck.pdf. Accessed September 3, 2025.
+DOCUMENT HISTORY
+Revised: February 2026
+Aetna Medicare Utilization Management Committee (MUMC) Approved: 3/26/2026
+Version: 2025
+Policy effective date: 5/1/2026
+Policy termination date:
+See Evidence of Coverage for a complete description of plan benefits, exclusions, limitations and conditions of
+coverage. Plan features and availability may vary by service area.
+Y0001_NR_37041_2024_C © 2026 Aetna Inc.
+This document contains prescription brand name drugs that are trademarks or registered trademarks of pharmaceutical manufacturers that are not
+affiliated with Aetna Inc.
+6
+
+-- 6 of 6 --

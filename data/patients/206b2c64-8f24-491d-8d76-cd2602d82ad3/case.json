@@ -1,0 +1,13 @@
+{
+  "caseId": "206b2c64-8f24-491d-8d76-cd2602d82ad3",
+  "payer": "Cigna",
+  "requestedDrug": "Herceptin",
+  "diagnosis": "Breast Cancer",
+  "patientName": "Jane Test",
+  "status": "ready-for-eval",
+  "createdAt": "2026-04-22T01:49:17.331Z",
+  "updatedAt": "2026-04-22T01:49:17.333Z",
+  "documentFiles": [
+    "clinical-note.pdf"
+  ]
+}

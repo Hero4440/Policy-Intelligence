@@ -1,0 +1,39 @@
+{
+  "id": "bcbs-nc-etanercept-ra",
+  "payer": "BCBS-NC",
+  "plan": "Commercial",
+  "policyTitle": "BCBS North Carolina Etanercept Criteria",
+  "drug": {
+    "brandName": "Enbrel",
+    "genericName": "etanercept",
+    "aliases": ["etanercept", "enbrel"],
+    "products": [{ "name": "Enbrel", "tier": "non-preferred" }]
+  },
+  "indication": "Rheumatoid Arthritis",
+  "coverageStatus": "covered-with-pa",
+  "paRequired": true,
+  "diagnosisRequirements": [
+    {
+      "icd10Codes": ["M05.*", "M06.*"],
+      "description": "RA",
+      "evidenceText": "Patient must have active RA as defined by ACR criteria.",
+      "source": { "document": "BCBSNC_Etanercept.pdf", "page": 1, "section": "Policy" }
+    }
+  ],
+  "stepTherapy": [
+    {
+      "drugName": "methotrexate",
+      "dosage": "15mg weekly",
+      "duration": "2 months",
+      "failureCriteria": "inadequate response",
+      "evidenceText": "Prior trial of methotrexate for 2 months required.",
+      "source": { "document": "BCBSNC_Etanercept.pdf", "page": 2, "section": "Criteria" }
+    }
+  ],
+  "otherRequirements": [],
+  "sourceDocument": {
+    "filename": "BCBSNC_Etanercept.pdf",
+    "retrievalDate": "2026-05-10",
+    "effectiveDate": "2026-04-01"
+  }
+}

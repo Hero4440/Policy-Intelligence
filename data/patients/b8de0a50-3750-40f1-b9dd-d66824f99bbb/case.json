@@ -1,0 +1,80 @@
+{
+  "caseId": "b8de0a50-3750-40f1-b9dd-d66824f99bbb",
+  "payer": "Cigna Commercial",
+  "requestedDrug": "Requested Drug",
+  "diagnosis": "Breast Cancer",
+  "patientName": "Phase9 Smoke 2",
+  "status": "ready-for-eval",
+  "createdAt": "2026-04-22T05:45:44.303Z",
+  "updatedAt": "2026-04-22T05:45:44.306Z",
+  "documentFiles": [
+    "clinical-note.txt"
+  ],
+  "documents": [
+    {
+      "documentId": "1f43b459-bfc9-4f86-8670-65eea63a33b4",
+      "fileName": "clinical-note.txt",
+      "documentType": "clinical_note",
+      "contentType": "text/plain",
+      "storedAt": "2026-04-22T05:45:44.306Z",
+      "summary": "diagnosis: Breast Cancer · requested drug: Requested Drug · payer: Cigna Commercial",
+      "factCount": 6
+    }
+  ],
+  "extractedFacts": [
+    {
+      "factId": "fd3d064d-4495-40f5-9c14-d023a6329217",
+      "category": "diagnosis",
+      "label": "diagnosis",
+      "value": "Breast Cancer",
+      "sourceDocumentId": "1f43b459-bfc9-4f86-8670-65eea63a33b4",
+      "evidenceSnippet": "Breast Cancer",
+      "confidence": "medium"
+    },
+    {
+      "factId": "bad3c59f-e4e9-4674-b2b2-9ddcca165c49",
+      "category": "requested_drug",
+      "label": "requested drug",
+      "value": "Requested Drug",
+      "sourceDocumentId": "1f43b459-bfc9-4f86-8670-65eea63a33b4",
+      "evidenceSnippet": "Requested Drug",
+      "confidence": "medium"
+    },
+    {
+      "factId": "bac2cde9-0e02-4f4f-8641-a18b0495cf29",
+      "category": "payer",
+      "label": "payer",
+      "value": "Cigna Commercial",
+      "sourceDocumentId": "1f43b459-bfc9-4f86-8670-65eea63a33b4",
+      "evidenceSnippet": "Cigna Commercial",
+      "confidence": "medium"
+    },
+    {
+      "factId": "96168500-8319-4ec1-8193-1cd74434f9cd",
+      "category": "insurance",
+      "label": "insurance",
+      "value": "Cigna Commercial",
+      "sourceDocumentId": "1f43b459-bfc9-4f86-8670-65eea63a33b4",
+      "evidenceSnippet": "Cigna Commercial",
+      "confidence": "medium"
+    },
+    {
+      "factId": "d23a49e4-e0ef-448a-acbc-3d03f67d3580",
+      "category": "prescriber",
+      "label": "prescriber",
+      "value": "Prescriber",
+      "sourceDocumentId": "1f43b459-bfc9-4f86-8670-65eea63a33b4",
+      "evidenceSnippet": "Prescriber",
+      "confidence": "medium"
+    },
+    {
+      "factId": "d288b60f-e717-4ff1-a0b4-f3cdcf1525d7",
+      "category": "prior_therapy",
+      "label": "prior therapy",
+      "value": "paclitaxel",
+      "sourceDocumentId": "1f43b459-bfc9-4f86-8670-65eea63a33b4",
+      "evidenceSnippet": "paclitaxel",
+      "confidence": "medium"
+    }
+  ]
+}

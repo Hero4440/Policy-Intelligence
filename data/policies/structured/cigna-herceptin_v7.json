@@ -1,0 +1,68 @@
+{
+  "id": "cigna-herceptin-v7",
+  "payer": "Cigna",
+  "plan": "Commercial",
+  "policyTitle": "Cigna Trastuzumab (Herceptin) Policy",
+  "drug": {
+    "brandName": "Herceptin",
+    "genericName": "trastuzumab",
+    "aliases": ["trastuzumab", "herceptin"],
+    "products": [
+      { "name": "Herceptin", "tier": "preferred" },
+      { "name": "Herzuma", "tier": "preferred" }
+    ]
+  },
+  "indication": "Breast Cancer",
+  "coverageStatus": "covered-with-pa",
+  "paRequired": true,
+  "diagnosisRequirements": [
+    {
+      "icd10Codes": ["C50.*"],
+      "description": "HER2-positive breast cancer",
+      "evidenceText": "Patient must have HER2-overexpressing breast cancer (IHC 3+ or FISH-positive) documented by pathology.",
+      "source": {
+        "document": "Cigna_Oncology_2026.pdf",
+        "page": 8,
+        "section": "Trastuzumab Coverage Criteria"
+      }
+    },
+    {
+      "icd10Codes": ["R01.1"],
+      "description": "Cardiac function assessment",
+      "evidenceText": "Baseline cardiac function (LVEF) must be ≥50% documented within 3 months prior to treatment initiation.",
+      "source": {
+        "document": "Cigna_Oncology_2026.pdf",
+        "page": 9,
+        "section": "Cardiac Monitoring Requirements"
+      }
+    }
+  ],
+  "stepTherapy": [],
+  "otherRequirements": [
+    {
+      "category": "prior authorization",
+      "requirement": "Prior authorization required before treatment initiation",
+      "evidenceText": "Authorization must be requested at least 5 business days before the first dose.",
+      "source": {
+        "document": "Cigna_Oncology_2026.pdf",
+        "page": 6,
+        "section": "Prior Authorization Requirements"
+      }
+    },
+    {
+      "category": "coverage duration",
+      "requirement": "Coverage authorized for up to 12 months with quarterly re-authorization",
+      "evidenceText": "Initial authorization period is up to 12 months. Continuation requires reauthorization every 3 months with evidence of ongoing clinical benefit.",
+      "source": {
+        "document": "Cigna_Oncology_2026.pdf",
+        "page": 7,
+        "section": "Authorization Duration"
+      }
+    }
+  ],
+  "sourceDocument": {
+    "filename": "Cigna_Oncology_2026.pdf",
+    "retrievalDate": "2026-05-10",
+    "effectiveDate": "2026-01-01"
+  }
+}

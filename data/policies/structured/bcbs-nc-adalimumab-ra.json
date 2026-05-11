@@ -1,0 +1,71 @@
+{
+  "id": "bcbs-nc-adalimumab-ra",
+  "payer": "BCBS-NC",
+  "plan": "Blue Value",
+  "policyTitle": "Blue Cross Blue Shield NC - Adalimumab Criteria",
+  "drug": {
+    "brandName": "Humira",
+    "genericName": "adalimumab",
+    "aliases": ["adalimumab", "humira"],
+    "products": [
+      {
+        "name": "Humira",
+        "tier": "non-preferred",
+        "aliases": []
+      },
+      {
+        "name": "Hadlima",
+        "tier": "preferred",
+        "aliases": ["adalimumab-bwwd"]
+      }
+    ]
+  },
+  "indication": "Rheumatoid Arthritis",
+  "coverageStatus": "covered-with-pa",
+  "paRequired": true,
+  "diagnosisRequirements": [
+    {
+      "icd10Codes": ["M05.*", "M06.0*"],
+      "description": "Active Rheumatoid Arthritis",
+      "evidenceText": "Initial approval requires confirmed diagnosis of active RA with laboratory evidence of RF or anti-CCP.",
+      "source": {
+        "document": "BCBSNC_Medical_Policy_Adalimumab.pdf",
+        "page": 1,
+        "section": "Criteria for Coverage"
+      }
+    }
+  ],
+  "stepTherapy": [
+    {
+      "drugName": "methotrexate",
+      "dosage": "Max tolerated",
+      "duration": "12 weeks",
+      "failureCriteria": "inadequate response",
+      "evidenceText": "Failure of at least one conventional synthetic DMARD (e.g., methotrexate, leflunomide, or sulfasalazine) for at least 12 weeks.",
+      "source": {
+        "document": "BCBSNC_Medical_Policy_Adalimumab.pdf",
+        "page": 2,
+        "section": "Step 1 DMARDs"
+      }
+    }
+  ],
+  "otherRequirements": [
+    {
+      "category": "TB Testing",
+      "requirement": "Negative TB test within 12 months",
+      "evidenceText": "Member must be screened for latent tuberculosis infection with a TB skin test or IGRA prior to therapy.",
+      "source": {
+        "document": "BCBSNC_Medical_Policy_Adalimumab.pdf",
+        "page": 4,
+        "section": "Monitoring Requirements"
+      },
+      "ambiguous": false
+    }
+  ],
+  "sourceDocument": {
+    "filename": "BCBSNC_Medical_Policy_Adalimumab.pdf",
+    "url": "https://bcbsnc.com/medical-policy/adalimumab",
+    "retrievalDate": "2026-05-10",
+    "effectiveDate": "2026-03-15"
+  }
+}

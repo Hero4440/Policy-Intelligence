@@ -1,0 +1,6 @@
+Patient: Milestone Six Smoke
+Diagnosis: Rheumatoid arthritis
+Requested Drug: adalimumab
+Payer: UHC
+Prior Therapy: methotrexate for 90 days
+Prescriber: rheumatologist

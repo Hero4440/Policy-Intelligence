@@ -1,0 +1,27 @@
+Policy Title: Breast Cancer
+Payer: Cigna
+Plan: Commercial
+Drug Family: Herceptin (trastuzumab)
+Coverage Status: covered-with-pa
+Prior Auth Required: Yes
+Indication: Breast Cancer
+Effective Date: Not specified
+Source File: test.pdf
+
+Preferred Products:
+- None listed
+
+Non-Preferred Products:
+- None listed
+
+Covered Indications:
+- Breast Cancer
+
+Diagnosis Requirements:
+- None listed
+
+Step Therapy:
+- None listed
+
+Other Requirements:
+- None listed

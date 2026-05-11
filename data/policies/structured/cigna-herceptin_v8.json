@@ -1,0 +1,26 @@
+{
+  "policyId": "cigna-herceptin",
+  "version": 8,
+  "fileName": "cigna-herceptin_v8.json",
+  "savedAt": "2026-04-22T02:14:41.342Z",
+  "record": {
+    "id": "test-1",
+    "payer": "Cigna",
+    "plan": "Commercial",
+    "drug": {
+      "brandName": "Herceptin",
+      "genericName": "trastuzumab",
+      "aliases": []
+    },
+    "indication": "Breast Cancer",
+    "coverageStatus": "covered-with-pa",
+    "paRequired": false,
+    "diagnosisRequirements": [],
+    "stepTherapy": [],
+    "otherRequirements": [],
+    "sourceDocument": {
+      "filename": "test.pdf",
+      "retrievalDate": "2026-01-01"
+    }
+  }
+}

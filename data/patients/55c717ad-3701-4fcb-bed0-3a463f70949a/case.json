@@ -1,0 +1,71 @@
+{
+  "caseId": "55c717ad-3701-4fcb-bed0-3a463f70949a",
+  "payer": "UHC",
+  "requestedDrug": "adalimumab",
+  "diagnosis": "Rheumatoid arthritis",
+  "patientName": "Milestone Six Smoke",
+  "status": "ready-for-eval",
+  "createdAt": "2026-04-22T03:15:13.580Z",
+  "updatedAt": "2026-04-22T03:15:13.585Z",
+  "documentFiles": [
+    "clinical-note.txt"
+  ],
+  "documents": [
+    {
+      "documentId": "cd3e17ec-47df-4d15-973e-2378f4685533",
+      "fileName": "clinical-note.txt",
+      "documentType": "clinical_note",
+      "contentType": "text/plain",
+      "storedAt": "2026-04-22T03:15:13.585Z",
+      "summary": "diagnosis: Rheumatoid arthritis · requested drug: adalimumab · payer: UHC",
+      "factCount": 5
+    }
+  ],
+  "extractedFacts": [
+    {
+      "factId": "0d8011b3-340f-4edc-b086-57a440150329",
+      "category": "diagnosis",
+      "label": "diagnosis",
+      "value": "Rheumatoid arthritis",
+      "sourceDocumentId": "cd3e17ec-47df-4d15-973e-2378f4685533",
+      "evidenceSnippet": "Rheumatoid arthritis",
+      "confidence": "medium"
+    },
+    {
+      "factId": "9dd080f1-e941-4472-b7ae-aa379780d091",
+      "category": "requested_drug",
+      "label": "requested drug",
+      "value": "adalimumab",
+      "sourceDocumentId": "cd3e17ec-47df-4d15-973e-2378f4685533",
+      "evidenceSnippet": "adalimumab",
+      "confidence": "medium"
+    },
+    {
+      "factId": "ab898b68-cf38-4007-901c-c9ed4597d98e",
+      "category": "payer",
+      "label": "payer",
+      "value": "UHC",
+      "sourceDocumentId": "cd3e17ec-47df-4d15-973e-2378f4685533",
+      "evidenceSnippet": "UHC",
+      "confidence": "medium"
+    },
+    {
+      "factId": "fcf5ece5-6e8d-494d-91d0-ac71d957bf53",
+      "category": "prescriber",
+      "label": "prescriber",
+      "value": "rheumatologist",
+      "sourceDocumentId": "cd3e17ec-47df-4d15-973e-2378f4685533",
+      "evidenceSnippet": "rheumatologist",
+      "confidence": "medium"
+    },
+    {
+      "factId": "b5b71864-a687-4ffb-bbc6-fc1443fd8a5d",
+      "category": "prior_therapy",
+      "label": "prior therapy",
+      "value": "methotrexate for 90 days",
+      "sourceDocumentId": "cd3e17ec-47df-4d15-973e-2378f4685533",
+      "evidenceSnippet": "methotrexate for 90 days",
+      "confidence": "medium"
+    }
+  ]
+}

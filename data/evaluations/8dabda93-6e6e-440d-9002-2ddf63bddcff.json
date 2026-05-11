@@ -1,0 +1,14 @@
+{
+  "caseId": "f059479a-a74e-43a7-9e0f-ad0e43a8f2f9",
+  "policyId": "cigna-herceptin",
+  "policyVersion": 1,
+  "coverageStatus": "PA Required",
+  "checklist": [
+    {
+      "criterion": "Prior Auth Required",
+      "status": "PASS"
+    }
+  ],
+  "evalId": "8dabda93-6e6e-440d-9002-2ddf63bddcff",
+  "evaluatedAt": "2026-04-22T02:29:02.276Z"
+}

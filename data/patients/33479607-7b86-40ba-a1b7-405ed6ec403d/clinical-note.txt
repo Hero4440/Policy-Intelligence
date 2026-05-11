@@ -1,0 +1,6 @@
+Patient: Phase9 Smoke 3
+Diagnosis: Breast Cancer
+Requested Drug: Herceptin
+Prior Therapies: paclitaxel
+Prescriber: medical oncologist
+Insurance: Cigna Commercial

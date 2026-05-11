@@ -1,0 +1,13 @@
+{
+  "policyId": "cigna-herceptin",
+  "fromVersion": 7,
+  "toVersion": 8,
+  "timestamp": "2026-04-22T02:14:41.342Z",
+  "changes": [
+    {
+      "field": "paRequired",
+      "oldValue": true,
+      "newValue": false
+    }
+  ]
+}

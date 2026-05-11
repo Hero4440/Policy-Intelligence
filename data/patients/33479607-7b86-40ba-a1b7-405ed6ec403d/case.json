@@ -1,0 +1,80 @@
+{
+  "caseId": "33479607-7b86-40ba-a1b7-405ed6ec403d",
+  "payer": "Cigna Commercial",
+  "requestedDrug": "Herceptin",
+  "diagnosis": "Breast Cancer",
+  "patientName": "Phase9 Smoke 3",
+  "status": "ready-for-eval",
+  "createdAt": "2026-04-22T05:46:12.655Z",
+  "updatedAt": "2026-04-22T05:46:12.659Z",
+  "documentFiles": [
+    "clinical-note.txt"
+  ],
+  "documents": [
+    {
+      "documentId": "4e0773f2-4ae3-48ef-ad31-feac1258b537",
+      "fileName": "clinical-note.txt",
+      "documentType": "clinical_note",
+      "contentType": "text/plain",
+      "storedAt": "2026-04-22T05:46:12.659Z",
+      "summary": "diagnosis: Breast Cancer · requested drug: Herceptin · payer: Cigna Commercial",
+      "factCount": 6
+    }
+  ],
+  "extractedFacts": [
+    {
+      "factId": "f5bbe755-159c-48e0-b953-5e1da3a9ab6a",
+      "category": "diagnosis",
+      "label": "diagnosis",
+      "value": "Breast Cancer",
+      "sourceDocumentId": "4e0773f2-4ae3-48ef-ad31-feac1258b537",
+      "evidenceSnippet": "Breast Cancer",
+      "confidence": "medium"
+    },
+    {
+      "factId": "673ad72e-765a-4513-8bb9-4b0d5c3490b8",
+      "category": "requested_drug",
+      "label": "requested drug",
+      "value": "Herceptin",
+      "sourceDocumentId": "4e0773f2-4ae3-48ef-ad31-feac1258b537",
+      "evidenceSnippet": "Herceptin",
+      "confidence": "medium"
+    },
+    {
+      "factId": "c5832cbb-f2bb-4117-aae9-8ac4d2e3ea4b",
+      "category": "payer",
+      "label": "payer",
+      "value": "Cigna Commercial",
+      "sourceDocumentId": "4e0773f2-4ae3-48ef-ad31-feac1258b537",
+      "evidenceSnippet": "Cigna Commercial",
+      "confidence": "medium"
+    },
+    {
+      "factId": "8b293030-5d48-4f23-933e-f1b189f2b7cc",
+      "category": "insurance",
+      "label": "insurance",
+      "value": "Cigna Commercial",
+      "sourceDocumentId": "4e0773f2-4ae3-48ef-ad31-feac1258b537",
+      "evidenceSnippet": "Cigna Commercial",
+      "confidence": "medium"
+    },
+    {
+      "factId": "84e256d3-fbe7-46ba-b921-68164623536e",
+      "category": "prescriber",
+      "label": "prescriber",
+      "value": "medical oncologist",
+      "sourceDocumentId": "4e0773f2-4ae3-48ef-ad31-feac1258b537",
+      "evidenceSnippet": "medical oncologist",
+      "confidence": "medium"
+    },
+    {
+      "factId": "aeb5ee57-195c-4b24-a2d6-16c5cd50c136",
+      "category": "prior_therapy",
+      "label": "prior therapy",
+      "value": "paclitaxel",
+      "sourceDocumentId": "4e0773f2-4ae3-48ef-ad31-feac1258b537",
+      "evidenceSnippet": "paclitaxel",
+      "confidence": "medium"
+    }
+  ]
+}

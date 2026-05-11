@@ -1,0 +1,42 @@
+{
+  "id": "cigna-adalimumab-ra",
+  "payer": "Cigna",
+  "plan": "Commercial",
+  "policyTitle": "Cigna Adalimumab Utilization Management",
+  "drug": {
+    "brandName": "Humira",
+    "genericName": "adalimumab",
+    "aliases": ["adalimumab", "humira"],
+    "products": [
+      { "name": "Humira", "tier": "preferred" },
+      { "name": "Cyltezo", "tier": "preferred" }
+    ]
+  },
+  "indication": "Rheumatoid Arthritis",
+  "coverageStatus": "covered-with-pa",
+  "paRequired": true,
+  "diagnosisRequirements": [
+    {
+      "icd10Codes": ["M05.9", "M06.9"],
+      "description": "RA Diagnosis",
+      "evidenceText": "Confirmation of Rheumatoid Arthritis through clinical and laboratory findings.",
+      "source": { "document": "Cigna_PA_Adalimumab.pdf", "page": 2, "section": "Indications" }
+    }
+  ],
+  "stepTherapy": [
+    {
+      "drugName": "methotrexate",
+      "dosage": "20mg weekly",
+      "duration": "3 months",
+      "failureCriteria": "intolerance or failure",
+      "evidenceText": "Must fail a 3-month trial of 20mg methotrexate or have a contraindication.",
+      "source": { "document": "Cigna_PA_Adalimumab.pdf", "page": 4, "section": "Prerequisites" }
+    }
+  ],
+  "otherRequirements": [],
+  "sourceDocument": {
+    "filename": "Cigna_PA_Adalimumab.pdf",
+    "retrievalDate": "2026-05-10",
+    "effectiveDate": "2026-02-01"
+  }
+}

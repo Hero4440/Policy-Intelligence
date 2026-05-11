@@ -1,0 +1,41 @@
+{
+  "id": "uhc-herceptin",
+  "payer": "UHC",
+  "plan": "Commercial",
+  "policyTitle": "UHC Oncology Policy: Trastuzumab",
+  "drug": {
+    "brandName": "Herceptin",
+    "genericName": "trastuzumab",
+    "aliases": ["trastuzumab", "herceptin"],
+    "products": [
+      { "name": "Herceptin", "tier": "preferred" },
+      { "name": "Herzuma", "tier": "preferred" }
+    ]
+  },
+  "indication": "Breast Cancer",
+  "coverageStatus": "covered-with-pa",
+  "paRequired": true,
+  "diagnosisRequirements": [
+    {
+      "icd10Codes": ["C50.*"],
+      "description": "Breast cancer",
+      "evidenceText": "Coverage is provided for HER2-positive adjuvant breast cancer treatment.",
+      "source": { "document": "UHC_Oncology.pdf", "page": 5, "section": "HER2 Agents" }
+    }
+  ],
+  "stepTherapy": [],
+  "otherRequirements": [
+    {
+      "category": "cardiac monitoring",
+      "requirement": "LVEF measurement",
+      "evidenceText": "Baseline Left Ventricular Ejection Fraction (LVEF) must be ≥ 50%.",
+      "source": { "document": "UHC_Oncology.pdf", "page": 6, "section": "Safety" },
+      "ambiguous": false
+    }
+  ],
+  "sourceDocument": {
+    "filename": "UHC_Oncology.pdf",
+    "retrievalDate": "2026-05-10",
+    "effectiveDate": "2026-01-01"
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "id": "aetna-herceptin",
+  "payer": "Aetna",
+  "plan": "Commercial",
+  "policyTitle": "Aetna Trastuzumab Policy",
+  "drug": {
+    "brandName": "Herceptin",
+    "genericName": "trastuzumab",
+    "aliases": ["trastuzumab", "herceptin"],
+    "products": [
+      { "name": "Herceptin", "tier": "non-preferred" },
+      { "name": "Kanjinti", "tier": "preferred" }
+    ]
+  },
+  "indication": "Breast Cancer",
+  "coverageStatus": "covered",
+  "paRequired": false,
+  "diagnosisRequirements": [
+    {
+      "icd10Codes": ["C50.*"],
+      "description": "HER2-positive breast cancer",
+      "evidenceText": "Patient must have HER2-overexpressing breast cancer (IHC 3+ or FISH+).",
+      "source": { "document": "Aetna_Oncology_2026.pdf", "page": 10, "section": "Trastuzumab" }
+    }
+  ],
+  "stepTherapy": [],
+  "otherRequirements": [],
+  "sourceDocument": {
+    "filename": "Aetna_Oncology_2026.pdf",
+    "retrievalDate": "2026-05-10",
+    "effectiveDate": "2026-01-01"
+  }
+}
