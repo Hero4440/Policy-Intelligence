@@ -49,4 +49,4 @@ EXPOSE 3000
 ENV NODE_ENV=production
 
 # Start server
-CMD ["node", "--loader", "tsx/esm", "src/server/index.ts"]
+CMD ["node", "--import", "tsx/esm", "src/server/index.ts"]
