@@ -1,14 +1,19 @@
 {
   "buildCommand": "npm run frontend:build",
   "outputDirectory": "dist",
+  "public": true,
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "/api"
+      "destination": "${RAILWAY_BACKEND_URL}/api/$1"
     },
     {
       "source": "/mcp/(.*)",
-      "destination": "/mcp"
+      "destination": "${RAILWAY_BACKEND_URL}/mcp/$1"
+    },
+    {
+      "source": "/health",
+      "destination": "${RAILWAY_BACKEND_URL}/health"
     },
     {
       "source": "/(.*)",
@@ -18,5 +23,5 @@
   "env": {
     "NODE_ENV": "production"
   },
-  "regions": ["sfo1"]
+  "regions": ["iad1"]
 }
