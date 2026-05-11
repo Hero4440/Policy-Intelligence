@@ -212,37 +212,66 @@ export function ChatView() {
     setIsLoading(true);
 
     try {
-      const response = await fetch('/api/chat/policy-qa', {
+      const sessionId = crypto.randomUUID();
+      const response = await fetch('/api/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ question })
+        body: JSON.stringify({
+          sessionId,
+          messages: [...messages, userMessage].map(m => ({ role: m.role, content: m.content })),
+          context: {}
+        })
       });
 
       if (!response.ok) {
-        const payload = await response.json().catch(() => ({ error: `Request failed: ${response.status}` }));
-        throw new Error(typeof payload.error === 'string' ? payload.error : `Request failed: ${response.status}`);
+        throw new Error(`Request failed: ${response.status}`);
       }
 
-      const payload = await response.json() as PolicyQaChatResponse;
-      const assistantMessage: ChatMessage = {
-        id: crypto.randomUUID(),
-        role: 'assistant',
-        content: payload.answer,
-        evidence: payload.evidence
-      };
+      const reader = response.body?.getReader();
+      if (!reader) {
+        throw new Error('No response body');
+      }
 
-      setMessages((current) => {
-        const updatedMessages = [...current, assistantMessage];
-        // Update suggested questions after assistant responds
-        setSuggestedQuestions(getContextualSuggestions(updatedMessages));
-        return updatedMessages;
-      });
-      if (payload.evidence.length > 0) {
-        setActiveEvidence({
-          title: 'Sources',
-          evidence: mapEvidence(payload.evidence)
+      let assistantContent = '';
+      const decoder = new TextDecoder();
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        const chunk = decoder.decode(value);
+        const lines = chunk.split('\n');
+
+        for (const line of lines) {
+          if (line.startsWith('data: ')) {
+            const data = line.slice(6);
+            if (data === '[DONE]') continue;
+
+            try {
+              const parsed = JSON.parse(data);
+              if (parsed.type === 'final_answer' && parsed.content) {
+                assistantContent += parsed.content;
+              }
+            } catch {
+              // Ignore parse errors
+            }
+          }
+        }
+      }
+
+      if (assistantContent) {
+        const assistantMessage: ChatMessage = {
+          id: crypto.randomUUID(),
+          role: 'assistant',
+          content: assistantContent
+        };
+
+        setMessages((current) => {
+          const updatedMessages = [...current, assistantMessage];
+          setSuggestedQuestions(getContextualSuggestions(updatedMessages));
+          return updatedMessages;
         });
       }
     } catch (requestError) {
@@ -265,47 +294,77 @@ export function ChatView() {
     setError(null);
     setIsLoading(true);
 
-    void fetch('/api/chat/policy-qa', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ question })
-    })
-      .then(async (response) => {
+    void (async () => {
+      try {
+        const sessionId = crypto.randomUUID();
+        const response = await fetch('/api/chat', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            sessionId,
+            messages: [...messages, userMessage].map(m => ({ role: m.role, content: m.content })),
+            context: {}
+          })
+        });
+
         if (!response.ok) {
-          const payload = await response.json().catch(() => ({ error: `Request failed: ${response.status}` }));
-          throw new Error(typeof payload.error === 'string' ? payload.error : `Request failed: ${response.status}`);
+          throw new Error(`Request failed: ${response.status}`);
         }
 
-        const payload = await response.json() as PolicyQaChatResponse;
-        const assistantMessage: ChatMessage = {
-          id: crypto.randomUUID(),
-          role: 'assistant',
-          content: payload.answer,
-          evidence: payload.evidence
-        };
+        const reader = response.body?.getReader();
+        if (!reader) {
+          throw new Error('No response body');
+        }
 
-        setMessages((current) => {
-          const updatedMessages = [...current, assistantMessage];
-          // Update suggested questions after assistant responds
-          setSuggestedQuestions(getContextualSuggestions(updatedMessages));
-          return updatedMessages;
-        });
-        if (payload.evidence.length > 0) {
-          setActiveEvidence({
-            title: 'Sources',
-            evidence: mapEvidence(payload.evidence)
+        let assistantContent = '';
+        const decoder = new TextDecoder();
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          const chunk = decoder.decode(value);
+          const lines = chunk.split('\n');
+
+          for (const line of lines) {
+            if (line.startsWith('data: ')) {
+              const data = line.slice(6);
+              if (data === '[DONE]') continue;
+
+              try {
+                const parsed = JSON.parse(data);
+                if (parsed.type === 'final_answer' && parsed.content) {
+                  assistantContent += parsed.content;
+                }
+              } catch {
+                // Ignore parse errors
+              }
+            }
+          }
+        }
+
+        if (assistantContent) {
+          const assistantMessage: ChatMessage = {
+            id: crypto.randomUUID(),
+            role: 'assistant',
+            content: assistantContent
+          };
+
+          setMessages((current) => {
+            const updatedMessages = [...current, assistantMessage];
+            setSuggestedQuestions(getContextualSuggestions(updatedMessages));
+            return updatedMessages;
           });
         }
-      })
-      .catch((requestError) => {
+      } catch (requestError) {
         setError(requestError instanceof Error ? requestError.message : 'Chat request failed');
-      })
-      .finally(() => {
+      } finally {
         setIsLoading(false);
         setInput('');
-      });
+      }
+    })();
   }
 
   return (
