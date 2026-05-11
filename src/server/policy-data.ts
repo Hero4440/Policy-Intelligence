@@ -1,6 +1,7 @@
-import { readFileSync } from 'fs';
+import { readFileSync, existsSync, mkdirSync, writeFileSync } from 'fs';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
+import { S3Client, GetObjectCommand } from '@aws-sdk/client-s3';
 import { normalizeDrugName } from '../../data/lookup/drug-aliases.ts';
 import type { PolicyRecord as StructuredPolicyRecord } from '../../data/schemas/policy.schema.ts';
 import { listIngestedSnapshots, type IngestedCoverageSnapshot } from './ingestion/store.js';
@@ -240,9 +241,61 @@ function parseCsv(text: string): CsvRow[] {
   );
 }
 
-function readCsv(fileName: string): CsvRow[] {
+async function downloadFromS3(fileName: string): Promise<string> {
+  const endpoint = process.env.S3_ENDPOINT;
+  const bucket = process.env.S3_BUCKET;
+  const accessKey = process.env.S3_ACCESS_KEY;
+  const secretKey = process.env.S3_SECRET_KEY;
+
+  if (!endpoint || !bucket || !accessKey || !secretKey) {
+    throw new Error('S3 credentials not configured');
+  }
+
+  const s3Client = new S3Client({
+    region: process.env.S3_REGION || 'auto',
+    endpoint,
+    credentials: {
+      accessKeyId: accessKey,
+      secretAccessKey: secretKey
+    }
+  });
+
+  const command = new GetObjectCommand({
+    Bucket: bucket,
+    Key: `formulary/${fileName}`
+  });
+
+  const response = await s3Client.send(command);
+  const text = await response.Body?.transformToString() || '';
+  return text;
+}
+
+async function ensureCsvFile(fileName: string): Promise<string> {
   const fullPath = join(packageDir, fileName);
-  return parseCsv(readFileSync(fullPath, 'utf-8'));
+
+  if (existsSync(fullPath)) {
+    return readFileSync(fullPath, 'utf-8');
+  }
+
+  console.log(`Downloading ${fileName} from S3...`);
+  const content = await downloadFromS3(fileName);
+
+  if (!existsSync(packageDir)) {
+    mkdirSync(packageDir, { recursive: true });
+  }
+
+  writeFileSync(fullPath, content);
+  console.log(`Saved ${fileName} to ${fullPath}`);
+  return content;
+}
+
+function readCsv(fileName: string): CsvRow[] {
+  throw new Error(`Use readCsvAsync instead of readCsv for ${fileName}`);
+}
+
+async function readCsvAsync(fileName: string): Promise<CsvRow[]> {
+  const content = await ensureCsvFile(fileName);
+  return parseCsv(content);
 }
 
 function asBool(value: string): boolean {
@@ -323,14 +376,14 @@ function summarizeStructuredCoverage(policy: StructuredPolicyRecord): string {
   }
 }
 
-function loadCatalog(): CatalogData {
+async function loadCatalog(): Promise<CatalogData> {
   if (cache) {
     return cache;
   }
 
-  const plansRows = readCsv('plans.csv');
-  const formularyRows = readCsv('formulary_drugs.csv');
-  const rulesRows = readCsv('coverage_rules_by_plan.csv');
+  const plansRows = await readCsvAsync('plans.csv');
+  const formularyRows = await readCsvAsync('formulary_drugs.csv');
+  const rulesRows = await readCsvAsync('coverage_rules_by_plan.csv');
 
   const plans = plansRows.map<PolicyPlan>((row) => ({
     planId: row.plan_id,
@@ -544,8 +597,8 @@ function aggregateStructuredMatches(policies: StructuredPolicyRecord[], drugQuer
   }));
 }
 
-export function searchDrugs(query: string, limit = 12): string[] {
-  const { formularyRows, structuredPolicies, ingestedSnapshots } = loadCatalog();
+export async function searchDrugs(query: string, limit = 12): Promise<string[]> {
+  const { formularyRows, structuredPolicies, ingestedSnapshots } = await loadCatalog();
   const normalized = compactWhitespace(query).toLowerCase();
   const candidates = new Map<string, string>();
 
@@ -600,8 +653,8 @@ export function searchDrugs(query: string, limit = 12): string[] {
   return [...candidates.values()].sort().slice(0, limit);
 }
 
-export function listIssuers(): string[] {
-  const { plans, ingestedSnapshots } = loadCatalog();
+export async function listIssuers(): Promise<string[]> {
+  const { plans, ingestedSnapshots } = await loadCatalog();
   const byKey = new Map<string, string>();
   for (const plan of plans) {
     byKey.set(plan.issuerKey, plan.issuerName);
@@ -612,8 +665,8 @@ export function listIssuers(): string[] {
   return [...new Set(byKey.values())].sort();
 }
 
-export function compareDrugAcrossPlans(drugQuery: string, issuerFilter?: string): PolicyCoverageMatch[] {
-  const { formularyRows, plansById, structuredPolicies, ingestedSnapshots } = loadCatalog();
+export async function compareDrugAcrossPlans(drugQuery: string, issuerFilter?: string): Promise<PolicyCoverageMatch[]> {
+  const { formularyRows, plansById, structuredPolicies, ingestedSnapshots } = await loadCatalog();
   const normalizedFilter = issuerFilter?.trim().toLowerCase();
 
   const formularyMatches = formularyRows.filter((row) =>
@@ -654,15 +707,15 @@ export function compareDrugAcrossPlans(drugQuery: string, issuerFilter?: string)
   });
 }
 
-function findStructuredPolicy(planId: string, drugQuery: string): StructuredPolicyRecord | undefined {
-  const { structuredPolicies } = loadCatalog();
+async function findStructuredPolicy(planId: string, drugQuery: string): Promise<StructuredPolicyRecord | undefined> {
+  const { structuredPolicies } = await loadCatalog();
   return structuredPolicies.find((policy) =>
     structuredPlanId(policy) === planId && matchesDrugQuery(structuredSearchText(policy), drugQuery)
   );
 }
 
-export function getPlanDrugDetail(planId: string, drugQuery: string): PolicyPlanDrugDetail | null {
-  const { formularyRows, rulesByPlan, plansById, ingestedSnapshots } = loadCatalog();
+export async function getPlanDrugDetail(planId: string, drugQuery: string): Promise<PolicyPlanDrugDetail | null> {
+  const { formularyRows, rulesByPlan, plansById, ingestedSnapshots } = await loadCatalog();
   const matches = formularyRows.filter((row) =>
     row.planId === planId
     && (matchesCanonicalDrugKey(row.canonicalDrugKey, row.alternateDrugKeys, drugQuery)
@@ -724,7 +777,7 @@ export function getPlanDrugDetail(planId: string, drugQuery: string): PolicyPlan
     };
   }
 
-  const structured = findStructuredPolicy(planId, drugQuery);
+  const structured = await findStructuredPolicy(planId, drugQuery);
   if (!structured) {
     return null;
   }
@@ -755,8 +808,8 @@ export function getPlanDrugDetail(planId: string, drugQuery: string): PolicyPlan
   };
 }
 
-export function getChangeWatch(drugQuery: string, issuerFilter?: string): PolicyChangeWatch {
-  const matches = compareDrugAcrossPlans(drugQuery, issuerFilter);
+export async function getChangeWatch(drugQuery: string, issuerFilter?: string): Promise<PolicyChangeWatch> {
+  const matches = await compareDrugAcrossPlans(drugQuery, issuerFilter);
   const sourceDates = matches.map((match) => ({
     issuerName: match.issuerName,
     sourceFile: match.sourceFile,
@@ -796,8 +849,8 @@ export function getChangeWatch(drugQuery: string, issuerFilter?: string): Policy
   };
 }
 
-export function getCatalogSummary() {
-  const { plans, formularyRows, structuredPolicies, ingestedSnapshots } = loadCatalog();
+export async function getCatalogSummary() {
+  const { plans, formularyRows, structuredPolicies, ingestedSnapshots } = await loadCatalog();
   return {
     planCount: plans.length,
     formularyRowCount: formularyRows.length,

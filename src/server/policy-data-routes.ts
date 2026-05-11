@@ -10,26 +10,26 @@ import {
 } from './policy-data.js';
 
 export function registerPolicyDataRoutes(app: Express) {
-  app.get('/api/policy/summary', (req: Request, res: Response) => {
+  app.get('/api/policy/summary', async (req: Request, res: Response) => {
     res.json({
-      summary: getCatalogSummary()
+      summary: await getCatalogSummary()
     });
   });
 
-  app.get('/api/policy/issuers', (req: Request, res: Response) => {
+  app.get('/api/policy/issuers', async (req: Request, res: Response) => {
     res.json({
-      issuers: listIssuers()
+      issuers: await listIssuers()
     });
   });
 
-  app.get('/api/policy/drugs', (req: Request, res: Response) => {
+  app.get('/api/policy/drugs', async (req: Request, res: Response) => {
     const query = typeof req.query.query === 'string' ? req.query.query : '';
     res.json({
-      drugs: searchDrugs(query, query ? 12 : 100)
+      drugs: await searchDrugs(query, query ? 12 : 100)
     });
   });
 
-  app.get('/api/policy/compare', (req: Request, res: Response) => {
+  app.get('/api/policy/compare', async (req: Request, res: Response) => {
     const drug = typeof req.query.drug === 'string' ? req.query.drug : '';
     const issuer = typeof req.query.issuer === 'string' ? req.query.issuer : undefined;
 
@@ -41,11 +41,11 @@ export function registerPolicyDataRoutes(app: Express) {
     res.json({
       drug,
       issuer: issuer ?? null,
-      matches: compareDrugAcrossPlans(drug, issuer)
+      matches: await compareDrugAcrossPlans(drug, issuer)
     });
   });
 
-  app.get('/api/policy/detail', (req: Request, res: Response) => {
+  app.get('/api/policy/detail', async (req: Request, res: Response) => {
     const drug = typeof req.query.drug === 'string' ? req.query.drug : '';
     const planId = typeof req.query.planId === 'string' ? req.query.planId : '';
 
@@ -54,7 +54,7 @@ export function registerPolicyDataRoutes(app: Express) {
       return;
     }
 
-    const detail = getPlanDrugDetail(planId, drug);
+    const detail = await getPlanDrugDetail(planId, drug);
     if (!detail) {
       res.status(404).json({ error: 'No detail found for that plan and drug' });
       return;
@@ -63,7 +63,7 @@ export function registerPolicyDataRoutes(app: Express) {
     res.json({ detail });
   });
 
-  app.get('/api/policy/changes', (req: Request, res: Response) => {
+  app.get('/api/policy/changes', async (req: Request, res: Response) => {
     const drug = typeof req.query.drug === 'string' ? req.query.drug : '';
     const issuer = typeof req.query.issuer === 'string' ? req.query.issuer : undefined;
 
@@ -73,7 +73,7 @@ export function registerPolicyDataRoutes(app: Express) {
     }
 
     res.json({
-      changeWatch: getChangeWatch(drug, issuer)
+      changeWatch: await getChangeWatch(drug, issuer)
     });
   });
 

@@ -9,9 +9,9 @@ dist/
 **/.env.local
 **/.env.local.*
 /data/ingestion/db.json
-# Ignore large doc files but allow formulary data CSVs for production
-docs/hackaathon/*.pdf
-docs/hackaathon/*.txt
+# Exclude all large formulary files due to memory constraints on Railway
+data/formulary/
+docs/hackaathon/
 docs/hackaathon2/
 # Allow essential data directories for production
 !data/
@@ -20,8 +20,6 @@ docs/hackaathon2/
 !data/schemas/
 !data/lookup/
 !data/evaluations/
-!docs/hackaathon/*.csv
-!docs/hackaathon/llm_ready_plan_records.jsonl
 
 .claude/
 .kiro/
