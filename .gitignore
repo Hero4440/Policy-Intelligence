@@ -9,7 +9,9 @@ dist/
 **/.env.local
 **/.env.local.*
 /data/ingestion/db.json
-docs/hackaathon/
+# Ignore large doc files but allow formulary data CSVs for production
+docs/hackaathon/*.pdf
+docs/hackaathon/*.txt
 docs/hackaathon2/
 # Allow essential data directories for production
 !data/
@@ -18,6 +20,8 @@ docs/hackaathon2/
 !data/schemas/
 !data/lookup/
 !data/evaluations/
+!docs/hackaathon/*.csv
+!docs/hackaathon/llm_ready_plan_records.jsonl
 
 .claude/
 .kiro/
