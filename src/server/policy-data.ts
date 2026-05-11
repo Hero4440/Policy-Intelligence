@@ -179,8 +179,6 @@ interface CatalogData {
   ingestedSnapshots: IngestedCoverageSnapshot[];
 }
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 const projectRoot = join(__dirname, '../..');
 const packageDir = join(projectRoot, 'docs/hackaathon/insurance_hackathon_final_data_package');
 
