@@ -1,0 +1,163 @@
+# PolicyPilot — Video Script
+
+---
+
+**[SCENE 1: Personal Hook + Product Intro | 0:00 - 0:30]**
+
+"Hi, I'm Tejas and I'm Tanmay — we're international students in US. In my first semester here, a doctor prescribed me a medication. I went to the pharmacy to pick it up — and got told the insurance won't cover it without prior authorization. I had no idea what that even meant. Two hours of phone calls between the pharmacy, the insurance company, and the doctor's office — and I still went home without the medication.
+
+That stuck with me. If one prescription is this confusing — imagine being an oncologist managing thirty patients on expensive drugs, each with a different insurance plan.
+
+So we built PolicyPilot — a healthcare policy intelligence platform that lets doctors, clinic staff, and patients instantly search drug coverage across insurance plans, compare payer rules side by side, and get evidence-backed answers in seconds instead of hours.
+
+Let me show you how it works. Meet Jennifer Kim. She has breast cancer. Her doctor needs to start Herceptin. Is it covered? What does her plan require?"
+
+---
+
+**[SCENE 2: Prompt Opinion Demo | 0:30 - 1:10]**
+
+"First, let's see PolicyPilot inside Prompt Opinion — where judges and clinicians will actually use it. We've published our MCP server to the marketplace. A doctor selects a patient, opens the agent, and asks: Is Herceptin covered for Jennifer Kim under Aetna?
+
+PolicyPilot responds with a cited answer — covered, no prior auth, requirements listed, source linked. The doctor can follow up: What about UHC? What prior auth criteria do they need? Every answer is grounded in real policy documents.
+
+This is our MCP integration — 17 tools that Prompt Opinion's agent can call to search coverage, compare plans, evaluate patients, and extract evidence."
+
+---
+
+**[SCENE 3: Architecture — Behind the Scenes | 1:10 - 1:30]**
+
+"Now let me show you how this works behind the scenes."
+
+*(Show architecture diagram)*
+
+"On the left — doctors, patients, and prior auth reviewers interact through Prompt Opinion. Prompt Opinion calls our MCP server, which connects to the PolicyPilot backend. The backend uses Google Gemini for natural language understanding and evidence extraction. And on the right — our PolicyPilot UI gives direct access to all the same intelligence. Let me walk you through it."
+
+---
+
+**[SCENE 4: Data Tab | 1:30 - 1:45]**
+
+"Starting with Data. This is where policies enter the system. Upload a payer PDF — Aetna's Herceptin policy — and AI extracts the structured rules automatically. Drug names, coverage criteria, prior auth requirements — all pulled from the document. No manual data entry."
+
+---
+
+**[SCENE 5: Changes Tab | 1:45 - 1:55]**
+
+"Changes. When a payer updates their policy, PolicyPilot detects what changed. Was it just formatting — or a new prior auth requirement? Every change is classified as cosmetic, operational, or clinical."
+
+---
+
+**[SCENE 6: Insights Tab | 1:55 - 2:05]**
+
+"Insights — the big picture. A heat map across payers and drugs. Which plans are most restrictive, where coverage gaps exist. Click any cell, drill into the evidence."
+
+---
+
+**[SCENE 7: Compare Tab | 2:05 - 2:20]**
+
+"Compare — Aetna vs UHC for Herceptin, side by side. Aetna approves immediately. UHC requires prior auth, higher thresholds, adds a week. Click any cell and you see the exact policy text. No guessing. Just evidence."
+
+---
+
+**[SCENE 8: Workspace Tab | 2:20 - 2:30]**
+
+"Workspace — search any drug, see coverage across every payer instantly. One view, all plans. This is what we wish existed when we were on hold with our insurance."
+
+---
+
+**[SCENE 9: Chat Tab | 2:30 - 2:40]**
+
+"And Chat — a doctor types a plain English question, gets a cited answer in seconds. Covered. Requirements listed. Source linked. No phone calls."
+
+---
+
+**[SCENE 10: Close | 2:40 - 2:55]**
+
+"We spent two hours on the phone over one prescription and went home empty-handed. Jennifer Kim's oncologist gets a clear, sourced answer in under a minute.
+
+PolicyPilot — 17 MCP tools, powered by Google Gemini, every answer grounded in real policy evidence.
+
+Built by two international CS students — because nobody should have to fight their insurance just to understand what's covered.
+
+PolicyPilot. Policy intelligence in seconds."
+
+# PolicyPilot — Video Script
+
+---
+
+**[SCENE 1: Personal Hook + Product Intro | 0:00 - 0:30]**
+
+"Hi, I'm Tejas and I'm Tanmay — we're international CS students in the US. Our first semester here, a doctor prescribed one of us a medication. We went to the pharmacy to pick it up — and got told the insurance won't cover it without prior authorization. We had no idea what that even meant. Two hours of phone calls between the pharmacy, the insurance company, and the doctor's office — and we still went home without the medication.
+
+That stuck with us. If one prescription is this confusing — imagine being an oncologist managing thirty patients on expensive drugs, each with a different insurance plan.
+
+So we built PolicyPilot — a healthcare policy intelligence platform that lets doctors, clinic staff, and patients instantly search drug coverage across insurance plans, compare payer rules side by side, and get evidence-backed answers in seconds instead of hours.
+
+Let me show you how it works. Meet Jennifer Kim — 47, HER2-positive breast cancer. Her doctor needs to start Herceptin. Is it covered? What does her plan require?"
+
+---
+
+**[SCENE 2: Prompt Opinion Demo | 0:30 - 1:10]**
+
+"First, let's see PolicyPilot inside Prompt Opinion — where judges and clinicians will actually use it. We've published our MCP server to the marketplace. A doctor selects a patient, opens the agent, and asks: Is Herceptin covered for Jennifer Kim under Aetna?
+
+PolicyPilot responds with a cited answer — covered, no prior auth, requirements listed, source linked. The doctor can follow up: What about UHC? What prior auth criteria do they need? Every answer is grounded in real policy documents.
+
+This is our MCP integration — 17 tools that Prompt Opinion's agent can call to search coverage, compare plans, evaluate patients, and extract evidence."
+
+---
+
+**[SCENE 3: Architecture — Behind the Scenes | 1:10 - 1:30]**
+
+"Now let me show you how this works behind the scenes."
+
+*(Show architecture diagram)*
+
+"On the left — doctors, patients, and prior auth reviewers interact through Prompt Opinion. Prompt Opinion calls our MCP server, which connects to the PolicyPilot backend. The backend uses Google Gemini for natural language understanding and evidence extraction. And on the right — our PolicyPilot UI gives direct access to all the same intelligence. Let me walk you through it."
+
+---
+
+**[SCENE 4: Data Tab | 1:30 - 1:45]**
+
+"Starting with Data. This is where policies enter the system. Upload a payer PDF — Aetna's Herceptin policy — and AI extracts the structured rules automatically. Drug names, coverage criteria, prior auth requirements — all pulled from the document. No manual data entry."
+
+---
+
+**[SCENE 5: Changes Tab | 1:45 - 1:55]**
+
+"Changes. When a payer updates their policy, PolicyPilot detects what changed. Was it just formatting — or a new prior auth requirement? Every change is classified as cosmetic, operational, or clinical."
+
+---
+
+**[SCENE 6: Insights Tab | 1:55 - 2:05]**
+
+"Insights — the big picture. A heat map across payers and drugs. Which plans are most restrictive, where coverage gaps exist. Click any cell, drill into the evidence."
+
+---
+
+**[SCENE 7: Compare Tab | 2:05 - 2:20]**
+
+"Compare — Aetna vs UHC for Herceptin, side by side. Aetna approves immediately. UHC requires prior auth, higher thresholds, adds a week. Click any cell and you see the exact policy text. No guessing. Just evidence."
+
+---
+
+**[SCENE 8: Workspace Tab | 2:20 - 2:30]**
+
+"Workspace — search any drug, see coverage across every payer instantly. One view, all plans. This is what we wish existed when we were on hold with our insurance."
+
+---
+
+**[SCENE 9: Chat Tab | 2:30 - 2:40]**
+
+"And Chat — a doctor types a plain English question, gets a cited answer in seconds. Covered. Requirements listed. Source linked. No phone calls."
+
+---
+
+**[SCENE 10: Close | 2:40 - 2:55]**
+
+"We spent two hours on the phone over one prescription and went home empty-handed. Jennifer Kim's oncologist gets a clear, sourced answer in under a minute.
+
+PolicyPilot — 17 MCP tools, powered by Google Gemini, every answer grounded in real policy evidence.
+
+Built by two international CS students — because nobody should have to fight their insurance just to understand what's covered.
+
+PolicyPilot. Policy intelligence in seconds."
