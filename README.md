@@ -229,18 +229,3 @@ Links
 * Live Demo: policy-intelligence-peach.vercel.app
 * Project Page: app.promptopinion.ai
 * GitHub Repo: Add repository link here
-
-⸻
-
-Team
-
-* Tejas Shah
-* Tanmay Bhuskute
-
-⸻
-
-Contribution
-
-I contributed to building PolicyPilot as a policy intelligence platform for healthcare coverage decisions. My work involved designing the product workflow, structuring the policy search experience, integrating AI-powered querying, and helping build a system that turns fragmented insurance policy data into clear, actionable insights for providers.
-
-I also contributed to the overall architecture, including normalized policy data handling, coverage comparison logic, evidence-backed responses, and the user experience for fast clinical decision support.
