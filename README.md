@@ -1,6 +1,5 @@
-Here’s a cleaner GitHub-ready README version. You can paste this directly into README.md.
 
-PolicyPilot
+### PolicyPilot
 
 Making healthcare coverage decisions human again.
 
